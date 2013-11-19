@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @coach.name %>
+</p>
+
+<p>
+  <b>Phone:</b>
+  <%= @coach.phone %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @coach.email %>
+</p>
+
+<p>
+  <b>Day rate:</b>
+  <%= @coach.day_rate %>
+</p>
+
+<p>
+  <b>Cities:</b>
+  <%= @coach.cities.collect { |c| c.name }.to_sentence %>
+</p>
+
+
+<%= link_to 'Edit', edit_coach_path(@coach) %> |
+<%= link_to 'Back', coaches_path %>

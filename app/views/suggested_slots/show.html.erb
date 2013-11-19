@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Time:</b>
+  <%= @suggested_slot.time %>
+</p>
+
+<p>
+  <b>Studio:</b>
+  <%= @suggested_slot.studio %>
+</p>
+
+
+<%= link_to 'Edit', edit_suggested_slot_path(@suggested_slot) %> |
+<%= link_to 'Back', suggested_slots_path %>

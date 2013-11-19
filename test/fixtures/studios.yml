@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  capacity: 1
+  price: 1
+  available_from: 2012-02-26 17:26:30
+  available_to: 2012-02-26 17:26:30
+  notes: MyText
+  venue: 
+
+two:
+  name: MyString
+  capacity: 1
+  price: 1
+  available_from: 2012-02-26 17:26:30
+  available_to: 2012-02-26 17:26:30
+  notes: MyText
+  venue: 

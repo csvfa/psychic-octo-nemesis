@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  number: 1
+  changed_at: 2012-04-22 22:29:03
+  booking: 
+
+two:
+  number: 1
+  changed_at: 2012-04-22 22:29:03
+  booking: 

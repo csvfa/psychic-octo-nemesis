@@ -1,0 +1,49 @@
+<%= form_for(@events_company) do |f| %>
+  <% if @events_company.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@events_company.errors.count, "error") %> prohibited this events_company from being saved:</h2>
+
+      <ul>
+      <% @events_company.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :address %><br />
+    <%= f.text_area :address %>
+  </div>
+  <div class="field">
+    <%= f.label :website %><br />
+    <%= f.text_field :website %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :phone %><br />
+    <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :service_agreement %><br />
+    <%= f.text_area :service_agreement %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_terms %><br />
+    <%= f.text_area :payment_terms %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

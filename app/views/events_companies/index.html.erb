@@ -1,0 +1,37 @@
+<h1>Listing events_companies</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Address</th>
+    <th>Website</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Service agreement</th>
+    <th>Payment terms</th>
+    <th>Notes</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @events_companies.each do |events_company| %>
+  <tr>
+    <td><%= events_company.name %></td>
+    <td><%= events_company.address %></td>
+    <td><%= events_company.website %></td>
+    <td><%= events_company.email %></td>
+    <td><%= events_company.phone %></td>
+    <td><%= events_company.service_agreement %></td>
+    <td><%= events_company.payment_terms %></td>
+    <td><%= events_company.notes %></td>
+    <td><%= link_to 'Show', events_company %></td>
+    <td><%= link_to 'Edit', edit_events_company_path(events_company) %></td>
+    <td><%= link_to 'Destroy', events_company, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Events company', new_events_company_path %>

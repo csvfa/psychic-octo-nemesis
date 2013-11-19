@@ -1,0 +1,6 @@
+green - everyhing done
+brown - murkified - job not happened, not chasing any more
+light blue - note to say don't chase now, but chase next month
+yellow - waiting for something
+pink - feedback has been sent, used to find quotes
+red - something needs done urgently

@@ -1,0 +1,25 @@
+<%= form_for(@suggested_slot) do |f| %>
+  <% if @suggested_slot.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@suggested_slot.errors.count, "error") %> prohibited this suggested_slot from being saved:</h2>
+
+      <ul>
+      <% @suggested_slot.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :time %><br />
+    <%= f.time_select :time %>
+  </div>
+  <div class="field">
+    <%= f.label :studio %><br />
+    <%= f.text_field :studio %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

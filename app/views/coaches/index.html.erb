@@ -1,0 +1,31 @@
+<h1>Listing coaches</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Phone</th>
+    <th>Email</th>
+    <th>Day rate</th>
+    <th>City</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @coaches.each do |coach| %>
+  <tr>
+    <td><%= coach.name %></td>
+    <td><%= coach.phone %></td>
+    <td><%= coach.email %></td>
+    <td><%= coach.day_rate %></td>
+    <td><%= coach.cities.collect { |c| c.name }.to_sentence %></td>
+    <td><%= link_to 'Show', coach %></td>
+    <td><%= link_to 'Edit', edit_coach_path(coach) %></td>
+    <td><%= link_to 'Destroy', coach, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Coach', new_coach_path %>

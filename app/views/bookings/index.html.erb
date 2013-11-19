@@ -1,0 +1,49 @@
+<h1>Listing bookings</h1>
+
+<table>
+  <tr>
+    <th>Party date</th>
+    <th>Customer</th>
+    <th>Guests</th>
+    <th>Theme</th>
+    <th>Special requirements</th>
+    <th>event</th>
+    <th>Notes</th>
+    <th>Coach</th>
+    <th>Venue</th>
+    <th>Venue booked with</th>
+    <th>Advance venue payment required</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @bookings.each do |booking| %>
+  <tr>
+    <td><%= booking.timeslot.to_s :standard %></td>
+    <td><%= booking.customer.name %></td>
+    <td><%= booking.guest_number.number %></td>
+    <td><%= booking.theme %></td>
+    <td><%= booking.special_requirements %></td>
+    <td>
+    	<%  booking.events.each do |event| %>
+    	<p>
+    		<%= event %>
+    	</p>
+    	<% end %>
+    </td>
+    <td><%= booking.notes %></td>
+    <td><%= booking.coach %></td>
+    <td><%= booking.venue %></td>
+    <td><%= booking.venue_booked_with %></td>
+    <td><%= booking.advance_venue_payment_required %></td>
+    <td><%= link_to 'Show', booking %></td>
+    <td><%= link_to 'Edit', edit_booking_path(booking) %></td>
+    <td><%= link_to 'Destroy', booking, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Booking', new_booking_path %>

@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @studio.name %>
+</p>
+
+<p>
+  <b>Capacity:</b>
+  <%= @studio.capacity %>
+</p>
+
+<p>
+  <b>Price:</b>
+  <%= @studio.price %>
+</p>
+
+<p>
+  <b>Available from:</b>
+  <%= @studio.available_from %>
+</p>
+
+<p>
+  <b>Available to:</b>
+  <%= @studio.available_to %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @studio.notes %>
+</p>
+
+<p>
+  <b>Venue:</b>
+  <%= @studio.venue %>
+</p>
+
+
+<%= link_to 'Edit', edit_studio_path(@studio) %> |
+<%= link_to 'Back', studios_path %>

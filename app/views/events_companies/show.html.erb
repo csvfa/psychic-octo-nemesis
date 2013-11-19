@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @events_company.name %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @events_company.address %>
+</p>
+
+<p>
+  <b>Website:</b>
+  <%= @events_company.website %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @events_company.email %>
+</p>
+
+<p>
+  <b>Phone:</b>
+  <%= @events_company.phone %>
+</p>
+
+<p>
+  <b>Service agreement:</b>
+  <%= @events_company.service_agreement %>
+</p>
+
+<p>
+  <b>Payment terms:</b>
+  <%= @events_company.payment_terms %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @events_company.notes %>
+</p>
+
+<p>
+  <b>Sales people:</b>
+  <% @events_company.sales_people.each do |s| %>
+  	<p><%= s.name %></p>
+  <% end %>
+</p>
+
+<%= link_to 'Edit', edit_events_company_path(@events_company) %> |
+<%= link_to 'Back', events_companies_path %>

@@ -1,0 +1,29 @@
+<h1>Listing opening_times</h1>
+
+<table>
+  <tr>
+    <th>Day of week</th>
+    <th>Opening time</th>
+    <th>Closing time</th>
+    <th>Venue</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @opening_times.each do |opening_time| %>
+  <tr>
+    <td><%= opening_time.day_of_week %></td>
+    <td><%= opening_time.opening_time %></td>
+    <td><%= opening_time.closing_time %></td>
+    <td><%= opening_time.venue %></td>
+    <td><%= link_to 'Show', opening_time %></td>
+    <td><%= link_to 'Edit', edit_opening_time_path(opening_time) %></td>
+    <td><%= link_to 'Destroy', opening_time, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Opening time', new_opening_time_path %>

@@ -1,0 +1,63 @@
+<h1>Booking detail - <%= @booking.customer.name %></h1>
+
+<p id="notice"><%= notice %></p>
+<div id="time & venue">
+	<p>
+  	<b>Party date:</b>
+  	<%= @booking.timeslot %>
+	</p>
+</div>
+
+<p>
+  <b>Customer:</b>
+  <%= @booking.customer %>
+</p>
+
+<p>
+  <b>Number of guests:</b>
+  <%= @booking.guest_number.number %>
+</p>
+
+<p>
+  <b>Theme:</b>
+  <%= @booking.theme %>
+</p>
+
+<p>
+  <b>Special requirements:</b>
+  <%= @booking.special_requirements %>
+</p>
+
+<p>
+  <b>event:</b>
+  <%= @booking.current_event %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @booking.notes %>
+</p>
+
+<p>
+  <b>Coach:</b>
+  <%= @booking.coach %>
+</p>
+
+<p>
+  <b>Venue:</b>
+  <%= @booking.venue %>
+</p>
+
+<p>
+  <b>Venue booked with:</b>
+  <%= @booking.venue_booked_with %>
+</p>
+
+<p>
+  <b>Advance venue payment required:</b>
+  <%= @booking.advance_venue_payment_required %>
+</p>
+
+
+<%= link_to 'Edit', edit_booking_path(@booking) %> |
+<%= link_to 'Back', bookings_path %>

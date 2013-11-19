@@ -1,0 +1,2 @@
+module SuggestedSlotsHelper
+end

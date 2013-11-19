@@ -1,0 +1,2 @@
+module EventsCompaniesHelper
+end

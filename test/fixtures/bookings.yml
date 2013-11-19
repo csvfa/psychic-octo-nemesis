@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  party_date: 2012-08-09
+  theme: 
+  special_requirements: MyText
+  status: 1
+  last_status_date: 2012-08-09 22:11:28
+  notes: MyText
+  coach: 
+  when_coach_booked: 2012-08-09 22:11:28
+  when_job_sheet_sent: 2012-08-09 22:11:28
+  venue: 
+  venue_booked_with: MyString
+  advance_venue_payment_required: false
+
+two:
+  party_date: 2012-08-09
+  theme: 
+  special_requirements: MyText
+  status: 1
+  last_status_date: 2012-08-09 22:11:28
+  notes: MyText
+  coach: 
+  when_coach_booked: 2012-08-09 22:11:28
+  when_job_sheet_sent: 2012-08-09 22:11:28
+  venue: 
+  venue_booked_with: MyString
+  advance_venue_payment_required: false

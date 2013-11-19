@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  day_of_week: 1
+  opening_time: 2012-02-27 13:13:42
+  closing_time: 2012-02-27 13:13:42
+  venue: 
+
+two:
+  day_of_week: 1
+  opening_time: 2012-02-27 13:13:42
+  closing_time: 2012-02-27 13:13:42
+  venue: 
