@@ -55,9 +55,9 @@
     <%= link_to 'Add new coach', new_coach_path %>
   </div>
   <div class="field">
-    <%= f.label :venue %><br />
-    <%= f.collection_select :venue_id, @venues, :id, :name, :prompt => "Select a venue" %>
-    <%= link_to 'Add new venue', new_venue_path %>
+    <%= f.label :studio %><br />
+    <%= f.collection_select :studio_id, @studios, :id, :to_s, :prompt => "Select a studio" %>
+    <%= link_to 'Add new studio', new_studio_path %>
   </div>
   <div class="field">
     <%= f.label :venue_booked_with %><br />

@@ -27,7 +27,7 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @themes = Theme.all
     @coaches = Coach.all
-    @venues = Venue.all
+    @studios = Studio.all
     @customers = Customer.all
 
     respond_to do |format|
@@ -41,7 +41,7 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @themes = Theme.all
     @coaches = Coach.all
-    @venues = Venue.all
+    @studios = Studio.all
     @customers = Customer.all
   end
 

@@ -1,4 +1,4 @@
 <div class="field">
 	<%= f.label :booking %><br />
-	<%= f.collection_select :booking_id, @bookings, :id, @booking.customer.name + " at " + @booking.venue.name, :prompt => "Select a booking" %>
+	<%= f.collection_select :booking_id, @bookings, :id, @booking.customer.name + " at " + @booking.studio, :prompt => "Select a booking" %>
 </div>

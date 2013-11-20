@@ -25,6 +25,7 @@ class StudiosController < ApplicationController
   # GET /studios/new.json
   def new
     @studio = Studio.new
+		@venues = Venue.all
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +36,7 @@ class StudiosController < ApplicationController
   # GET /studios/1/edit
   def edit
     @studio = Studio.find(params[:id])
+		@venues = Venue.all
   end
 
   # POST /studios
