@@ -45,7 +45,7 @@ class Event < ActiveRecord::Base
 		'Feedback received',
 		'Customer cancels & feedback requested',
 		'Cancellation feedback received',
-		'CC cancels booking'
+		'CC cancels booking',
 		'Murkified'
 	]
 	
