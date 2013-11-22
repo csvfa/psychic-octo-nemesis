@@ -4,7 +4,7 @@ class Booking < ActiveRecord::Base
 
 	belongs_to :theme
 	belongs_to :coach
-	belongs_to :venue
+	belongs_to :studio
 	belongs_to :customer
 
 	def new
@@ -23,10 +23,10 @@ class Booking < ActiveRecord::Base
 	end
   
 	def name
-		if venue.nil?
+		if studio.nil?
 			customer.to_s
 		else
-			customer.to_s + " at " + venue.to_s
+			customer.to_s + " at " + studio.venue.to_s
 		end
 	end
 

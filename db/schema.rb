@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121004184045) do
+ActiveRecord::Schema.define(:version => 20131120154056) do
 
   create_table "bookings", :force => true do |t|
     t.datetime "timeslot"
@@ -23,17 +23,16 @@ ActiveRecord::Schema.define(:version => 20121004184045) do
     t.integer  "coach_id"
     t.datetime "when_coach_booked"
     t.datetime "when_job_sheet_sent"
-    t.integer  "venue_id"
     t.string   "venue_booked_with"
     t.boolean  "advance_venue_payment_required"
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
     t.integer  "customer_id"
+    t.integer  "studio_id"
   end
 
   add_index "bookings", ["coach_id"], :name => "index_bookings_on_coach_id"
   add_index "bookings", ["theme_id"], :name => "index_bookings_on_theme_id"
-  add_index "bookings", ["venue_id"], :name => "index_bookings_on_venue_id"
 
   create_table "cities", :force => true do |t|
     t.string   "name"
