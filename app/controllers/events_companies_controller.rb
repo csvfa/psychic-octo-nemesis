@@ -25,7 +25,8 @@ class EventsCompaniesController < ApplicationController
   # GET /events_companies/new.json
   def new
     @events_company = EventsCompany.new
-
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
+		
     respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @events_company }
@@ -44,7 +45,7 @@ class EventsCompaniesController < ApplicationController
 
     respond_to do |format|
       if @events_company.save
-        format.html { redirect_to @events_company, :notice => 'Events company was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Events company was successfully created.' }
         format.json { render :json => @events_company, :event => :created, :location => @events_company }
       else
         format.html { render :action => "new" }

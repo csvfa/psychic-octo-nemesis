@@ -26,6 +26,7 @@ class VenuesController < ApplicationController
   def new
     @venue = Venue.new
     @cities = City.all
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -46,7 +47,7 @@ class VenuesController < ApplicationController
 
     respond_to do |format|
       if @venue.save
-        format.html { redirect_to @venue, :notice => 'Venue was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Venue was successfully created.' }
         format.json { render :json => @venue, :event => :created, :location => @venue }
       else
         format.html { render :action => "new" }

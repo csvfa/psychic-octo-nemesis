@@ -1,0 +1,2 @@
+class StudioEventController < ApplicationController
+end

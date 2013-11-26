@@ -29,6 +29,8 @@ class BookingsController < ApplicationController
     @coaches = Coach.all
     @studios = Studio.all
     @customers = Customer.all
+		
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -52,7 +54,7 @@ class BookingsController < ApplicationController
 
     respond_to do |format|
       if @booking.save
-        format.html { redirect_to @booking, :notice => 'Booking was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Booking was successfully created.' }
         format.json { render :json => @booking, :event => :created, :location => @booking }
       else
         format.html { render :action => "new" }

@@ -26,6 +26,7 @@ class StudiosController < ApplicationController
   def new
     @studio = Studio.new
 		@venues = Venue.all
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -46,7 +47,7 @@ class StudiosController < ApplicationController
 
     respond_to do |format|
       if @studio.save
-        format.html { redirect_to @studio, :notice => 'Studio was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Studio was successfully created.' }
         format.json { render :json => @studio, :event => :created, :location => @studio }
       else
         format.html { render :action => "new" }

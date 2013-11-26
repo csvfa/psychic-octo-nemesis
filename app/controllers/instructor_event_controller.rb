@@ -1,0 +1,2 @@
+class InstructorEventController < ApplicationController
+end

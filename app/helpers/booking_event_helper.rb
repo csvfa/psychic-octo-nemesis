@@ -1,0 +1,2 @@
+module BookingEventHelper
+end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131120154056) do
+ActiveRecord::Schema.define(:version => 20131126104944) do
 
   create_table "bookings", :force => true do |t|
     t.datetime "timeslot"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20131120154056) do
     t.string   "action"
     t.integer  "imageable_id"
     t.string   "imageable_type"
+    t.string   "type"
   end
 
   add_index "events", ["booking_id"], :name => "index_statuses_on_booking_id"

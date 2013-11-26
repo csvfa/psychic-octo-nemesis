@@ -25,6 +25,7 @@ class CoachesController < ApplicationController
   # GET /coaches/new.json
   def new
     @coach = Coach.new
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +45,7 @@ class CoachesController < ApplicationController
 
     respond_to do |format|
       if @coach.save
-        format.html { redirect_to @coach, :notice => 'Coach was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Coach was successfully created.' }
         format.json { render :json => @coach, :event => :created, :location => @coach }
       else
         format.html { render :action => "new" }

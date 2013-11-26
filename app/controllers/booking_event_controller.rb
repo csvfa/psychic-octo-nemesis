@@ -1,0 +1,2 @@
+class BookingEventController < ApplicationController
+end

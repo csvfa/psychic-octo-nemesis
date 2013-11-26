@@ -25,6 +25,7 @@ class SuggestedSlotsController < ApplicationController
   # GET /suggested_slots/new.json
   def new
     @suggested_slot = SuggestedSlot.new
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +45,7 @@ class SuggestedSlotsController < ApplicationController
 
     respond_to do |format|
       if @suggested_slot.save
-        format.html { redirect_to @suggested_slot, :notice => 'Suggested slot was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Suggested slot was successfully created.' }
         format.json { render :json => @suggested_slot, :event => :created, :location => @suggested_slot }
       else
         format.html { render :action => "new" }

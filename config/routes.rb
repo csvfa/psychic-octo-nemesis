@@ -1,4 +1,6 @@
 CheerleadingCoDatabase::Application.routes.draw do
+  get "studio_event/PaymentEvent"
+
   resources :events
 
   resources :bookings

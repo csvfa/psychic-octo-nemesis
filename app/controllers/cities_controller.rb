@@ -25,6 +25,7 @@ class CitiesController < ApplicationController
   # GET /cities/new.json
   def new
     @city = City.new
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +45,7 @@ class CitiesController < ApplicationController
 
     respond_to do |format|
       if @city.save
-        format.html { redirect_to @city, :notice => 'City was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'City was successfully created.' }
         format.json { render :json => @city, :event => :created, :location => @city }
       else
         format.html { render :action => "new" }

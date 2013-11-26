@@ -25,7 +25,8 @@ class ThemesController < ApplicationController
   # GET /themes/new.json
   def new
     @theme = Theme.new
-
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
+		
     respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @theme }
@@ -44,7 +45,7 @@ class ThemesController < ApplicationController
 
     respond_to do |format|
       if @theme.save
-        format.html { redirect_to @theme, :notice => 'Theme was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Theme was successfully created.' }
         format.json { render :json => @theme, :event => :created, :location => @theme }
       else
         format.html { render :action => "new" }

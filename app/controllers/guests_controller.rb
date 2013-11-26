@@ -26,6 +26,7 @@ class GuestsController < ApplicationController
   def new
   	@booking = Booking.find(params[:booking_id])
     @guest = Guest.new(:booking => @booking, :number => params[:number])
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -46,7 +47,7 @@ class GuestsController < ApplicationController
 
     respond_to do |format|
       if @guest.save
-        format.html { redirect_to @guest.booking, :notice => 'Number of guests is now ' + @guest.number.to_s }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Number of guests is now ' + @guest.number.to_s }
         format.json { render :json => @guest, :event => :created, :location => @guest }
       else
         format.html { render :action => "new" }

@@ -1,0 +1,2 @@
+module StudioEventHelper
+end

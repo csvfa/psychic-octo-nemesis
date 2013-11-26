@@ -24,7 +24,6 @@ class EventsController < ApplicationController
   # GET /events/new
   # GET /events/new.json
   def new
-	debugger
     @booking = Booking.find(params["booking_id"])
     @event = Event.new(:booking => @booking, :code => params[:code], :notes => params[:notes])
 

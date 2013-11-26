@@ -25,6 +25,7 @@ class OpeningTimesController < ApplicationController
   # GET /opening_times/new.json
   def new
     @opening_time = OpeningTime.new
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +45,7 @@ class OpeningTimesController < ApplicationController
 
     respond_to do |format|
       if @opening_time.save
-        format.html { redirect_to @opening_time, :notice => 'Opening time was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Opening time was successfully created.' }
         format.json { render :json => @opening_time, :event => :created, :location => @opening_time }
       else
         format.html { render :action => "new" }

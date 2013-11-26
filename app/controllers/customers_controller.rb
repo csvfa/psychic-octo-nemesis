@@ -25,6 +25,7 @@ class CustomersController < ApplicationController
   # GET /customers/new.json
   def new
     @customer = Customer.new
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +45,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
-        format.html { redirect_to @customer, :notice => 'Customer was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Customer was successfully created.' }
         format.json { render :json => @customer, :event => :created, :location => @customer }
       else
         format.html { render :action => "new" }

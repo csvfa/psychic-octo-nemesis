@@ -25,6 +25,7 @@ class ManagersController < ApplicationController
   # GET /managers/new.json
   def new
     @manager = Manager.new
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +45,7 @@ class ManagersController < ApplicationController
 
     respond_to do |format|
       if @manager.save
-        format.html { redirect_to @manager, :notice => 'Manager was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Manager was successfully created.' }
         format.json { render :json => @manager, :event => :created, :location => @manager }
       else
         format.html { render :action => "new" }
