@@ -1,14 +1,119 @@
-<h1>Cheerleading Company Database</h1>
-<%= link_to "Bookings", bookings_path %>
-<%= link_to "Cities", cities_path %>
-<%= link_to "Coaches", coaches_path %>
-<%= link_to "Customers", customers_path %>
-<%= link_to "Guests", guests_path %>
-<%= link_to "Events Companies", events_companies_path %>
-<%= link_to "Managers", managers_path %>
-<%= link_to "Opening Times", opening_times_path %>
-<%= link_to "Sales People", sales_people_path %>
-<%= link_to "Studios", studios_path %>
-<%= link_to "Suggested Slots", suggested_slots_path %>
-<%= link_to "Themes", themes_path %>
-<%= link_to "Venues", venues_path %>
+<div class="container">
+	<div class="page-header">
+		<h1>The Cheerleading Company Database</h1>
+		
+		<%= link_to "Create New Booking", new_booking_path %> | 
+		<%= link_to "Cities", cities_path %> | 
+		<%= link_to "Coaches", coaches_path %> | 
+		<%= link_to "Customers", customers_path %> | 
+		<%= link_to "Events Companies", events_companies_path %> | 
+		<%= link_to "Studios", studios_path %> | 
+		<%= link_to "Themes", themes_path %> | 
+	</div>
+	
+	<!-- implement when colours have been built
+	<h2>Action Required</h2>
+	<table>
+		<tr>
+			<th>Time &amp; Studio</th>
+			<th>Customer</th>
+			<th>Instructor &amp; Theme</th>
+			<th>Booking Communication</th>
+			<th>Payment</th>
+		</tr>
+	</table>
+	-->
+	
+	<!-- show by date, city, venue, time -->
+	<% @dates.each do |date| %>
+		<h2><%= date.to_s(:standard) %></h2>
+		<table class="table table-condensed">
+			<tr>
+				<th>Customer</th>
+				<th>Time &amp; Studio</th>
+				<th>Instructor &amp; Theme</th>
+				<th>Booking Notes</th>
+				<th>Payment</th>
+				<th>Actions</th>
+			</tr>
+			<% Booking.orderedByTimeslotOn(date).each do |booking| %>
+				<tr>
+					<td> <!-- Customer -->
+						<table>
+							<tr><td class="text-muted">Name</td><td><%= booking.customer %></td></tr>
+							<tr><td class="text-muted">Phone</td><td><%= booking.customer.telephone_number %></td></tr>
+							<tr><td class="text-muted">Email</td><td><%= booking.customer.email %></td></tr>
+							<tr><td class="text-muted">Guests</td><td><%= booking.guest.to_s %></td></tr>
+							<tr><td class="text-muted">EO</td>
+								<td>
+									<% if booking.sales_person.nil? %>
+										-
+									<% else %>
+										<%= booking.sales_person.name %><br>(<%= booking.sales_person.events_company.name %>)
+									<% end %>
+								</td>
+							</tr>
+						</table>
+					</td>
+					
+					<td> <!-- Time and Studio -->
+						<p><%= booking.timeslot.to_s(:time_only) %>
+						<% if booking.studio.nil? %>
+							<span class="text-muted">No studio</span></p>
+						<% else %>
+							<span class="text-muted">at</span> <%= booking.studio %></p>
+						<% end %>
+						<!-- Studio Events -->
+						<%= render partial: "events",
+							:locals => {:events => booking.events.where(:type => "StudioEvent"),
+							:type => "studio",
+							:booking_id => booking.id}
+						%>
+					</td> 
+
+					<td> <!-- Intructor & Theme -->
+						<p>
+							<% if booking.coach.nil? %>
+								<span class ="text-muted">No coach</span>
+							<% else %>
+								<%= booking.coach.name %>
+							<% end %>
+						</p>
+						<p>
+							<% if booking.theme.nil? %>
+								<span class ="text-muted">No theme</span>
+							<% else %>
+								<%= booking.theme.name %></p>
+							<% end %>
+						</p>
+						<!-- Instructor Events -->
+						<%= render partial: "events",
+							:locals => {:events => booking.events.where(:type => "InstructorEvent"),
+							:type => "instructor",
+							:booking_id => booking.id}
+						%>				</td>
+					<td> <!-- Booking notes -->
+						<%= render partial: "events",
+							:locals => {:events => booking.events.where(:type => "BookingEvent"),
+							:type => "booking",
+							:booking_id => booking.id}
+						%>
+					</td>
+					<td> <!-- Payment notes -->
+						<%= render partial: "events",
+							:locals => {:events => booking.events.where(:type => "PaymentEvent"),
+							:type => "payment",
+							:booking_id => booking.id}
+						%>
+					</td>
+					<td> <!-- Actions  -->
+						<%= link_to 'Edit', edit_booking_path(booking) %>
+					</td>
+				</tr>
+			<% end %>
+		</table>
+	<% end %>
+				
+	
+</div>
+	

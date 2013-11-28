@@ -28,7 +28,11 @@ class BookingsController < ApplicationController
     @themes = Theme.all
     @coaches = Coach.all
     @studios = Studio.all
-    @customers = Customer.all
+		@salespeople = SalesPerson.all
+		
+		#Create a new customer record which will appear in the view
+		@booking.customer = Customer.new
+		@booking.customer.build
 		
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
@@ -44,7 +48,9 @@ class BookingsController < ApplicationController
     @themes = Theme.all
     @coaches = Coach.all
     @studios = Studio.all
-    @customers = Customer.all
+		@salespeople = SalesPerson.all
+		
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
   end
 
   # POST /bookings
@@ -70,7 +76,7 @@ class BookingsController < ApplicationController
 
     respond_to do |format|
       if @booking.update_attributes(params[:booking])
-        format.html { redirect_to @booking, :notice => 'Booking was successfully updated.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Booking was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }

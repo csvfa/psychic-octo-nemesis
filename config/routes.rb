@@ -30,6 +30,14 @@ CheerleadingCoDatabase::Application.routes.draw do
   resources :events_companies
   
 	resources :sales_people
+	
+	resources :studio_events
+	
+	resources :instructor_events	
+	
+	resources :payment_events
+	
+	resources :booking_events
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

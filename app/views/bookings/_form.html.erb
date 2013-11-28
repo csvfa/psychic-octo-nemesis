@@ -1,6 +1,6 @@
 <%= form_for(@booking) do |f| %>
   <% if @booking.errors.any? %>
-    <div id="error_explanation">
+    <div class="alert alert-danger">
       <h2><%= pluralize(@booking.errors.count, "error") %> prohibited this booking from being saved:</h2>
 
       <ul>
@@ -10,31 +10,71 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :timeslot %><br />
-    <%= f.datetime_select :timeslot %>
-  </div>
-  <div class="field">
-    <%= f.label :customer %><br />
-    <%= f.collection_select :customer_id, @customers, :id, :name, :prompt => "Select a customer" %>
-    <%= link_to 'Add new customer', new_customer_path %>
-  </div>
-	<div class="field">
-  	<p>Number of guests:<br />
-  	<%= @booking.guest_number.number %>
-  	<%= link_to 'Change', new_guest_path(:booking_id => @booking.id, :number => @booking.guest_number.number) %></p>
+<form role="form"> <!-- Bootstrap CSS styling -->
+<div class="row">
+	<div class="col-md-3">
+		<%= f.fields_for :customer do |c| %> <!-- Customer fields -->
+			<div class="form-group">
+				<%= c.label :name, "Customer name" %><br />
+				<%= c.text_field :name %>
+			</div>
+			<div class="form-group">
+				<%= c.label :telephone_number, "Customer phone" %><br />
+				<%= c.text_field :telephone_number %>
+			</div>
+			<div class="form-group">
+				<%= c.label :email, "Customer email" %><br />
+				<%= c.text_field :email %>
+			</div>
+		<% end %> <!-- End of customer fields -->
+		<%= f.fields_for :guest do |g| %>
+			<div class="form-group">
+				<%= g.label :number, "Number of guests" %><br />
+				<%= g.number_field :number %>
+			</div>
+		<% end %>
+		<div class="form-group">
+			<%= f.label :sales_person %><br />
+			<%= f.collection_select :sales_person_id, @salespeople, :id, :name, :prompt => "Select a sales person" %>
+			<br />
+			<%= link_to 'Create new sales person', new_sales_person_path %>
+		</div>
 	</div>
-  <div class="field">
-    <%= f.label :theme %><br />
-    <%= f.collection_select :theme_id, @themes, :id, :name, :prompt => "Select a theme" %>
-    <%= link_to 'Add new theme', new_theme_path %>
-  </div>
-  <div class="field">
-    <%= f.label :special_requirements %><br />
-    <%= f.text_area :special_requirements %>
-  </div>
-  <div class="field">
+	<div class="col-md-3">
+		<div class="form-group">
+			<%= f.label :timeslot %><br />
+			<%= f.datetime_select :timeslot %>
+		</div>
+		<div class="form-group">
+			<%= f.label :studio %><br />
+			<%= f.collection_select :studio_id, @studios, :id, :to_s, :prompt => "Select a studio" %>
+			<br />
+			<%= link_to 'Create new studio', new_studio_path %>
+		</div>
+	</div>
+	<div class="col-md-3">
+	  <div class="form-group">
+			<%= f.label "Instructor" %><br />
+			<%= f.collection_select :coach_id, @coaches, :id, :name, :prompt => "Select an instructor" %>
+			<br />
+			<%= link_to 'Create new instructor', new_coach_path %>
+		</div>
+		<div class="form-group">
+			<%= f.label :theme %><br />
+			<%= f.collection_select :theme_id, @themes, :id, :name, :prompt => "Select a theme" %>
+			<br />
+			<%= link_to 'Create new theme', new_theme_path %>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="form-group">
+			<%= f.label :advance_venue_payment_required %><br />
+			<%= f.check_box :advance_venue_payment_required %>
+		</div>
+	</div>
+</div>
+	<!-- Events will be on index..(?)
+  <div class="form-group">
     <p>event:<br />
     <% @booking.events.each do |event| %>
   		<%= event %>
@@ -44,30 +84,21 @@
   			:booking_id => @booking.id,
   			:code => @booking.current_event.code,
   			:notes => @booking.current_event.notes) %></p>
-  </div>
-  <div class="field">
-    <%= f.label :notes %><br />
+  </div> -->
+  <!-- No use case for this(?)
+	<div class="form-group">
+    <%= f.label "Extra notes" %><br />
     <%= f.text_area :notes %>
-  </div>
-  <div class="field">
-    <%= f.label :coach %><br />
-    <%= f.collection_select :coach_id, @coaches, :id, :name, :prompt => "Select a coach" %>
-    <%= link_to 'Add new coach', new_coach_path %>
-  </div>
-  <div class="field">
-    <%= f.label :studio %><br />
-    <%= f.collection_select :studio_id, @studios, :id, :to_s, :prompt => "Select a studio" %>
-    <%= link_to 'Add new studio', new_studio_path %>
-  </div>
-  <div class="field">
+  </div> -->
+
+	<!-- User would just put who studio was booked with in the event notes.. (?)
+  <div class="form-group">
     <%= f.label :venue_booked_with %><br />
     <%= f.text_field :venue_booked_with %>
-  </div>
-  <div class="field">
-    <%= f.label :advance_venue_payment_required %><br />
-    <%= f.check_box :advance_venue_payment_required %>
-  </div>
+  </div> -->
+
   <div class="actions">
     <%= f.submit %>
   </div>
+</form>
 <% end %>

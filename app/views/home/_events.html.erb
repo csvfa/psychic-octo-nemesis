@@ -1,0 +1,14 @@
+<% if events.count == 0 %>
+	<p class="text-muted">No <%= type %> notes</p>
+<% end %>
+<% events.each do |event| %>
+	<div class="well well-sm">
+		<small><%= event.occurred_at.to_s(:standard) %></small>
+		<br />
+		<span class="label label-info"><%= event.code %></span>
+		<br />
+		<small class="text-info">"<%= event.notes %>"</small>
+	</div>
+<% end %>
+<!-- do a case statement and construct link based on "type". new_studio_event_path(pass booking id) -->
+<%= link_to '+', new_studio_event_path(:booking_id => booking_id) %>
