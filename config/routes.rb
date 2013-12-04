@@ -1,4 +1,6 @@
 CheerleadingCoDatabase::Application.routes.draw do
+   # root 'bookings#index'
+    
   get "studio_event/PaymentEvent"
 
   resources :events
