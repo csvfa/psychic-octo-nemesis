@@ -1,0 +1,12 @@
+<div class="container">
+	<div class = "row">
+		<div class = "col-md-11">
+			<h1>Editing instructor note <small>for <%= @booking %></small></h1>
+		</div>
+		<div class = "col-md-1">
+			<%= button_to "Delete note", @instructor_event, :method=>:delete, :class=>"btn btn-danger",:confirm=>"Are you sure?" %>
+		</div>
+	</div>
+	<%= render 'form' %>
+	<%= link_to 'Home', root_path %>
+</div>

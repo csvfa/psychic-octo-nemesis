@@ -1,0 +1,52 @@
+<%= form_for(@booking_event) do |f| %>
+  <% if @booking_event.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(@booking_event.errors.count, "error") %> prohibited this booking note from being saved:</h2>
+
+      <ul>
+      <% @booking_event.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+	
+<form role="form"> <!-- Bootstrap CSS styling -->
+<div class = "row">
+	<div class = "col-md-12">
+	  <div class="form-group">
+			<%= f.label :occurred_at %><br />
+			<%= f.datetime_select :occurred_at, {:class=>"form-control"} %>
+		</div>
+	</div>
+</div>
+<div class = "row">
+	<div class = "col-md-6">
+		<div class="form-group">
+			<%= f.label :code %><br />
+			<%= f.select :code, BookingEvent::CODES, {}, { :size=>BookingEvent::CODES.count, :class=>"form-control" } %>
+		</div>
+	</div>
+	<div class = "col-md-6">
+		<div class="form-group">
+			<%= f.label :action %><br />
+			<%= f.select :action, Event::ACTIONS, {}, { :size=>Event::ACTIONS.count, :class=>"form-control" } %>
+		</div>
+	</div>
+</div>
+<div class = "row">
+	<div class = "col-md-12">
+		<div class="form-group">
+			<%= f.label :notes %><br />
+			<%= f.text_area :notes, {:class=>"form-control", :rows=>3} %>
+		</div>
+	</div>
+</div>
+
+  <%= f.hidden_field :booking_id, :value => @booking.id %>
+	
+  <div class="actions">
+    <%= f.submit :class=>"btn btn-default" %>
+  </div>
+</form>
+<% end %>

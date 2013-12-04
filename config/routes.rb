@@ -33,11 +33,13 @@ CheerleadingCoDatabase::Application.routes.draw do
 	
 	resources :studio_events
 	
-	resources :instructor_events	
+	resources :instructor_events
 	
 	resources :payment_events
 	
 	resources :booking_events
+	
+	get '/studios/in_city_id/:id', to: 'studios#in_city_id'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

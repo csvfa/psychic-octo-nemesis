@@ -26,18 +26,28 @@
 				<%= c.label :email, "Customer email" %><br />
 				<%= c.text_field :email %>
 			</div>
+			<div class="form-group">
+				<%= c.label :city, "Customer city" %><br />
+				<%= f.collection_select :city_id, @cities, :id, :name, {}, :size=>@cities.count, :class=>"form-control" %>
+			</div>
 		<% end %> <!-- End of customer fields -->
+		
 		<%= f.fields_for :guest do |g| %>
 			<div class="form-group">
 				<%= g.label :number, "Number of guests" %><br />
 				<%= g.number_field :number %>
 			</div>
 		<% end %>
+		
 		<div class="form-group">
 			<%= f.label :sales_person %><br />
 			<%= f.collection_select :sales_person_id, @salespeople, :id, :name, :prompt => "Select a sales person" %>
 			<br />
 			<%= link_to 'Create new sales person', new_sales_person_path %>
+		</div>
+		<div class="form-group">
+			<%= f.label "Extra customer notes" %><br />
+			<%= f.text_area :notes, {:class=>"form-control", :rows=>3} %>
 		</div>
 	</div>
 	<div class="col-md-3">
@@ -47,7 +57,8 @@
 		</div>
 		<div class="form-group">
 			<%= f.label :studio %><br />
-			<%= f.collection_select :studio_id, @studios, :id, :to_s, :prompt => "Select a studio" %>
+			<!--  f.collection_select :studio_id, @studios, :id, :to_s, :prompt => "Select a studio" -->
+			<%= f.collection_select :studio_id, Studio.in_city(@booking.city), :id, :to_s, :prompt => "Select a studio" %>
 			<br />
 			<%= link_to 'Create new studio', new_studio_path %>
 		</div>
@@ -85,11 +96,8 @@
   			:code => @booking.current_event.code,
   			:notes => @booking.current_event.notes) %></p>
   </div> -->
-  <!-- No use case for this(?)
-	<div class="form-group">
-    <%= f.label "Extra notes" %><br />
-    <%= f.text_area :notes %>
-  </div> -->
+
+
 
 	<!-- User would just put who studio was booked with in the event notes.. (?)
   <div class="form-group">
@@ -102,3 +110,4 @@
   </div>
 </form>
 <% end %>
+

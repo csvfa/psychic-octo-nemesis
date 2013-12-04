@@ -1,14 +1,16 @@
 <div class="container">
 	<div class="page-header">
 		<h1>The Cheerleading Company Database</h1>
-		
+		<p>
 		<%= link_to "Create New Booking", new_booking_path %> | 
 		<%= link_to "Cities", cities_path %> | 
 		<%= link_to "Coaches", coaches_path %> | 
 		<%= link_to "Customers", customers_path %> | 
 		<%= link_to "Events Companies", events_companies_path %> | 
 		<%= link_to "Studios", studios_path %> | 
-		<%= link_to "Themes", themes_path %> | 
+		<%= link_to "Themes", themes_path %>
+		</p>
+		<p><%= label_tag :region %> <%= select_tag :region, options_for_select(["All"] + City::REGIONS) %></p>
 	</div>
 	
 	<!-- implement when colours have been built
@@ -31,29 +33,37 @@
 			<tr>
 				<th>Customer</th>
 				<th>Time &amp; Studio</th>
-				<th>Instructor &amp; Theme</th>
+				<th>Instructor</th>
 				<th>Booking Notes</th>
 				<th>Payment</th>
 				<th>Actions</th>
 			</tr>
+			
+			<!-- make this a partial, add controller method to return correct bookings -->
 			<% Booking.orderedByTimeslotOn(date).each do |booking| %>
 				<tr>
 					<td> <!-- Customer -->
-						<table>
-							<tr><td class="text-muted">Name</td><td><%= booking.customer %></td></tr>
-							<tr><td class="text-muted">Phone</td><td><%= booking.customer.telephone_number %></td></tr>
-							<tr><td class="text-muted">Email</td><td><%= booking.customer.email %></td></tr>
-							<tr><td class="text-muted">Guests</td><td><%= booking.guest.to_s %></td></tr>
-							<tr><td class="text-muted">EO</td>
-								<td>
-									<% if booking.sales_person.nil? %>
-										-
-									<% else %>
-										<%= booking.sales_person.name %><br>(<%= booking.sales_person.events_company.name %>)
-									<% end %>
-								</td>
-							</tr>
-						</table>
+							<p><%= booking.customer %></p>
+							<p><%= booking.customer.telephone_number %></p>
+							<p><%= booking.customer.email %></p>
+							<p><%= booking.city %></p>
+							<p><% if booking.guest.nil? %>
+								<span class="text-muted">No</span>
+							<% else %>
+								<%= booking.guest.to_s %>
+							<% end %>
+							<span class="text-muted"> guests</span></p>
+							<p>
+							<% if booking.theme.nil? %>
+								<span class ="text-muted">No theme</span>
+							<% else %>
+								<%= booking.theme.name %></p>
+							<% end %>
+							</p>
+							<% unless booking.sales_person.nil? %>
+									<p><span class="text-muted">EO </span><%= booking.sales_person.name %><br>(<%= booking.sales_person.events_company.name %>)</p>
+							<% end %>
+							<p><%= booking.notes %></p>
 					</td>
 					
 					<td> <!-- Time and Studio -->
@@ -71,19 +81,12 @@
 						%>
 					</td> 
 
-					<td> <!-- Intructor & Theme -->
+					<td> <!-- Intructor -->
 						<p>
 							<% if booking.coach.nil? %>
-								<span class ="text-muted">No coach</span>
+								<span class ="text-muted">No instructor</span>
 							<% else %>
 								<%= booking.coach.name %>
-							<% end %>
-						</p>
-						<p>
-							<% if booking.theme.nil? %>
-								<span class ="text-muted">No theme</span>
-							<% else %>
-								<%= booking.theme.name %></p>
 							<% end %>
 						</p>
 						<!-- Instructor Events -->

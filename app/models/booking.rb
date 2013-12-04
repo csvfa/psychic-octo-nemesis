@@ -1,5 +1,5 @@
 class Booking < ActiveRecord::Base
-	has_one :guest, :dependent => :destroy 
+	has_one :guest, :dependent => :destroy
 	has_many :events, :dependent => :destroy
 
 	belongs_to :theme
@@ -7,6 +7,7 @@ class Booking < ActiveRecord::Base
 	belongs_to :studio
 	belongs_to :customer
 	belongs_to :sales_person
+	belongs_to :city
 	
 	accepts_nested_attributes_for :guest
 	accepts_nested_attributes_for :customer

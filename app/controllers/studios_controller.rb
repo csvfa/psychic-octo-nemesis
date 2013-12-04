@@ -83,4 +83,18 @@ class StudiosController < ApplicationController
       format.json { head :no_content }
     end
   end
+	
+	# Called by Javascript when the City drop down is changed so that the Studios select only has
+	# array of arrays [id, name] studios in the selected city
+	def in_city_id
+		@studioNames = Array.new
+		
+		Studio.in_city(City.find(params[:id])).each do |studio|
+			@studioNames << [studio.id, studio.to_s]
+		end
+		
+		respond_to do |format|
+			format.json  { render :json => @studioNames }      
+		end
+	end
 end

@@ -3,12 +3,42 @@
 <% end %>
 <% events.each do |event| %>
 	<div class="well well-sm">
-		<small><%= event.occurred_at.to_s(:standard) %></small>
+		<small><%= event.occurred_at.to_s(:standard) %>
+		<!-- Edit link -->
+		<% edit_path = case type
+			when "studio" then			edit_studio_event_path(event)
+			when "instructor" then	edit_instructor_event_path(event)
+			when "booking" then			edit_booking_event_path(event)
+			when "payment" then			edit_payment_event_path(event)
+		end %>
+		| <%= link_to 'Edit', edit_path %>
+		
+		<!-- Delete button MOVE DELETE BUTTON TO EDIT SCREEN. FOR BOOKINGS TOO.-->
+		
+		</small>
 		<br />
-		<span class="label label-info"><%= event.code %></span>
+		
+		<!-- Colour is dependent on action -->
+		<% label_class = case event.action
+			when "Done" then									"label label-success"
+			when "Waiting" then								"label label-warning"
+			when "Chase later" then						"label label-info"
+			when "Action required now" then		"label label-danger"
+			else															"label label-primary"
+			end %>
+			
+		<span class="<%= label_class %>"><%= event.code %></span>
 		<br />
 		<small class="text-info">"<%= event.notes %>"</small>
 	</div>
 <% end %>
-<!-- do a case statement and construct link based on "type". new_studio_event_path(pass booking id) -->
-<%= link_to '+', new_studio_event_path(:booking_id => booking_id) %>
+
+<!-- The "New" link depends on the type of event we've got -->
+<% new_path = case type
+	when "studio" then			new_studio_event_path(:booking_id => booking_id)
+	when "instructor" then	new_instructor_event_path(:booking_id => booking_id)
+	when "booking" then			new_booking_event_path(:booking_id => booking_id)
+	when "payment" then			new_payment_event_path(:booking_id => booking_id)
+end %>
+	
+<%= link_to '+', new_path %>

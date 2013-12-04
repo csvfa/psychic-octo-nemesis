@@ -29,10 +29,11 @@ class BookingsController < ApplicationController
     @coaches = Coach.all
     @studios = Studio.all
 		@salespeople = SalesPerson.all
+		@cities = City.all
 		
-		#Create a new customer record which will appear in the view
+		#Create new customer & guest no. records which will appear in the view
 		@booking.customer = Customer.new
-		@booking.customer.build
+		@booking.guest = Guest.new
 		
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
@@ -49,6 +50,11 @@ class BookingsController < ApplicationController
     @coaches = Coach.all
     @studios = Studio.all
 		@salespeople = SalesPerson.all
+		@cities = City.all
+		
+		if @booking.guest.nil?
+			@booking.guest = Guest.new
+		end
 		
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
   end
@@ -88,12 +94,18 @@ class BookingsController < ApplicationController
   # DELETE /bookings/1
   # DELETE /bookings/1.json
   def destroy
+		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
     @booking = Booking.find(params[:id])
     @booking.destroy
 
     respond_to do |format|
-      format.html { redirect_to bookings_url }
+      format.html { redirect_to session.delete(:return_to), :notice => 'Booking was deleted.' }
       format.json { head :no_content }
     end
   end
+
+	# use for ajax call used by region filter on home index.
+	def in_region(region)
+		@bookings = Booking.joins(:city).where("cities.region = " + region)
+	end
 end

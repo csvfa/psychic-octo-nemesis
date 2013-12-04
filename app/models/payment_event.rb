@@ -1,6 +1,7 @@
 class PaymentEvent < Event
   CODES = [
-		'Invoice sent',
+		'Need to send invoice',
+		'Invoice sent, awaiting pay',
 		'Deposit overdue, no longer holding',
 		'Deposit received',
 		'Form & deposit received & confirmation sent',
@@ -14,5 +15,5 @@ class PaymentEvent < Event
 		'Balance paid'
 	]
 	
-		validates_inclusion_of :code, :in => CODES, :message => "{{value}} must be in #{CODES.join ','}"
+		validates_inclusion_of :code, :in => CODES, :message => "{{value}} must be in #{CODES.join ','}", :allow_nil => true
 end
