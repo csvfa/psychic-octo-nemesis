@@ -4,13 +4,17 @@ class Studio < ActiveRecord::Base
   has_many :booking
   
   validates_presence_of :name
-  
+    
 	def to_s
 		to_string
 	end
 	
 	def to_string
-		name + " at " + venue.to_s
+        if name=="Default" then
+            venue.to_s
+        else
+            name + " at " + venue.to_s
+        end
 	end
 	
 	def self.in_city(city)

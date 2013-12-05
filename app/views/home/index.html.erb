@@ -2,7 +2,7 @@
 	<div class="page-header">
 		<h1>The Cheerleading Company Database</h1>
 		<p>
-		<%= link_to "Create New Booking", new_booking_path %> | 
+		<%= link_to "Bookings", bookings_path %> | 
 		<%= link_to "Cities", cities_path %> | 
 		<%= link_to "Coaches", coaches_path %> | 
 		<%= link_to "Customers", customers_path %> | 
@@ -10,113 +10,5 @@
 		<%= link_to "Studios", studios_path %> | 
 		<%= link_to "Themes", themes_path %>
 		</p>
-		<p><%= label_tag :region %> <%= select_tag :region, options_for_select(["All"] + City::REGIONS) %></p>
 	</div>
-	
-	<!-- implement when colours have been built
-	<h2>Action Required</h2>
-	<table>
-		<tr>
-			<th>Time &amp; Studio</th>
-			<th>Customer</th>
-			<th>Instructor &amp; Theme</th>
-			<th>Booking Communication</th>
-			<th>Payment</th>
-		</tr>
-	</table>
-	-->
-	
-	<!-- show by date, city, venue, time -->
-	<% @dates.each do |date| %>
-		<h2><%= date.to_s(:standard) %></h2>
-		<table class="table table-condensed">
-			<tr>
-				<th>Customer</th>
-				<th>Time &amp; Studio</th>
-				<th>Instructor</th>
-				<th>Booking Notes</th>
-				<th>Payment</th>
-				<th>Actions</th>
-			</tr>
-			
-			<!-- make this a partial, add controller method to return correct bookings -->
-			<% Booking.orderedByTimeslotOn(date).each do |booking| %>
-				<tr>
-					<td> <!-- Customer -->
-							<p><%= booking.customer %></p>
-							<p><%= booking.customer.telephone_number %></p>
-							<p><%= booking.customer.email %></p>
-							<p><%= booking.city %></p>
-							<p><% if booking.guest.nil? %>
-								<span class="text-muted">No</span>
-							<% else %>
-								<%= booking.guest.to_s %>
-							<% end %>
-							<span class="text-muted"> guests</span></p>
-							<p>
-							<% if booking.theme.nil? %>
-								<span class ="text-muted">No theme</span>
-							<% else %>
-								<%= booking.theme.name %></p>
-							<% end %>
-							</p>
-							<% unless booking.sales_person.nil? %>
-									<p><span class="text-muted">EO </span><%= booking.sales_person.name %><br>(<%= booking.sales_person.events_company.name %>)</p>
-							<% end %>
-							<p><%= booking.notes %></p>
-					</td>
-					
-					<td> <!-- Time and Studio -->
-						<p><%= booking.timeslot.to_s(:time_only) %>
-						<% if booking.studio.nil? %>
-							<span class="text-muted">No studio</span></p>
-						<% else %>
-							<span class="text-muted">at</span> <%= booking.studio %></p>
-						<% end %>
-						<!-- Studio Events -->
-						<%= render partial: "events",
-							:locals => {:events => booking.events.where(:type => "StudioEvent"),
-							:type => "studio",
-							:booking_id => booking.id}
-						%>
-					</td> 
-
-					<td> <!-- Intructor -->
-						<p>
-							<% if booking.coach.nil? %>
-								<span class ="text-muted">No instructor</span>
-							<% else %>
-								<%= booking.coach.name %>
-							<% end %>
-						</p>
-						<!-- Instructor Events -->
-						<%= render partial: "events",
-							:locals => {:events => booking.events.where(:type => "InstructorEvent"),
-							:type => "instructor",
-							:booking_id => booking.id}
-						%>				</td>
-					<td> <!-- Booking notes -->
-						<%= render partial: "events",
-							:locals => {:events => booking.events.where(:type => "BookingEvent"),
-							:type => "booking",
-							:booking_id => booking.id}
-						%>
-					</td>
-					<td> <!-- Payment notes -->
-						<%= render partial: "events",
-							:locals => {:events => booking.events.where(:type => "PaymentEvent"),
-							:type => "payment",
-							:booking_id => booking.id}
-						%>
-					</td>
-					<td> <!-- Actions  -->
-						<%= link_to 'Edit', edit_booking_path(booking) %>
-					</td>
-				</tr>
-			<% end %>
-		</table>
-	<% end %>
-				
-	
 </div>
-	
