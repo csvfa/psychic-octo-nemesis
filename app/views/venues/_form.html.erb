@@ -1,45 +1,78 @@
 <%= form_for(@venue) do |f| %>
-  <% if @venue.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@venue.errors.count, "error") %> prohibited this venue from being saved:</h2>
+    <% if @venue.errors.any? %>
+        <div id="error_explanation">
+            <h2><%= pluralize(@venue.errors.count, "error") %> prohibited this venue from being saved:</h2>
+            <ul>
+            <% @venue.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+            </ul>
+        </div>
+    <% end %>
 
-      <ul>
-      <% @venue.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :contact_name %><br />
-    <%= f.text_field :contact_name %>
-  </div>
-  <div class="field">
-    <%= f.label :contact_email %><br />
-    <%= f.text_field :contact_email %>
-  </div>
-  <div class="field">
-    <%= f.label :contact_phone %><br />
-    <%= f.text_field :contact_phone %>
-  </div>
-  <div class="field">
-    <%= f.label :payment_procedure %><br />
-    <%= f.text_area :payment_procedure %>
-  </div>
-  <div class="field">
-    <%= f.label :notes %><br />
-    <%= f.text_area :notes %>
-  </div>
-  <div class="field">
-    <%= f.label :city %><br />
-    <%= f.collection_select :city_id, @cities, :id, :name, :prompt => "Select a city" %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <form role="form"> <!-- Bootstrap CSS styling -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <%= f.label :name %><br />
+                    <%= f.text_field :name %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :contact_name %><br />
+                    <%= f.text_field :contact_name %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :contact_email %><br />
+                    <%= f.text_field :contact_email %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :contact_phone %><br />
+                    <%= f.text_field :contact_phone %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :payment_procedure %><br />
+                    <%= f.text_area :payment_procedure, { :rows => 3 } %>
+                </div>
+                <div class="form-group">
+                    <%= f.label "Venue notes" %><br />
+                    <%= f.text_area :notes, { :rows => 3 } %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :city %><br />
+                    <%= f.collection_select :city_id, @cities, :id, :name, :prompt => "Select a city" %>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <%= f.fields_for :studios do |s| %> <!-- Default Studio fields -->
+                            <div class="form-group">
+                                <%= s.label :capacity %><br />
+                                <%= s.number_field :capacity %>
+                            </div>
+                            <div class="form-group">
+                                <%= s.label :price %><br />
+                                <%= s.number_field :price %>
+                            </div>
+                            <div class="form-group">
+                                <%= s.label :available_from %><br />
+                                <%= s.time_select :available_from %>
+                            </div>
+                            <div class="form-group">
+                                <%= s.label :available_to %><br />
+                                <%= s.time_select :available_to %>
+                            </div>
+                            <div class="form-group">
+                                <%= s.label "Studio notes" %><br />
+                                <%= s.text_area :notes, { :rows => 3 } %>
+                            </div>
+                        <% end %> <!-- End of default studio fields -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <%= f.submit %>
+        </div>
+    </form>
 <% end %>
