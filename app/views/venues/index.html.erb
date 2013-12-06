@@ -10,8 +10,6 @@
     <th>Notes</th>
     <th>City</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @venues.each do |venue| %>
@@ -22,14 +20,12 @@
     <td><%= venue.contact_phone %></td>
     <td><%= venue.payment_procedure %></td>
     <td><%= venue.notes %></td>
-    <td><%= venue.city.name %></td>
-    <td><%= link_to 'Show', venue %></td>
+    <td><% unless venue.city.nil? %> <%= venue.city.name %><% end %></td>
     <td><%= link_to 'Edit', edit_venue_path(venue) %></td>
-    <td><%= link_to 'Destroy', venue, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Venue', new_venue_path %>
+<%= link_to 'New Venue', new_venue_path %> | <%= link_to 'Home', root_path %>

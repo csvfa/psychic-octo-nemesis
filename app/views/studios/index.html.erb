@@ -10,8 +10,6 @@
     <th>Notes</th>
     <th>Venue</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @studios.each do |studio| %>
@@ -23,13 +21,11 @@
     <td><%= studio.available_to %></td>
     <td><%= studio.notes %></td>
     <td><%= studio.venue %></td>
-    <td><%= link_to 'Show', studio %></td>
     <td><%= link_to 'Edit', edit_studio_path(studio) %></td>
-    <td><%= link_to 'Destroy', studio, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Studio', new_studio_path %>
+<%= link_to 'New Studio', new_studio_path %> | <%= link_to 'Home', root_path %> |

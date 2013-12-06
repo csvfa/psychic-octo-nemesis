@@ -2,9 +2,6 @@ class BookingsController < ApplicationController
   # GET /bookings
     
     def index
-	# Bookings on or after today
-	@dates = Booking.datesOfCurrentBookings
-		
 	# order by city, venue, timeslot, time
 	
 	# attempt 1 here doesn't work because a booking may not have a studio
@@ -14,6 +11,13 @@ class BookingsController < ApplicationController
 	#			x.studio.venue.name,
 	#			x.timeslot]
 	#		}
+        
+        # if the user previously chose a region, use that. otherwise default to All
+        if session[:region].nil?
+            @region = "All"
+        else
+            @region = session[:region]
+        end
   end
 
   # GET /bookings/1
@@ -69,6 +73,15 @@ class BookingsController < ApplicationController
   # POST /bookings.json
   def create
     @booking = Booking.new(params[:booking])
+    @themes = Theme.all
+    @coaches = Coach.all
+    @studios = Studio.all
+    @salespeople = SalesPerson.all
+    @cities = City.all
+      
+    if @booking.guest.nil?
+        @booking.guest = Guest.new
+    end
 
     respond_to do |format|
       if @booking.save
@@ -110,8 +123,19 @@ class BookingsController < ApplicationController
     end
   end
 
-	# use for ajax call used by region filter on home index.
-	def in_region(region)
-		@bookings = Booking.joins(:city).where("cities.region = " + region)
-	end
+    # use for ajax call used by region filter on bookings index.
+    def set_region
+        @region = params[:region]
+        
+        # store in session so return to the page later remembers the last selected region
+        session[:region] = @region
+        
+        respond_to do |format|
+            format.html { render :partial => "bookings" }
+		end
+        
+        #render :update do |page|
+        #    page.replace_html 'bookingsDiv', :partial => 'bookings'
+        #end
+    end
 end

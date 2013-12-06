@@ -43,9 +43,19 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <%= f.fields_for :studios do |s| %> <!-- Default Studio fields -->
+                <%= f.fields_for :studios do |s| %> <!-- Default Studio fields -->
+                    <div class="panel panel-default">
+                        <% if s.object.name == "Default" %>
+                            <div class="panel-heading">Default studio</div>
+                            <%= s.hidden_field :name, value: "Default" %>
+                        <% end %>
+                        <div class="panel-body">
+                        <% if s.object.name != "Default" %>
+                            <div class="form-group">
+                                <%= s.label :name %><br />
+                                <%= s.text_field :name %>
+                            </div>
+                        <% end %>
                             <div class="form-group">
                                 <%= s.label :capacity %><br />
                                 <%= s.number_field :capacity %>
@@ -66,9 +76,9 @@
                                 <%= s.label "Studio notes" %><br />
                                 <%= s.text_area :notes, { :rows => 3 } %>
                             </div>
-                        <% end %> <!-- End of default studio fields -->
+                        </div>
                     </div>
-                </div>
+                <% end %> <!-- End of default studio fields -->
             </div>
         </div>
         <div class="actions">

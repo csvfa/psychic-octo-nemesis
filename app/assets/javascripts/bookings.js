@@ -33,30 +33,16 @@ $(document).ready(function(){
                 });
             };
 			});
-      $("select#region").change(function(){
-																var value_string = $(this).val();
-																// Send the request and update studio dropdown 
-																$.ajax({
-																			 dataType: "json",
-																			 cache: false,
-																			 url: '/bookings/in_region/' + value_string,
-																			 timeout: 2000,
-																			 error: function(XMLHttpRequest, errorTextStatus, error){
-																			 alert("Failed to submit : "+ errorTextStatus+" ;"+error);
-																			 },
-																			 success: function(data){                    
-																			 // Clear all options from studio select 
-																			 //$("select#booking_studio_id option").remove();
-																			 //put in a empty default line
-																			 //var row = "<option value=\"" + "" + "\">" + "" + "</option>";
-																			 //$(row).appendTo("select#booking_studio_id");                        
-																			 // Fill studio select 
-																			 //$.each(data, function(i, j){
-																			//				row = "<option value=\"" + j[0] + "\">" + j[1] + "</option>";   
-																			//				$(row).appendTo("select#booking_studio_id");                     
-																			//				});             
-																			// }
-																			 });
-																};
-																});
 });
+    
+function update_bookings_div(region) {  
+  jQuery.ajax({
+    url: "/set_region",
+    type: "GET",
+    data: {"region" : region},
+    dataType: "html",
+    success: function(data) {
+      jQuery("#bookingsDiv").html(data);
+    }
+  });
+}

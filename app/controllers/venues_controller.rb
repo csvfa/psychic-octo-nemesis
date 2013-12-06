@@ -27,7 +27,6 @@ class VenuesController < ApplicationController
         @venue = Venue.new
         @cities = City.all
         @studio = Studio.new(name: "Default")
-        # @venue.studios.new 
       @venue.studios << @studio
       
     session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
@@ -48,8 +47,11 @@ class VenuesController < ApplicationController
   # POST /venues.json
   def create
     @venue = Venue.new(params[:venue])
+    @cities = City.all
+    
+      # if studio is the default one, assign name Default
 
-    respond_to do |format|
+    respond_to do |format| 
       if @venue.save
         format.html { redirect_to session.delete(:return_to), :notice => 'Venue was successfully created.' }
         format.json { render :json => @venue, :event => :created, :location => @venue }

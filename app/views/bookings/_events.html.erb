@@ -1,44 +1,77 @@
 <% if events.count == 0 %>
-	<p class="text-muted">No <%= type %> notes</p>
+    <p class="text-muted">No <%= type %> notes</p>
 <% end %>
-<% events.each do |event| %>
-	<div class="well well-sm">
-		<small><%= event.occurred_at.to_s(:standard) %>
-		<!-- Edit link -->
-		<% edit_path = case type
-			when "studio" then			edit_studio_event_path(event)
-			when "instructor" then	edit_instructor_event_path(event)
-			when "booking" then			edit_booking_event_path(event)
-			when "payment" then			edit_payment_event_path(event)
-		end %>
-		| <%= link_to 'Edit', edit_path %>
-		
-		<!-- Delete button MOVE DELETE BUTTON TO EDIT SCREEN. FOR BOOKINGS TOO.-->
-		
-		</small>
-		<br />
-		
-		<!-- Colour is dependent on action -->
-		<% label_class = case event.action
-			when "Done" then									"label label-success"
-			when "Waiting" then								"label label-warning"
-			when "Chase later" then						"label label-info"
-			when "Action required now" then		"label label-danger"
-			else															"label label-primary"
-			end %>
-			
-		<span class="<%= label_class %>"><%= event.code %></span>
-		<br />
-		<small class="text-info">"<%= event.notes %>"</small>
-	</div>
+<% events.each_with_index do |event, index| %>
+
+        <!-- First, set some variables. Edit link -->
+        <% edit_path = case type
+            when "studio" then      edit_studio_event_path(event)
+            when "instructor" then  edit_instructor_event_path(event)
+            when "booking" then     edit_booking_event_path(event)
+            when "payment" then     edit_payment_event_path(event)
+        end %>
+
+        <!-- Colour is dependent on action -->
+        <% label_class = case event.action
+            when "Done" then                 "label label-success"
+            when "Waiting" then              "label label-warning"
+            when "Chase later" then          "label label-info"
+            when "Action required now" then  "label label-danger"
+            else                             "label label-default"
+        end %>
+
+    <!-- Each well contains all the notes for a day.
+
+        if this is the first in the array, or if the previous one has a different date, 
+            then create a new well, display the date<br>, then display the label/note.
+        else
+            just display the label/note
+    -->
+
+    <% if (index == 0) or (events[index - 1].occurred_at != events[index].occurred_at) %>
+        <div class="well well-sm">
+            <small><%= event.occurred_at.to_s(:date_only) %>
+            </small>
+            <br />
+
+            <%= link_to edit_path do %>
+                <span class="<%= label_class %>"><%= event.code %></span>
+            <% end %>
+
+            <% unless event.notes == "" %>
+                <small class="text-info"><%= event.notes %></small>
+            <% end %>
+            
+            <!-- If the next one requires a new well, then close this div -->
+            <% if (index == events.size - 1) or (events[index].occurred_at != events[index + 1].occurred_at) %>
+        </div>
+            <% else %>
+            <br />
+            <% end %>
+    <% else %> <!-- This note has the same date as the last one, so we put it in the same well -->
+            <%= link_to edit_path do %>
+                <span class="<%= label_class %>"><%= event.code %></span>
+            <% end %>
+
+            <% unless event.notes == "" %>
+                <small class="text-info"><%= event.notes %></small>
+            <% end %>
+            
+            <!-- If the next one requires a new well, then close this div -->
+            <% if (index == events.size - 1) or (events[index].occurred_at != events[index + 1].occurred_at) %>
+        </div>
+            <% else %>
+            <br />
+            <% end %>
+    <% end %>
 <% end %>
 
 <!-- The "New" link depends on the type of event we've got -->
 <% new_path = case type
-	when "studio" then			new_studio_event_path(:booking_id => booking_id)
-	when "instructor" then	new_instructor_event_path(:booking_id => booking_id)
-	when "booking" then			new_booking_event_path(:booking_id => booking_id)
-	when "payment" then			new_payment_event_path(:booking_id => booking_id)
+    when "studio" then         new_studio_event_path(:booking_id => booking_id)
+	when "instructor" then     new_instructor_event_path(:booking_id => booking_id)
+	when "booking" then        new_booking_event_path(:booking_id => booking_id)
+	when "payment" then        new_payment_event_path(:booking_id => booking_id)
 end %>
 	
 <%= link_to '+', new_path %>

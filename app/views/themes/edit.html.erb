@@ -1,6 +1,14 @@
-<h1>Editing theme</h1>
+<div class="container">
+	<div class = "row">
+		<div class = "col-md-11">
+			<h1>Editing theme</h1>
+		</div>
+		<div class = "col-md-1">
+			<%= button_to "Delete theme", @theme, :method=>:delete, :class=>"btn btn-danger",:confirm=>"Are you sure?" %>
+		</div>
+	</div>
+	
+	<p id="notice"><%= notice %></p>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @theme %> |
-<%= link_to 'Back', themes_path %>
+	<%= render 'form' %>
+</div>

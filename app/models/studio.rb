@@ -17,11 +17,17 @@ class Studio < ActiveRecord::Base
         end
 	end
 	
+        # returns all studios in the given city. always include "own venue"
 	def self.in_city(city)
 		if city.nil?
 			Studio.all
 		else
-			Studio.find_all_by_venue_id(Venue.where(city_id: city.id).pluck(:id))
+            ownVenue = Studio.joins(:venue).where("venues.name = 'Own venue'")
+            if ownVenue.nil?
+                Studio.find_all_by_venue_id(Venue.where(city_id: city.id).pluck(:id))
+            else
+                Studio.find_all_by_venue_id(Venue.where(city_id: city.id).pluck(:id)) + ownVenue
+            end
 		end
 	end
 end

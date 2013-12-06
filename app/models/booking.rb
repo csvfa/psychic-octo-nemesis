@@ -55,19 +55,27 @@ class Booking < ActiveRecord::Base
 		end
 	end
 	
-	def self.orderedByTimeslotOn(date)
-		# returns all bookings for a given day, in order of timeslot
-		# can we use sort method to sort by city, venue, time?
-		Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).order('timeslot')
+	def self.orderedByTimeslotOn(region, date)
+		# returns all bookings in a given region, for a given day, in order of timeslot
+        if region == "All"
+            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).order('timeslot')
+        else
+            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region = '" + region + "'").order('timeslot')
+        end
 	end
 	
-	def self.datesOfCurrentBookings
+	def self.datesOfCurrentBookings(region)
 		# returns an array of dates of bookings that are taking place today or in the future
 		# this is used on the homepage
 		
 		# Bookings on or after today (note from previous midnight onwards so we include parties that already started today
-		currentBookings = Booking.where("timeslot >='" + Date.today.to_time.to_s + "'")
-		dates = Array.new
+        if region == "All"
+            currentBookings = Booking.where("timeslot >='" + Date.today.to_time.to_s + "'")
+		else
+            currentBookings = Booking.where("timeslot >='" + Date.today.to_time.to_s + "'").joins(:city).where("cities.region = '" + region + "'")
+        end
+            
+        dates = Array.new
 		
 		#get each date that has a booking
 		currentBookings.each do |booking| 
