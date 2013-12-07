@@ -1,11 +1,11 @@
 class Studio < ActiveRecord::Base
-  belongs_to :venue
-  has_many :suggested_slot
-  has_many :booking
+    belongs_to :venue
+    has_many :suggested_slot
+    has_many :booking
   
-  validates_presence_of :name
+    validates_presence_of :name
     
-	def to_s
+    def to_s
 		to_string
 	end
 	
@@ -17,17 +17,17 @@ class Studio < ActiveRecord::Base
         end
 	end
 	
-        # returns all studios in the given city. always include "own venue"
-	def self.in_city(city)
-		if city.nil?
-			Studio.all
-		else
+    # returns all studios in the given city, sorted by venue. always include "own venue".
+    def self.in_city(city)
+        if city.nil?
+            Studio.joins(:venue).order('venues.name')
+        else
             ownVenue = Studio.joins(:venue).where("venues.name = 'Own venue'")
             if ownVenue.nil?
-                Studio.find_all_by_venue_id(Venue.where(city_id: city.id).pluck(:id))
+                Studio.joins(:venue).order('venues.name').find_all_by_venue_id(Venue.where(city_id: city.id).pluck(:id))
             else
-                Studio.find_all_by_venue_id(Venue.where(city_id: city.id).pluck(:id)) + ownVenue
+                Studio.joins(:venue).order('venues.name').find_all_by_venue_id(Venue.where(city_id: city.id).pluck(:id)) + ownVenue
             end
-		end
-	end
+        end
+    end
 end

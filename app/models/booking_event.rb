@@ -24,7 +24,8 @@ class BookingEvent < Event
 		'Customer cancels & feedback requested',
 		'Cancellation feedback received',
 		'CC cancels booking',
-		'Murkified'
+		'Murkified',
+        'Other'
 	]
 	
 		validates_inclusion_of :code, :in => CODES, :message => "{{value}} must be in #{CODES.join ','}", :allow_nil => true

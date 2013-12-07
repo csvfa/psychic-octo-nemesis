@@ -3,10 +3,11 @@ class Event < ActiveRecord::Base
   #belongs_to :imageable, :polymorphic => true #this allows the model to 'belong to' multiple models. Is this needed? Event just belongs to Booking.
 	
 	ACTIONS = [
-		'Done',
-		'Waiting',
-		'Chase later',
-		'Action required now'
+		'Done (green)',
+		'Waiting (yellow)',
+		'Chase later (blue)',
+		'Action required now (red)',
+        'None'
 	]
 	
 	validates_inclusion_of :action, :in => ACTIONS, :message => "{{value}} must be in #{ACTIONS.join ','}", :allow_nil => true

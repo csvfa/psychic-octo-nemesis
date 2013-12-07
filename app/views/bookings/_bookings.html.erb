@@ -10,10 +10,6 @@
 		</tr>
 	</table>
 	-->
-
-<!-- show by date, city, venue, time -->
-	<% Booking.datesOfCurrentBookings(@region).each do |date| %>
-		<h2><%= date.to_s(:standard) %></h2>
 		<table class="table table-condensed">
 			<tr>
 				<th>Customer</th>
@@ -23,6 +19,10 @@
 				<th>Payment</th>
 				<th>Actions</th>
 			</tr>
+<!-- show by date, city, venue, time -->
+	<% Booking.datesOfCurrentBookings(@region).each do |date| %>
+		<tr><td colspan=6><h2><%= date.to_s(:standard) %></h2></td></tr>
+
 			
 			<!-- make this a partial, add controller method to return correct bookings -->
 			<% Booking.orderedByTimeslotOn(@region, date).each do |booking| %>
@@ -99,5 +99,5 @@
 					</td>
 				</tr>
 			<% end %>
-		</table>
-	<% end %>
+	   <% end %>
+</table>

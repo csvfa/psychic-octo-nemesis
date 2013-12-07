@@ -13,7 +13,8 @@ class PaymentEvent < Event
 		'Balance overdue - Wednesday reminder',
 		'Balance overdue - Friday cancellation',
 		'Balance paid',
-      'Comment received'
+      'Comment received',
+      'Other'
 	]
 	
 		validates_inclusion_of :code, :in => CODES, :message => "{{value}} must be in #{CODES.join ','}", :allow_nil => true
