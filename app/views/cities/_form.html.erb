@@ -13,19 +13,25 @@
 
 <form role="form"> <!-- Bootstrap CSS styling -->
 <div class = "row">
-	<div class = "col-md-6">
+	<div class = "col-md-4">
 	  <div class="form-group">
 			<%= f.label :name %><br />
 			<%= f.text_field :name, {:class=>"form-control"} %>
 		</div>
 	</div>
-	<div class = "col-md-6">
+	<div class = "col-md-4">
 		<div class="form-group">
 			<%= f.label :region %><br />
 			<%= f.select :region, City::REGIONS, {}, { :size=>City::REGIONS.count, :class=>"form-control" } %>
 		</div>
 	</div>
-	
+    <div class = "col-md-4">
+		<div class="form-group">
+			<%= f.label :latitude %><br />
+			<%= f.number_field :latitude %>
+		</div>
+	</div>
+</div>
   <div class="actions">
     <%= f.submit :class=>"btn btn-default" %>
   </div>

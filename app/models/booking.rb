@@ -57,10 +57,11 @@ class Booking < ActiveRecord::Base
 	
 	def self.orderedByTimeslotOn(region, date)
 		# returns all bookings in a given region, for a given day, in order of timeslot
+        # need to then order by city, and then by time
         if region == "All"
-            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).order('timeslot')
+            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).order('latitude DESC', 'timeslot')
         else
-            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region = '" + region + "'").order('timeslot')
+            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region = '" + region + "'").order('latitude DESC', 'timeslot')
         end
 	end
 	

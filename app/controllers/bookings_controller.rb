@@ -39,7 +39,7 @@ class BookingsController < ApplicationController
     @coaches = Coach.all
     @studios = Studio.all
 		@salespeople = SalesPerson.all
-		@cities = City.all
+		@cities = City.all :order => "latitude DESC"
 		
 		#Create new customer & guest no. records which will appear in the view
 		@booking.customer = Customer.new
@@ -54,13 +54,13 @@ class BookingsController < ApplicationController
   end
 
   # GET /bookings/1/edit
-  def edit
-    @booking = Booking.find(params[:id])
-    @themes = Theme.all
-    @coaches = Coach.all
-    @studios = Studio.all
-		@salespeople = SalesPerson.all
-		@cities = City.all
+    def edit
+        @booking = Booking.find(params[:id])
+        @themes = Theme.all :order => :name
+        @coaches = Coach.all :order => :name
+        @studios = Studio.all
+        @salespeople = SalesPerson.all
+		@cities = City.all :order => "latitude DESC"
 		
 		if @booking.guest.nil?
 			@booking.guest = Guest.new
@@ -73,11 +73,11 @@ class BookingsController < ApplicationController
   # POST /bookings.json
   def create
     @booking = Booking.new(params[:booking])
-    @themes = Theme.all
-    @coaches = Coach.all
+    @themes = Theme.all :order => :name
+    @coaches = Coach.all :order => :name
     @studios = Studio.all
     @salespeople = SalesPerson.all
-    @cities = City.all
+    @cities = City.all :order => "latitude DESC"
       
     if @booking.guest.nil?
         @booking.guest = Guest.new

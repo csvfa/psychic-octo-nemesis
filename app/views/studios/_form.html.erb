@@ -1,4 +1,4 @@
-<%= form_for(@studio) do |f| %>
+<%= nested_form_for(@studio) do |f| %>
   <% if @studio.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@studio.errors.count, "error") %> prohibited this studio from being saved:</h2>
@@ -11,36 +11,50 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :capacity %><br />
-    <%= f.number_field :capacity %>
-  </div>
-  <div class="field">
-    <%= f.label :price %><br />
-    <%= f.number_field :price %>
-  </div>
-  <div class="field">
-    <%= f.label :available_from %><br />
-    <%= f.time_select :available_from %>
-  </div>
-  <div class="field">
-    <%= f.label :available_to %><br />
-    <%= f.time_select :available_to %>
-  </div>
-  <div class="field">
-    <%= f.label :notes %><br />
-    <%= f.text_area :notes %>
-  </div>
-	<div class="field">
-    <%= f.label :venue %><br />
-    <%= f.collection_select :venue_id, @venues, :id, :name, :prompt => "Select a venue" %>
-    <%= link_to 'Add new venue', new_venue_path %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <form role="form"> <!-- Bootstrap CSS styling -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <%= f.label :name %><br />
+                    <%= f.text_field :name %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :capacity %><br />
+                    <%= f.number_field :capacity %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :price %><br />
+                    <%= f.number_field :price %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :available_from %><br />
+                    <%= f.time_select :available_from %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :available_to %><br />
+                    <%= f.time_select :available_to %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :notes %><br />
+                    <%= f.text_area :notes, {:class=>"form-control", :rows=>3} %>
+                </div>
+                <div class="form-group">
+                    <%= f.label :venue %><br />
+                    <%= f.collection_select :venue_id, @venues, :id, :name, :prompt => "Select a venue" %>
+                    <%= link_to 'Add new venue', new_venue_path %>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <%= f.fields_for :suggested_slots do |s| %>
+                    <%= render partial: "suggested_slot", locals: { s: s } %>
+                <% end %>
+                <p><%= f.link_to_add "Add a suggested slot", :suggested_slots %></p>
+            </div>
+        </div>
+        <div class = "row">
+            <div class="actions">
+                <%= f.submit %>
+            </div>
+        </div>
+
 <% end %>

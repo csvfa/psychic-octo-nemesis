@@ -1,14 +1,15 @@
 class StudiosController < ApplicationController
   # GET /studios
   # GET /studios.json
-  def index
-    @studios = Studio.all
+    def index
+        #studios, from north to south, grouped by venue.
+        @studios = Studio.joins(venue: :city).order("latitude DESC", "venues.name")
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @studios }
+        respond_to do |format|
+            format.html # index.html.erb
+            format.json { render :json => @studios }
+        end
     end
-  end
 
   # GET /studios/1
   # GET /studios/1.json

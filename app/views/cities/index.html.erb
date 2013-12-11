@@ -6,7 +6,7 @@
 	<% City::REGIONS.each do |region| %>
 		<h2><%= region %></h2>
 		<table class="table table-condensed">
-		<% City.find_all_by_region(region).each do |city| %>
+		<% City.find_all_by_region(region, :order => "latitude DESC").each do |city| %>
 			<tr>
 				<td><%= city.name %></td>
 				<td><%= link_to 'Edit', edit_city_path(city) %></td>
@@ -17,4 +17,4 @@
 
 <br />
 
-<%= link_to 'Create new City', new_city_path %> | <%= link_to 'Home', root_path %>
+<%= link_to 'Create new city', new_city_path %> | <%= link_to 'Home', root_path %>

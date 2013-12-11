@@ -1,7 +1,9 @@
 class Studio < ActiveRecord::Base
     belongs_to :venue
-    has_many :suggested_slot
-    has_many :booking
+    has_many :suggested_slots, :dependent => :destroy
+    has_many :bookings
+    
+    accepts_nested_attributes_for :suggested_slots, :allow_destroy => true
   
     validates_presence_of :name
     
