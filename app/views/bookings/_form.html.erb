@@ -29,6 +29,7 @@
 			<div class="form-group">
 				<%= c.label :city, "Customer city" %><br />
 				<%= f.collection_select :city_id, @cities, :id, :name, {}, :size=>@cities.count, :class=>"form-control" %>
+                <%= link_to 'Create new city', new_city_path %>
 			</div>
 		<% end %> <!-- End of customer fields -->
 		

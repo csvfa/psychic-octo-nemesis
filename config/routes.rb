@@ -1,8 +1,5 @@
 CheerleadingCoDatabase::Application.routes.draw do
-   # root 'bookings#index'
     
-  get "studio_event/PaymentEvent"
-
   resources :events
 
   resources :bookings
@@ -15,9 +12,9 @@ CheerleadingCoDatabase::Application.routes.draw do
 
   resources :opening_times
 
-  resources :suggested_slots
-
-  resources :studios
+    resources :studios do
+        resources :suggested_slots
+    end
 
   resources :themes
 
@@ -25,7 +22,7 @@ CheerleadingCoDatabase::Application.routes.draw do
 
   resources :cities
 
-  resources :managers
+  # resources :managers
 
   get "home/index"
 

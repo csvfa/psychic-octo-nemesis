@@ -1,7 +1,8 @@
 class Event < ActiveRecord::Base
 	belongs_to :booking
-  #belongs_to :imageable, :polymorphic => true #this allows the model to 'belong to' multiple models. Is this needed? Event just belongs to Booking.
 	
+    # WARNING these actions are stored as string in the DB, and views use them for view logic. So if the string changes, the views get messed up.
+    # Recommend implementing an Actions table with name, colour and id, and then adding action_id to the Event table.
 	ACTIONS = [
 		'Done (green)',
 		'Waiting (yellow)',

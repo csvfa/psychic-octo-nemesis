@@ -17,10 +17,12 @@ class PaymentEventsController < ApplicationController
 				
 		#We need to instantiate the @booking variable in case there's a save error, because the "new" view uses it
 		@booking = @payment_event.booking
+        
+        return_path = session.delete(:return_to) + "#booking" + @booking.id.to_s
 
     respond_to do |format|
       if @payment_event.save
-        format.html { redirect_to session.delete(:return_to), :notice => 'Payment note was successfully created.' }
+        format.html { redirect_to return_path, :notice => 'Payment note was successfully created.' }
         format.json { render :json => @payment_event, :event => :created, :location => @payment_event }
       else
         format.html { render :action => "new" }
@@ -40,10 +42,12 @@ class PaymentEventsController < ApplicationController
   def update
     @payment_event = PaymentEvent.find(params[:id])
 		@booking = @payment_event.booking
+      
+      return_path = session.delete(:return_to) + "#booking" + @booking.id.to_s
 
     respond_to do |format|
       if @payment_event.update_attributes(params[:payment_event])
-        format.html { redirect_to session.delete(:return_to), :notice => 'Payment note was successfully updated.' }
+        format.html { redirect_to return_path, :notice => 'Payment note was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }
@@ -55,10 +59,13 @@ class PaymentEventsController < ApplicationController
 	def destroy
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
     @payment_event = PaymentEvent.find(params[:id])
+        
+        return_path = session.delete(:return_to) + "#booking" + @payment_event.booking.id.to_s
+        
     @payment_event.destroy
 
     respond_to do |format|
-      format.html { redirect_to session.delete(:return_to), :notice => 'Payment note was deleted.' }
+      format.html { redirect_to return_path, :notice => 'Payment note was deleted.' }
       format.json { head :no_content }
     end
   end

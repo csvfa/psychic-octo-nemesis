@@ -1,4 +1,10 @@
 class SuggestedSlotsController < ApplicationController
+    before_filter :get_studio
+    
+    def get_studio
+        @studio = Studio.find(params[:studio_id])
+    end
+    
   # GET /suggested_slots
   # GET /suggested_slots.json
   def index
@@ -24,7 +30,7 @@ class SuggestedSlotsController < ApplicationController
   # GET /suggested_slots/new
   # GET /suggested_slots/new.json
   def new
-    @suggested_slot = SuggestedSlot.new
+    @suggested_slot = @studio.suggested_slots.new
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
@@ -41,11 +47,11 @@ class SuggestedSlotsController < ApplicationController
   # POST /suggested_slots
   # POST /suggested_slots.json
   def create
-    @suggested_slot = SuggestedSlot.new(params[:suggested_slot])
+    @suggested_slot = @studio.suggested_slots.new(params[:suggested_slot])
 
     respond_to do |format|
       if @suggested_slot.save
-        format.html { redirect_to session.delete(:return_to), :notice => 'Suggested slot was successfully created.' }
+        format.html { redirect_to edit_studio_path(@studio), :notice => 'Suggested slot was successfully created.' }
         format.json { render :json => @suggested_slot, :event => :created, :location => @suggested_slot }
       else
         format.html { render :action => "new" }

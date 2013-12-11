@@ -17,10 +17,12 @@ class InstructorEventsController < ApplicationController
 				
 		#We need to instantiate the @booking variable in case there's a save error, because the "new" view uses it
 		@booking = @instructor_event.booking
+        
+        return_path = session.delete(:return_to) + "#booking" + @booking.id.to_s
 
     respond_to do |format|
       if @instructor_event.save
-        format.html { redirect_to session.delete(:return_to), :notice => 'Instructor note was successfully created.' }
+        format.html { redirect_to return_path, :notice => 'Instructor note was successfully created.' }
         format.json { render :json => @instructor_event, :event => :created, :location => @instructor_event }
       else
         format.html { render :action => "new" }
@@ -40,10 +42,12 @@ class InstructorEventsController < ApplicationController
   def update
     @instructor_event = InstructorEvent.find(params[:id])
 		@booking = @instructor_event.booking
+      
+      return_path = session.delete(:return_to) + "#booking" + @booking.id.to_s
 
     respond_to do |format|
       if @instructor_event.update_attributes(params[:instructor_event])
-        format.html { redirect_to session.delete(:return_to), :notice => 'Instructor note was successfully updated.' }
+        format.html { redirect_to return_path, :notice => 'Instructor note was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }
@@ -55,10 +59,13 @@ class InstructorEventsController < ApplicationController
 	def destroy
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
     @instructor_event = InstructorEvent.find(params[:id])
+        
+        return_path = session.delete(:return_to) + "#booking" + @instructor_event.booking.id.to_s
+        
     @instructor_event.destroy
 
     respond_to do |format|
-      format.html { redirect_to session.delete(:return_to), :notice => 'Instructor note was deleted.' }
+      format.html { redirect_to return_path, :notice => 'Instructor note was deleted.' }
       format.json { head :no_content }
     end
   end

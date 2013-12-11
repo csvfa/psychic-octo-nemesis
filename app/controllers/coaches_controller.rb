@@ -25,7 +25,8 @@ class CoachesController < ApplicationController
   # GET /coaches/new.json
   def new
     @coach = Coach.new
-		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
+      
+		session[:return_to] = request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -61,7 +62,7 @@ class CoachesController < ApplicationController
 
     respond_to do |format|
       if @coach.update_attributes(params[:coach])
-        format.html { redirect_to @coach, :notice => 'Coach was successfully updated.' }
+        format.html { redirect_to coaches_path, :notice => 'Coach was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }

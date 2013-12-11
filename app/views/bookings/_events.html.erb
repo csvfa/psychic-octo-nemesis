@@ -13,11 +13,11 @@
 
         <!-- Colour is dependent on action -->
         <% label_class = case event.action
-            when "Done" then                 "label label-success"
-            when "Waiting" then              "label label-warning"
-            when "Chase later" then          "label label-info"
-            when "Action required now" then  "label label-danger"
-            else                             "label label-default"
+            when "Done (green)" then                "label label-success"
+            when "Waiting (yellow)" then            "label label-warning"
+            when "Chase later (blue)" then          "label label-info"
+            when "Action required now (red)" then   "label label-danger"
+            else                                    "label label-default"
         end %>
 
     <!-- Each well contains all the notes for a day.

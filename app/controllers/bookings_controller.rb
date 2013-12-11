@@ -34,7 +34,7 @@ class BookingsController < ApplicationController
   # GET /bookings/new
   # GET /bookings/new.json
   def new
-    @booking = Booking.new
+    @booking = Booking.new(params[:booking])
     @themes = Theme.all
     @coaches = Coach.all
     @studios = Studio.all

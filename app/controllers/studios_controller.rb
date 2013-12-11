@@ -1,4 +1,5 @@
 class StudiosController < ApplicationController
+    
   # GET /studios
   # GET /studios.json
     def index
@@ -22,11 +23,14 @@ class StudiosController < ApplicationController
     end
   end
 
-  # GET /studios/new
-  # GET /studios/new.json
-  def new
-    @studio = Studio.new
+    # GET /studios/new
+    # GET /studios/new.json
+    def new
+        @studio = Studio.new
 		@venues = Venue.all
+      
+        logger.debug "session[:return_to] is " + session[:return_to].to_s
+        logger.debug "request.referer is " + request.referer
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
@@ -35,16 +39,16 @@ class StudiosController < ApplicationController
     end
   end
 
-  # GET /studios/1/edit
-  def edit
-    @studio = Studio.find(params[:id])
+    # GET /studios/1/edit
+    def edit
+        @studio = Studio.find(params[:id])
 		@venues = Venue.all
-  end
+    end
 
-  # POST /studios
-  # POST /studios.json
-  def create
-    @studio = Studio.new(params[:studio])
+    # POST /studios
+    # POST /studios.json
+    def create
+        @studio = Studio.new(params[:studio])
 
     respond_to do |format|
       if @studio.save
@@ -64,7 +68,7 @@ class StudiosController < ApplicationController
 
     respond_to do |format|
       if @studio.update_attributes(params[:studio])
-        format.html { redirect_to @studio, :notice => 'Studio was successfully updated.' }
+        format.html { redirect_to studios_path, :notice => 'Studio was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }
@@ -80,7 +84,7 @@ class StudiosController < ApplicationController
     @studio.destroy
 
     respond_to do |format|
-      format.html { redirect_to studios_url }
+      format.html { redirect_to session.delete(:return_to) }
       format.json { head :no_content }
     end
   end

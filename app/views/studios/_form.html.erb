@@ -1,4 +1,4 @@
-<%= nested_form_for(@studio) do |f| %>
+<%= form_for(@studio) do |f| %>
   <% if @studio.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@studio.errors.count, "error") %> prohibited this studio from being saved:</h2>
@@ -14,6 +14,11 @@
     <form role="form"> <!-- Bootstrap CSS styling -->
         <div class="row">
             <div class="col-md-6">
+                <div class="form-group">
+                    <%= f.label :venue %><br />
+                    <%= f.collection_select :venue_id, @venues, :id, :name, :prompt => "Select a venue" %>
+                    <%= link_to 'Add new venue', new_venue_path %>
+                </div>
                 <div class="form-group">
                     <%= f.label :name %><br />
                     <%= f.text_field :name %>
@@ -38,17 +43,16 @@
                     <%= f.label :notes %><br />
                     <%= f.text_area :notes, {:class=>"form-control", :rows=>3} %>
                 </div>
-                <div class="form-group">
-                    <%= f.label :venue %><br />
-                    <%= f.collection_select :venue_id, @venues, :id, :name, :prompt => "Select a venue" %>
-                    <%= link_to 'Add new venue', new_venue_path %>
-                </div>
+
             </div>
             <div class="col-md-6">
                 <%= f.fields_for :suggested_slots do |s| %>
                     <%= render partial: "suggested_slot", locals: { s: s } %>
                 <% end %>
-                <p><%= f.link_to_add "Add a suggested slot", :suggested_slots %></p>
+                <!-- if the studio hasn't been created then there can be no new suggested slot path. user has to create studio first, then edit to add suggested slots. sucks, but i can't figure out a better way to do it -->
+                <% unless @studio.id == nil %>
+                    <%= link_to 'Add new suggested slot', new_studio_suggested_slot_path(@studio) %>
+                <% end %>
             </div>
         </div>
         <div class = "row">

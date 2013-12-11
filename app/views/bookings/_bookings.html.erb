@@ -24,9 +24,10 @@
 		<tr><td colspan=6><h2><%= date.to_s(:standard) %></h2></td></tr>
 
 			
-			<!-- make this a partial, add controller method to return correct bookings -->
+			<!-- make this a partial? -->
 			<% Booking.orderedByTimeslotOn(@region, date).each do |booking| %>
-				<tr>
+                <!-- this id acts as an anchor so user returns to the booking they left from -->
+                <tr id ="booking<%= booking.id %>">
 					<td> <!-- Customer -->
 							<p><%= booking.customer %></p>
 							<p><%= booking.customer.telephone_number %></p>
