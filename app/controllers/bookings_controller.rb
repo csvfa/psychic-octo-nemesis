@@ -100,10 +100,12 @@ class BookingsController < ApplicationController
   # PUT /bookings/1.json
   def update
     @booking = Booking.find(params[:id])
+	  
+	return_path = session.delete(:return_to) + "#booking" + @booking.id.to_s
 
     respond_to do |format|
       if @booking.update_attributes(params[:booking])
-        format.html { redirect_to session.delete(:return_to), :notice => 'Booking was successfully updated.' }
+        format.html { redirect_to return_path, :notice => 'Booking was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }
