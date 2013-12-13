@@ -40,7 +40,7 @@ CheerleadingCoDatabase::Application.routes.draw do
 	
 	get '/studios/in_city_id/:id', to: 'studios#in_city_id'
     
-    get '/set_region', to: 'bookings#set_region'
+    get '/set_filtered_regions', to: 'bookings#set_filtered_regions'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

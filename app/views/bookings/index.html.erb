@@ -3,15 +3,30 @@
 		<h1>The Cheerleading Company Database</h1>
 		<p>
 		<%= link_to "Create New Booking", new_booking_path %> | 
+		<%= link_to "Customers", customers_path %> |
 		<%= link_to "Cities", cities_path %> | 
-		<%= link_to "Coaches", coaches_path %> | 
-		<%= link_to "Customers", customers_path %> | 
+		<%= link_to "Instructors", coaches_path %> |  
 		<%= link_to "Events Companies", events_companies_path %> | 
-		<%= link_to "Venues", venues_path %> | 
 		<%= link_to "Themes", themes_path %> |
+		<%= link_to "Venues", venues_path %> | 
         <%= link_to "Studios", studios_path %>
 		</p>
-		<p><%= label_tag :region %> <%= select_tag :region, options_for_select(["All"] + City::REGIONS, @region), :onchange => "update_bookings_div(this.value)" %></p>
+        <div class="btn-group" data-toggle="buttons">
+            <% City::REGIONS.each do |region| %>  
+                <% if @filtered_regions.include?(region) %>
+                    <label class="btn btn-default btn-sm active">
+                <% else %>
+                    <label class="btn btn-default btn-sm">  
+                <% end %>
+                <%= check_box_tag(
+                    region,
+                    :on,
+                    false, 
+                    :onchange => "update_bookings_div(this.name)") %>
+                <%= region %></label>
+            <% end %>
+        </div>
+
 	</div>
 	
     <div id="bookingsDiv">

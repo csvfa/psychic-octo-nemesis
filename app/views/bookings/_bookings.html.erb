@@ -20,12 +20,10 @@
 				<th>Actions</th>
 			</tr>
 <!-- show by date, city, venue, time -->
-	<% Booking.datesOfCurrentBookings(@region).each do |date| %>
+	<% Booking.datesOfCurrentBookings(@filtered_regions).each do |date| %>
 		<tr><td colspan=6><h2><%= date.to_s(:standard) %></h2></td></tr>
-
-			
 			<!-- make this a partial? -->
-			<% Booking.orderedByTimeslotOn(@region, date).each do |booking| %>
+			<% Booking.orderedByTimeslotOn(@filtered_regions, date).each do |booking| %>
                 <!-- this id acts as an anchor so user returns to the booking they left from -->
                 <tr id ="booking<%= booking.id %>">
 					<td> <!-- Customer -->

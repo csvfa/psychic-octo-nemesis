@@ -35,14 +35,17 @@ $(document).ready(function(){
 			});
 });
     
-function update_bookings_div(region) {  
-  jQuery.ajax({
-    url: "/set_region",
-    type: "GET",
-    data: {"region" : region},
-    dataType: "html",
-    success: function(data) {
-      jQuery("#bookingsDiv").html(data);
-    }
-  });
+function update_bookings_div(region) {
+    
+    var checked = document.getElementById(region).checked;
+    
+    jQuery.ajax({
+        url: "/set_filtered_regions",
+        type: "GET",
+        data: {"region" : region, "add" : checked },
+        dataType: "html",
+        success: function(data) {
+            jQuery("#bookingsDiv").html(data);
+        }
+    });
 }

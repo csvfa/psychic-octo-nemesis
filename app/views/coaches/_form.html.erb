@@ -11,31 +11,38 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :phone %><br />
-    <%= f.text_field :phone %>
-  </div>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
-  </div>
-  <div class="field">
-    <%= f.label :day_rate %><br />
-    <%= f.number_field :day_rate %>
-  </div>
-  <div class="field">
-    <%= f.label :city %><br />
-    <% City.all.each do |city| %>
-    	<div>
-    	<%= check_box_tag "coach[city_ids][]", city.id, @coach.cities.include?(city) %>
-    	<%= city.name %>
-    	</div>
-    <% end %>
-  </div>
+<div class = "row">
+	<div class = "col-md-6">
+
+		<div class="form-group">
+			<%= f.label :name %><br />
+			<%= f.text_field :name, {:class=>"form-control"} %>
+		</div>
+		<div class="form-group">
+			<%= f.label :phone %><br />
+			<%= f.text_field :phone, {:class=>"form-control"} %>
+		</div>
+		<div class="form-group">
+			<%= f.label :email %><br />
+			<%= f.text_field :email, {:class=>"form-control"} %>
+		</div>
+		<div class="form-group">
+			<%= f.label :day_rate %><br />
+			<%= f.number_field :day_rate, {:class=>"form-control"} %>
+		</div>
+	</div>
+	<div class = "col-md-6">
+		<div class="form-group">
+			<%= f.label "Cities" %><br />
+			<% City.all.each do |city| %>
+    			<div>
+					<%= check_box_tag "coach[city_ids][]", city.id, @coach.cities.include?(city) %>
+					<%= city.name %>
+				</div>
+			<% end %>
+		</div>
+	</div>
+	</div>
   <div class="actions">
     <%= f.submit %>
   </div>

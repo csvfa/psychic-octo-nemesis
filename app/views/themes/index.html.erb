@@ -1,12 +1,11 @@
+<div class="container">
 <h1>Listing themes</h1>
 
-<table>
+<table class="table table-condensed">
   <tr>
     <th>Name</th>
     <th>Gifts</th>
     <th>Kit</th>
-    <th></th>
-    <th></th>
     <th></th>
   </tr>
 
@@ -15,13 +14,12 @@
     <td><%= theme.name %></td>
     <td><%= theme.gifts %></td>
     <td><%= theme.kit %></td>
-    <td><%= link_to 'Show', theme %></td>
     <td><%= link_to 'Edit', edit_theme_path(theme) %></td>
-    <td><%= link_to 'Destroy', theme, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Theme', new_theme_path %>
+<%= link_to 'New theme', new_theme_path %> | <%= link_to 'Home', root_path %>
+</div>

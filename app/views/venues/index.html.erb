@@ -1,26 +1,27 @@
+<div class="container">
 <h1>Listing venues</h1>
 
-<table>
+<table class="table table-condensed">
   <tr>
     <th>Name</th>
+	<th>City</th>
     <th>Contact name</th>
     <th>Contact email</th>
     <th>Contact phone</th>
     <th>Payment procedure</th>
     <th>Notes</th>
-    <th>City</th>
     <th></th>
   </tr>
 
 <% @venues.each do |venue| %>
   <tr>
     <td><%= venue.name %></td>
+	<td><% unless venue.city.nil? %> <%= venue.city.name %><% end %></td>
     <td><%= venue.contact_name %></td>
     <td><%= venue.contact_email %></td>
     <td><%= venue.contact_phone %></td>
     <td><%= venue.payment_procedure %></td>
     <td><%= venue.notes %></td>
-    <td><% unless venue.city.nil? %> <%= venue.city.name %><% end %></td>
     <td><%= link_to 'Edit', edit_venue_path(venue) %></td>
   </tr>
 <% end %>
@@ -29,3 +30,4 @@
 <br />
 
 <%= link_to 'New Venue', new_venue_path %> | <%= link_to 'Home', root_path %>
+</div>

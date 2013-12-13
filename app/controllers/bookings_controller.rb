@@ -12,11 +12,13 @@ class BookingsController < ApplicationController
 	#			x.timeslot]
 	#		}
         
-        # if the user previously chose a region, use that. otherwise default to All
-        if session[:region].nil?
-            @region = "All"
+        # if the user previously chose a region, use that. otherwise default to all. Set rather than an array so no duplicates.
+        if session[:filtered_regions].nil?
+            @filtered_regions = Set.new City::REGIONS
+            logger.debug "In Booking#index. @filtered_regions = Set.new City::REGIONS " + @filtered_regions.inspect
         else
-            @region = session[:region]
+            @filtered_regions = Set.new session[:filtered_regions]
+            logger.debug "In Booking#index. @filtered_regions = Set.new session[:filtered_regions] " + @filtered_regions.inspect
         end
   end
 
@@ -113,7 +115,7 @@ class BookingsController < ApplicationController
   # DELETE /bookings/1
   # DELETE /bookings/1.json
   def destroy
-		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
+	session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
     @booking = Booking.find(params[:id])
     @booking.destroy
 
@@ -124,18 +126,20 @@ class BookingsController < ApplicationController
   end
 
     # use for ajax call used by region filter on bookings index.
-    def set_region
-        @region = params[:region]
+    def set_filtered_regions
+		@filtered_regions = Set.new session[:filtered_regions]
+        
+        if params[:add] == "true"
+            @filtered_regions.add params[:region]
+        else
+            @filtered_regions.delete params[:region]
+        end
         
         # store in session so return to the page later remembers the last selected region
-        session[:region] = @region
+        session[:filtered_regions] = @filtered_regions
         
         respond_to do |format|
             format.html { render :partial => "bookings" }
 		end
-        
-        #render :update do |page|
-        #    page.replace_html 'bookingsDiv', :partial => 'bookings'
-        #end
     end
 end

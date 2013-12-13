@@ -55,26 +55,18 @@ class Booking < ActiveRecord::Base
 		end
 	end
 	
-	def self.orderedByTimeslotOn(region, date)
-		# returns all bookings in a given region, for a given day, in order of timeslot
+	def self.orderedByTimeslotOn(regions, date)
+		# returns all bookings in a given array of regions, for a given day, in order of timeslot
         # need to then order by city, and then by time
-        if region == "All"
-            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).order('latitude DESC', 'timeslot')
-        else
-            Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region = '" + region + "'").order('latitude DESC', 'timeslot')
-        end
+        Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region IN (?)", regions).order('latitude DESC', 'timeslot')
 	end
 	
-	def self.datesOfCurrentBookings(region)
+	def self.datesOfCurrentBookings(regions)
 		# returns an array of dates of bookings that are taking place today or in the future
-		# this is used on the homepage
+		# this is used on the bookings index
 		
 		# Bookings on or after today (note from previous midnight onwards so we include parties that already started today
-        if region == "All"
-            currentBookings = Booking.where("timeslot >='" + Date.today.to_time.to_s + "'")
-		else
-            currentBookings = Booking.where("timeslot >='" + Date.today.to_time.to_s + "'").joins(:city).where("cities.region = '" + region + "'")
-        end
+        currentBookings = Booking.where("timeslot >='" + Date.today.to_time.to_s + "'").joins(:city).where("cities.region IN (?)", regions)
             
         dates = Array.new
 		

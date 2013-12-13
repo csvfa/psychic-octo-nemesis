@@ -11,39 +11,46 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :address %><br />
-    <%= f.text_area :address %>
-  </div>
-  <div class="field">
-    <%= f.label :website %><br />
-    <%= f.text_field :website %>
-  </div>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
-  </div>
-  <div class="field">
-    <%= f.label :phone %><br />
-    <%= f.text_field :phone %>
-  </div>
-  <div class="field">
-    <%= f.label :service_agreement %><br />
-    <%= f.text_area :service_agreement %>
-  </div>
-  <div class="field">
-    <%= f.label :payment_terms %><br />
-    <%= f.text_area :payment_terms %>
-  </div>
-  <div class="field">
-    <%= f.label :notes %><br />
-    <%= f.text_area :notes %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+<form role="form"> <!-- Bootstrap CSS styling -->
+	<div class = "row">
+		<div class = "col-md-6">
+  			<div class="form-group">
+    			<%= f.label :name %><br />
+    			<%= f.text_field :name, {:class=>"form-control"} %>
+  			</div>
+  			<div class="form-group">
+    			<%= f.label :address %><br />
+    			<%= f.text_area :address, {:class=>"form-control", :rows=>3} %>
+  			</div>
+  			<div class="form-group">
+    			<%= f.label :website %><br />
+    			<%= f.text_field :website, {:class=>"form-control"} %>
+  			</div>
+  			<div class="form-group">
+    			<%= f.label :email %><br />
+    			<%= f.text_field :email, {:class=>"form-control"} %>
+  			</div>
+  			<div class="form-group">
+    			<%= f.label :phone %><br />
+    			<%= f.text_field :phone, {:class=>"form-control"} %>
+  			</div>
+		</div>
+		<div class = "col-md-6">
+  			<div class="form-group">
+    			<%= f.label :service_agreement %><br />
+    			<%= f.text_area :service_agreement, {:class=>"form-control", :rows=>3} %>
+  			</div>
+  			<div class="form-group">
+    			<%= f.label :payment_terms %><br />
+    			<%= f.text_area :payment_terms, {:class=>"form-control", :rows=>3} %>
+  			</div>
+  			<div class="form-group">
+    			<%= f.label :notes %><br />
+    			<%= f.text_area :notes, {:class=>"form-control", :rows=>3} %>
+  			</div>
+		</div>
+	</div>
+  	<div class="actions">
+    	<%= f.submit %>
+  	</div>
 <% end %>

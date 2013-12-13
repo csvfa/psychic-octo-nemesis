@@ -11,18 +11,25 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :gifts %><br />
-    <%= f.text_area :gifts %>
-  </div>
-  <div class="field">
-    <%= f.label :kit %><br />
-    <%= f.text_area :kit %>
-  </div>
+<form role="form">
+	<div class = "row">
+	<div class = "col-md-6">
+		<div class="form-group">
+			<%= f.label :name %><br />
+			<%= f.text_field :name, {:class=>"form-control"} %>
+		</div>
+		<div class="form-group">
+			<%= f.label :gifts %><br />
+			<%= f.text_area :gifts, {:class=>"form-control", :rows=>3} %>
+		</div>
+	</div>
+	<div class = "col-md-6">	
+		<div class="form-group">
+			<%= f.label :kit %><br />
+			<%= f.text_area :kit, {:class=>"form-control", :rows=>3} %>
+		</div>
+	</div>
+	</div>
   <div class="actions">
     <%= f.submit %>
   </div>

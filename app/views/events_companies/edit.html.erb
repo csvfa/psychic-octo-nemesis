@@ -1,6 +1,14 @@
-<h1>Editing events_company</h1>
-
+<div class="container">
+		<div class = "row">
+		<div class = "col-md-11">
+			<h1>Editing events company</h1>
+		</div>
+		<div class = "col-md-1">
+			<%= button_to "Delete events company", @events_company, :method=>:delete, :class=>"btn btn-danger",:confirm=>"Are you sure?" %>
+		</div>
+	</div>
+	
 <%= render 'form' %>
 
-<%= link_to 'Show', @events_company %> |
-<%= link_to 'Back', events_companies_path %>
+<%= link_to 'Home', root_path %>
+</div>

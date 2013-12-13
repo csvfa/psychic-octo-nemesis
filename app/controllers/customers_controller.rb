@@ -25,7 +25,7 @@ class CustomersController < ApplicationController
   # GET /customers/new.json
   def new
     @customer = Customer.new
-		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
+	session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,6 +36,7 @@ class CustomersController < ApplicationController
   # GET /customers/1/edit
   def edit
     @customer = Customer.find(params[:id])
+	session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
   end
 
   # POST /customers
@@ -73,11 +74,12 @@ class CustomersController < ApplicationController
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
+	session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
     @customer = Customer.find(params[:id])
     @customer.destroy
 
     respond_to do |format|
-      format.html { redirect_to customers_url }
+      format.html { redirect_to session.delete(:return_to) }
       format.json { head :no_content }
     end
   end

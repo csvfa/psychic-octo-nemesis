@@ -1,6 +1,7 @@
-<h1>Listing events_companies</h1>
+<div class="container">
+<h1>Listing events companies</h1>
 
-<table>
+<table class="table table-condensed">
   <tr>
     <th>Name</th>
     <th>Address</th>
@@ -10,8 +11,6 @@
     <th>Service agreement</th>
     <th>Payment terms</th>
     <th>Notes</th>
-    <th></th>
-    <th></th>
     <th></th>
   </tr>
 
@@ -25,13 +24,12 @@
     <td><%= events_company.service_agreement %></td>
     <td><%= events_company.payment_terms %></td>
     <td><%= events_company.notes %></td>
-    <td><%= link_to 'Show', events_company %></td>
     <td><%= link_to 'Edit', edit_events_company_path(events_company) %></td>
-    <td><%= link_to 'Destroy', events_company, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Events company', new_events_company_path %>
+<%= link_to 'New events company', new_events_company_path %> | <%= link_to 'Home', root_path %>
+</div>
