@@ -18,6 +18,27 @@ class Studio < ActiveRecord::Base
             name + " at " + venue.to_s
         end
 	end
+		
+	def available_at?(slot)
+		#true if the given timeslot is within the studio's available to/from times
+		slot_flattened_date = slot.change(:year => 2000, :month => 1, :day => 1)
+		
+		(slot_flattened_date >= available_from) && (slot_flattened_date <= available_to)
+	end
+		
+	def within_a_suggested_slot?(time)
+		#true if the given time is within the two hour span of a suggested slot
+		
+		is_within = false
+		time_flattened_date = time.change(:year => 2000, :month => 1, :day => 1)
+		
+		suggested_slots.each do |suggested_slot|
+			is_within = true if time_flattened_date.between?(suggested_slot.time, suggested_slot.time + 2.hours)
+		end
+		
+		is_within
+	end
+				
 	
     # returns all studios in the given city, sorted by venue. always include "own venue".
     def self.in_city(city)

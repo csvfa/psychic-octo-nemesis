@@ -61,6 +61,15 @@ class Booking < ActiveRecord::Base
         Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region IN (?)", regions).order('latitude DESC', 'timeslot')
 	end
 	
+	def self.in_timeslot(slot, studio, city = nil)
+		#returns all bookings on the given date, between the given time and 14 minutes after it, in the given studio
+		if studio.nil?
+			Booking.where(timeslot: slot..(slot + 14.minutes)).where(studio_id: nil).order('timeslot')
+		else
+			Booking.where(timeslot: slot..(slot + 14.minutes)).where(studio_id: studio.id).order('timeslot')
+		end
+	end
+	
 	def self.datesOfCurrentBookings(regions)
 		# returns an array of dates of bookings that are taking place today or in the future
 		# this is used on the bookings index

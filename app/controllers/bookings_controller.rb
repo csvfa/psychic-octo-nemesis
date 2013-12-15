@@ -1,4 +1,5 @@
 class BookingsController < ApplicationController
+	helper ApplicationHelper
   # GET /bookings
     
     def index
@@ -144,4 +145,12 @@ class BookingsController < ApplicationController
             format.html { render :partial => "bookings" }
 		end
     end
+	
+	def studio_calendar
+		@booking = Booking.find(params[:id])
+		@city = @booking.city
+		@date = @booking.timeslot
+		@studios = Studio.in_city(@city)
+		@cells_to_be_skipped_because_rowspan_is_annoying = Hash.new(0)
+	end
 end

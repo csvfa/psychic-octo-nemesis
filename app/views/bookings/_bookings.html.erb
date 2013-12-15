@@ -94,7 +94,8 @@
 						%>
 					</td>
 					<td> <!-- Actions  -->
-						<%= link_to 'Edit', edit_booking_path(booking) %>
+						<p><%= link_to 'Edit', edit_booking_path(booking) %></p>
+						<p><%= link_to 'Studio calendar', studio_calendar_booking_path(booking) %></p>
 					</td>
 				</tr>
 			<% end %>

@@ -2,7 +2,11 @@ CheerleadingCoDatabase::Application.routes.draw do
     
   resources :events
 
-  resources :bookings
+	resources :bookings do
+		member do
+			get 'studio_calendar'
+		end
+	end
 
   resources :customers
 
