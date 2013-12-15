@@ -11,3 +11,9 @@
  *= require_self
  *= require_tree .
 */
+
+/* Fix for margin setting on calendar */
+.well-sm {
+ padding: 7px;
+ margin-bottom: 0;
+}
