@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131209195136) do
+ActiveRecord::Schema.define(:version => 20131216152222) do
 
   create_table "bookings", :force => true do |t|
     t.datetime "timeslot"
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(:version => 20131209195136) do
     t.integer  "city_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.text     "address"
   end
 
   add_index "venues", ["city_id"], :name => "index_venues_on_city_id"

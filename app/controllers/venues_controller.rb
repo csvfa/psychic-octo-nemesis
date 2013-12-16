@@ -41,6 +41,8 @@ class VenuesController < ApplicationController
   def edit
     @venue = Venue.find(params[:id])
     @cities = City.all
+	  
+	session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
   end
 
   # POST /venues
@@ -69,7 +71,7 @@ class VenuesController < ApplicationController
 
     respond_to do |format|
       if @venue.update_attributes(params[:venue])
-        format.html { redirect_to @venue, :notice => 'Venue was successfully updated.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'Venue was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }

@@ -5,6 +5,7 @@
   <tr>
     <th>Name</th>
 	<th>City</th>
+	<th>Address</th>
     <th>Contact name</th>
     <th>Contact email</th>
     <th>Contact phone</th>
@@ -17,6 +18,7 @@
   <tr>
     <td><%= venue.name %></td>
 	<td><% unless venue.city.nil? %> <%= venue.city.name %><% end %></td>
+	<td><%= venue.address %></td>
     <td><%= venue.contact_name %></td>
     <td><%= venue.contact_email %></td>
     <td><%= venue.contact_phone %></td>

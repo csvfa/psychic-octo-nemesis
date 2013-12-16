@@ -16,7 +16,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <%= f.label :venue %><br />
-                    <%= f.collection_select :venue_id, @venues, :id, :name, :prompt => "Select a venue" %>
+                    <%= f.collection_select :venue_id, @venues, :id, :name %>
                     <%= link_to 'Add new venue', new_venue_path %>
                 </div>
                 <div class="form-group">
