@@ -1,6 +1,7 @@
 class Booking < ActiveRecord::Base
 	has_one :guest, :dependent => :destroy
 	has_many :events, :dependent => :destroy
+    has_many :invoices, :dependent => :destroy
 
 	belongs_to :theme
 	belongs_to :coach
@@ -88,4 +89,26 @@ class Booking < ActiveRecord::Base
 		dates.uniq!
 		dates.sort!
 	end
+  
+  def current_no_guests
+    # return the guest no of the latest line item. if there are no no line items, return .guest. if that doesn't exist, nil
+    current_no_guests = 0
+    all_invoices = invoices.all
+    no_guest_line_items = []
+    
+    if all_invoices.present?
+      all_invoices.each do |i|
+          no_guest_line_items += i.line_items.where("no_guests NOT NULL")
+      end
+      no_guest_line_items.sort! { |a,b| a.entry_date <=> b.entry_date }
+    end
+    
+    if !no_guest_line_items.empty?
+      current_no_guests = no_guest_line_items.last.no_guests
+    else
+      current_no_guests = guest.number unless guest.nil?
+    end
+    
+    current_no_guests
+  end
 end

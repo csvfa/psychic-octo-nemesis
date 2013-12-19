@@ -1,0 +1,63 @@
+<div class="container">
+	<div class="page-header"><h1>Invoices <small>for <%= @booking.customer.name %></small></h1></div>
+
+  <% @invoices.each do |invoice| %>
+  
+    <div class="row">
+      <div class="col-md-11">
+        <h2>Invoice id <%= invoice.id %></h2>
+        <p><span class="text-muted">Issued </span><%= invoice.invoice_date.to_s(:standard) %><span class="text-muted">, deposit due </span><%= invoice.deposit_due_date.to_s(:standard) %> (<%= distance_of_time_in_words_to_now(invoice.deposit_due_date) %> from now)<span class="text-muted">, balance due </span><%= invoice.balance_due_date.to_s(:standard) %> (<%= distance_of_time_in_words_to_now(invoice.balance_due_date) %> from now)</p>
+      </div>
+      <div class="col-md-1">
+        <%= link_to 'Edit', edit_invoice_path(invoice) %>
+      </div>
+    </div>
+  
+    <table class="table table-condensed">
+      <tr>
+        <th>Entry date</th>
+        <th>Description</th>
+        <th>No guests</th>
+        <th>Price per guest</th>
+        <th>Amount</th>
+        <th>Note</th>
+        <th>Expiry date</th>
+        <th></th>
+      </tr>
+
+      <% invoice.line_items.each do |line_item| %>
+        <tr>
+          <!-- set class depending on action -->
+          <td><%= line_item.entry_date.to_s(:standard) %></td>
+          <td><%= line_item.description %></td>
+          <td><%= line_item.no_guests %></td>
+          <td><%= number_to_currency(line_item.price_per_guest, unit: "&pound;") %></td>
+          <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
+          <td><%= line_item.note %></td>
+          <td><%= line_item.expiry_date.to_s(:standard) unless line_item.expiry_date.nil? %></td>
+          <td><%= link_to 'Edit', edit_line_item_path(line_item) %></td>
+        </tr>
+      <% end %>
+        <tr>
+          <td></td><td></td><td></td><td></td>
+          <td>
+            <table>
+              <tr><td>VAT</td><td align="right"><%= number_to_currency(invoice.vat, unit: "&pound;") %></td></tr>
+              <tr><td><strong>Total</strong></td><td align="right"><strong><%= number_to_currency(invoice.total, unit: "&pound;") %></strong></td></tr>
+            </table>
+          </td>
+          <td></td><td></td><td></td>
+        </tr>
+    </table>
+    <p>Add line item:
+      <%= link_to 'Discount', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :discount}) %> |
+      <%= link_to 'Guest change', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :guest_change}) %> |
+      <%= link_to 'Refund', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :refund}) %> |
+      <%= link_to 'Deposit payment', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :deposit_payment}) %> |
+      <%= link_to 'Balance payment', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :balance_payment}) %>
+    </p>
+
+  <% end %>
+<br />
+
+<%= link_to 'New invoice', new_booking_invoice_path(@booking) %> | <%= link_to 'Home', root_path %>

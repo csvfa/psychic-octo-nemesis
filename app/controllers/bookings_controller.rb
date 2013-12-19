@@ -153,4 +153,10 @@ class BookingsController < ApplicationController
 		@studios = Studio.in_city(@city)
 		@cells_to_be_skipped_because_rowspan_is_annoying = Hash.new(0)
 	end
+	
+	def booking_form
+		@booking = Booking.find(params[:id])
+		@customer = @booking.customer
+		@venue = @booking.studio.venue
+	end
 end
