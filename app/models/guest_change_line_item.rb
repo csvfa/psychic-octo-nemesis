@@ -1,15 +1,8 @@
 class GuestChangeLineItem < LineItem
-  def calculate_and_set_price_per_guest
-    case
-      when self.no_guests >= 20
-        self.price_per_guest = 25
-      when self.no_guests >= 10
-        self.price_per_guest = 30
-    end
-  end
-  
-  def calculate_and_set_amount
-    # amount = ((new no guests - old no guests) * price per guest)
-    self.amount = (self.no_guests - LineItem.latest_with_num_guests(self).no_guests) * self.price_per_guest
+  def calculate_and_set_variables
+    new_no_guests = self.invoice.booking.no_guests + self.no_guests
+    raise "The number of guests cannot go below one" if new_no_guests < 1
+    self.price_per_guest = nil
+    self.amount = new_no_guests * self.invoice.price_per_guest
   end
 end

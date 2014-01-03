@@ -35,16 +35,6 @@ class Booking < ActiveRecord::Base
 			customer.to_s + " at " + studio.venue.to_s
 		end
 	end
-
-	def guest_number
-		if guests.empty?
-			g = guests.build :number => 0
-			g.save
-			g
-		else
-			guests.last
-		end
-	end
 	
 	def current_event
 		if events.empty?
@@ -90,25 +80,32 @@ class Booking < ActiveRecord::Base
 		dates.sort!
 	end
   
-  def current_no_guests
-    # return the guest no of the latest line item. if there are no no line items, return .guest. if that doesn't exist, nil
-    current_no_guests = 0
-    all_invoices = invoices.all
-    no_guest_line_items = []
-    
-    if all_invoices.present?
-      all_invoices.each do |i|
-          no_guest_line_items += i.line_items.where("no_guests NOT NULL")
-      end
-      no_guest_line_items.sort! { |a,b| a.entry_date <=> b.entry_date }
-    end
-    
-    if !no_guest_line_items.empty?
-      current_no_guests = no_guest_line_items.last.no_guests
+  def no_guests # the number of guests this booking has
+    g = 0
+    if self.invoices.empty?
+      g = self.guest.number
     else
-      current_no_guests = guest.number unless guest.nil?
+      # go through each invoice and add their no_guests
+      self.invoices.each do |i|
+        g += i.no_guests unless i.no_guests.nil?
+      end
     end
-    
-    current_no_guests
+    g
+  end
+  
+  def amount # the total outstanding balance the customer needs to pay
+    a = 0
+    self.invoices.each do |i|
+      a += i.amount unless i.amount.nil?
+    end
+    a
+  end
+  
+  def price_per_guest
+    p = 0
+    self.invoices.each do |i|
+      p += i.price_per_guest unless i.price_per_guest.nil?
+    end
+    p
   end
 end

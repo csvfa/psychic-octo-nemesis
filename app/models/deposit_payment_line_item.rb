@@ -1,5 +1,2 @@
-class DepositPaymentLineItem < LineItem
-  def amount_per_guest
-    nil
-  end
+class DepositPaymentLineItem < BalancePaymentLineItem
 end

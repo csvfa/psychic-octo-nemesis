@@ -22,23 +22,25 @@
       
       <fieldset <%= @no_guests_state %>>
         <div class="form-group">
-          <%= f.label :no_guests %><br />
+          <%= f.label @label_prefix + :no_guests.to_s %><br />
           <%= f.number_field :no_guests, :class=>"form-control" %>
         </div>
       </fieldset>
       
       <fieldset <%= @price_per_guest_state %>>
         <div class="form-group">
-          <%= f.label :price_per_guest %><br />
+          <%= f.label @label_prefix + :price_per_guest.to_s %><br />
           <%= f.text_field :price_per_guest, :class=>"form-control", :onchange => "clear_amount()" %>
         </div>
       </fieldset>
-        
-      <div class="form-group">
-        <%= f.label :amount %><br />
-        <%= f.text_field :amount, :class=>"form-control", :onchange => "clear_price_per_guest()" %>
-      </div>
-    </div>
+      
+      <fieldset <%= @amount_state %>>
+        <div class="form-group">
+          <%= f.label @label_prefix + :amount.to_s %><br />
+          <%= f.text_field :amount, :class=>"form-control", :onchange => "clear_price_per_guest()" %>
+        </div>
+        </div>
+      </fieldset>
     
     <div class="col-md-4">
       <div class="form-group">
