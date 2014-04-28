@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131218141726) do
+ActiveRecord::Schema.define(:version => 20140305090144) do
+
+  create_table "availability_slots", :force => true do |t|
+    t.time     "available_from"
+    t.time     "available_to"
+    t.integer  "studio_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
   create_table "bookings", :force => true do |t|
     t.datetime "timeslot"
@@ -50,12 +58,13 @@ ActiveRecord::Schema.define(:version => 20131218141726) do
   end
 
   create_table "coaches", :force => true do |t|
-    t.string   "name"
+    t.string   "first_name"
     t.string   "phone"
     t.string   "email"
     t.integer  "day_rate"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "surname"
   end
 
   create_table "customers", :force => true do |t|
@@ -117,7 +126,7 @@ ActiveRecord::Schema.define(:version => 20131218141726) do
   add_index "invoices", ["booking_id"], :name => "index_invoices_on_booking_id"
 
   create_table "line_items", :force => true do |t|
-    t.date     "entry_date"
+    t.datetime "entry_date"
     t.integer  "no_guests"
     t.string   "type"
     t.decimal  "amount",          :precision => 8, :scale => 2
@@ -166,13 +175,13 @@ ActiveRecord::Schema.define(:version => 20131218141726) do
   create_table "studios", :force => true do |t|
     t.string   "name"
     t.integer  "capacity"
-    t.integer  "price"
+    t.decimal  "price",          :precision => 8, :scale => 2
     t.time     "available_from"
     t.time     "available_to"
     t.text     "notes"
     t.integer  "venue_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
   end
 
   add_index "studios", ["venue_id"], :name => "index_studios_on_venue_id"

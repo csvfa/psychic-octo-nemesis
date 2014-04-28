@@ -10,7 +10,7 @@ class BookingEvent < Event
 		'Pencil confirmation sent',
 		'Pencil expired',
 		'Customer wants to book',
-		'Booking form sent',
+		'Booking form & invoice sent',
         'Booking form received',
 		'Booking form has no phone number',
 		'Cheer info requested',

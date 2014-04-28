@@ -26,9 +26,8 @@ class InvoicesController < ApplicationController
   # GET /invoices/new.json
   def new
     @invoice = Invoice.new
-    @booking = get_booking
-    @invoice.balance_due_date = @booking.timeslot - 15.days
-    @invoice.deposit_due_date = Date.today + 7.days
+    @invoice.booking = @booking = get_booking
+    @invoice.set_default_dates
     
     session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 

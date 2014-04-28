@@ -31,7 +31,7 @@
 							<p><%= booking.customer.telephone_number %></p>
 							<p><%= booking.customer.email %></p>
 							<p><%= booking.city %></p>
-							<p><%= booking.current_no_guests.to_s %><span class="text-muted"> guests</span></p>
+							<p><%= booking.no_guests %><span class="text-muted"> guests</span></p>
 							<p>
 							<% if booking.theme.nil? %>
 								<span class ="text-muted">No theme</span>
@@ -65,7 +65,7 @@
 							<% if booking.coach.nil? %>
 								<span class ="text-muted">No instructor</span>
 							<% else %>
-								<%= booking.coach.name %>
+								<%= booking.coach.full_name %>
 							<% end %>
 						</p>
 						<!-- Instructor Events -->

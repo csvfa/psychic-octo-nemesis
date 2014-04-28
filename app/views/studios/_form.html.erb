@@ -29,7 +29,7 @@
                 </div>
                 <div class="form-group">
                     <%= f.label :price %><br />
-                    <%= f.number_field :price %>
+                    <%= f.text_field :price, :class => 'price', :value => (number_with_precision(f.object.price, :precision => 2) || 0) %>
                 </div>
                 <div class="form-group">
                     <%= f.label :available_from %><br />
@@ -46,6 +46,13 @@
 
             </div>
             <div class="col-md-6">
+              <%= f.fields_for :availability_slots do |s| %>
+                <%= render partial: "availability_slot", locals: { s: s } %>
+              <% end %>
+              <!-- if the studio hasn't been created then there can be no new suggested slot path. user has to create studio first, then edit to add suggested slots. sucks, but i can't figure out a better way to do it -->
+              <% unless @studio.id == nil %>
+                  <%= link_to 'Add new availability slot', new_studio_availability_slot_path(@studio) %>
+              <% end %>
                 <%= f.fields_for :suggested_slots do |s| %>
                     <%= render partial: "suggested_slot", locals: { s: s } %>
                 <% end %>

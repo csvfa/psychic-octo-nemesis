@@ -21,9 +21,10 @@ CheerleadingCoDatabase::Application.routes.draw do
 
   resources :opening_times
 
-    resources :studios do
-        resources :suggested_slots
-    end
+  resources :studios do
+    resources :suggested_slots
+    resources :availability_slots
+  end
 
   resources :themes
 

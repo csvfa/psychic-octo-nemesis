@@ -1,0 +1,8 @@
+<div class="form-group">
+    <%= s.label "Available from" %>
+    <%= s.time_select :available_from %>
+    <%= s.label "to" %>
+    <%= s.time_select :available_to %>
+    <%= s.check_box :_destroy %>
+    <%= s.label :_destroy, "Remove availability slot" %>
+</div>
