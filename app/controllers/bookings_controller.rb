@@ -16,10 +16,8 @@ class BookingsController < ApplicationController
         # if the user previously chose a region, use that. otherwise default to all. Set rather than an array so no duplicates.
         if session[:filtered_regions].nil?
             @filtered_regions = Set.new City::REGIONS
-            logger.debug "In Booking#index. @filtered_regions = Set.new City::REGIONS " + @filtered_regions.inspect
         else
             @filtered_regions = Set.new session[:filtered_regions]
-            logger.debug "In Booking#index. @filtered_regions = Set.new session[:filtered_regions] " + @filtered_regions.inspect
         end
   end
 
@@ -60,7 +58,7 @@ class BookingsController < ApplicationController
     def edit
         @booking = Booking.find(params[:id])
         @themes = Theme.all :order => :name
-        @coaches = Coach.all :order => :name
+        @coaches = Coach.all :order => :first_name
         @studios = Studio.all
         @salespeople = SalesPerson.all
 		@cities = City.all :order => "latitude DESC"
@@ -77,7 +75,7 @@ class BookingsController < ApplicationController
   def create
     @booking = Booking.new(params[:booking])
     @themes = Theme.all :order => :name
-    @coaches = Coach.all :order => :name
+    @coaches = Coach.all :order => :first_name
     @studios = Studio.all
     @salespeople = SalesPerson.all
     @cities = City.all :order => "latitude DESC"
@@ -152,5 +150,11 @@ class BookingsController < ApplicationController
 		@date = @booking.timeslot
 		@studios = Studio.in_city(@city)
 		@cells_to_be_skipped_because_rowspan_is_annoying = Hash.new(0)
+	end
+	
+	def booking_form
+		@booking = Booking.find(params[:id])
+		@customer = @booking.customer
+		@venue = @booking.studio.venue
 	end
 end

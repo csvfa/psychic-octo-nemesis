@@ -68,7 +68,7 @@
                             </div>
                             <div class="form-group">
                                 <%= s.label :price %><br />
-                                <%= s.number_field :price %>
+                                <%= s.text_field :price, :class => 'price', :value => (number_with_precision(s.object.price, :precision => 2) || 0) %>
                             </div>
                             <div class="form-group">
                                 <%= s.label :available_from %><br />

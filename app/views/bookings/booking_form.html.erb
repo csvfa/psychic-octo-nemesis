@@ -1,0 +1,27 @@
+<h1>Hen Party Booking Form</h1>
+<table>
+	<tr><td>Booking Party:</td><td><%= @customer.name %></td></tr>
+	<tr><td>Telephone:</td><td><%= @customer.telephone_number %></td></tr>
+	<tr><td>Email:</td><td><%= @customer.email %></td></tr>
+	<tr><td>Date/Time of Party:</td><td><%= @booking.timeslot.to_s(:date_only) %>, <%= @booking.timeslot.to_s(:time_only) %> -<%= (@booking.timeslot + 90.minutes).to_s(:time_only) %></td></tr>
+	<tr><td>Venue:</td><td><%= @venue.name %>, <%= @venue.address %></td></tr>
+	<tr><td>Party theme:</td><td><%= @booking.theme %></td></tr>
+	<tr><td>Additional info:</td><td>Package includes a bottle of bubbly as a gift for the bride</td></tr>
+	<tr><td>No. participants:</td><td><%= @booking.guest.to_s %> people</td></tr>
+	<tr><td>Fee:</td><td></td></tr>
+	<tr><td>Total due:</td><td></td></tr>
+</table>
+<small><p><strong>Please refer to the accompanying invoice for details of how to pay.</strong></p></small>
+<h6>Terms and conditions</h6>
+<small>
+	<p>Rate is based on min x participants. Additional participants will be charged at x per person if they book by x (xpp for participants added after x).</p>
+	<p>A 50% non-refundable deposit is required to secure a booking. The deposit is non-refundable and non-transferable even for individuals who drop out. Any individuals who drop out will lose their deposits. The balance is then due 15 days before the party and is also non-refundable and non-transferable. Breakages and any damage to Cheerleading Company equipment must be paid for in full.</p>
+	<p>Pregnant ladies are able to participate in the session provided they have got permission from their GP. Any pregnant participants who have not checked with their GP will not be able to join in, and will not be given refunds. So please ask them to check before booking!</p></small>
+<p><strong>Signed:_________________________________ Date:_________________________</strong></p>
+<small><address>
+	<strong>The Cheerleading Company Limited</strong><br />
+	98 Hubert Grove, Clapham, SW9 9PD.<br />
+	<%= link_to "www.cheerleadingcompany.co.uk", "http://www.cheerleadingcompany.co.uk" %><br />
+	<%= mail_to "cheerleadingco@hotmail.co.uk" %><br />
+	020 7274 3045
+</address></small>

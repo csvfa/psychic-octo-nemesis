@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  entry_date: 2013-12-17
+  no_guests: 1
+  type: 
+  amount: 
+  amount: 
+  note: MyText
+  action: MyString
+  description: MyString
+  expiry_date: 2013-12-17
+  references: MyString
+  invoice: 
+
+two:
+  entry_date: 2013-12-17
+  no_guests: 1
+  type: 
+  amount: 
+  amount: 
+  note: MyText
+  action: MyString
+  description: MyString
+  expiry_date: 2013-12-17
+  references: MyString
+  invoice: 

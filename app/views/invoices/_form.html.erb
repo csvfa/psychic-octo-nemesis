@@ -1,0 +1,32 @@
+<%= form_for(@invoice) do |f| %>
+  <% if @invoice.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+
+      <ul>
+      <% @invoice.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<form role="form"> <!-- Bootstrap CSS styling -->
+  <div class="form-group">
+    <%= f.label :invoice_date %><br />
+    <%= f.date_select :invoice_date, {:class=>"form-control"} %>
+  </div>
+  <div class="form-group">
+    <%= f.label :deposit_due_date %><br />
+    <%= f.date_select :deposit_due_date, {:class=>"form-control"} %>
+  </div>
+  <div class="form-group">
+    <%= f.label :balance_due_date %><br />
+    <%= f.date_select :balance_due_date, {:class=>"form-control"} %>
+  </div>
+  <%= f.hidden_field :booking_id, :value => @booking.id %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+</form>
+<% end %>

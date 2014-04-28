@@ -3,7 +3,8 @@
 
 <table class="table table-condensed">
   <tr>
-    <th>Name</th>
+    <th>First Name</th>
+    <th>Surname</th>
     <th>Phone</th>
     <th>Email</th>
     <th>Day rate</th>
@@ -13,7 +14,8 @@
 
 <% @coaches.each do |coach| %>
   <tr>
-    <td><%= coach.name %></td>
+    <td><%= coach.first_name %></td>
+    <td><%= coach.surname %></td>    
     <td><%= coach.phone %></td>
     <td><%= coach.email %></td>
     <td><%= coach.day_rate %></td>

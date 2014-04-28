@@ -1,0 +1,2 @@
+class DepositPaymentLineItem < BalancePaymentLineItem
+end

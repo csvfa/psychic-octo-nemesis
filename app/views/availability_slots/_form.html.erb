@@ -1,0 +1,23 @@
+<%= form_for([@studio, @availability_slot]) do |f| %>
+  <% if @availability_slot.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@availability_slot.errors.count, "error") %> prohibited this availability slot from being saved:</h2>
+
+      <ul>
+      <% @availability_slot.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :available_from %>
+    <%= f.time_select :available_from %>
+    <%= f.label "to" %>
+    <%= f.time_select :available_to %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -36,6 +36,7 @@ class CitiesController < ApplicationController
   # GET /cities/1/edit
   def edit
     @city = City.find(params[:id])
+    session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
   end
 
   # POST /cities
@@ -61,7 +62,7 @@ class CitiesController < ApplicationController
 
     respond_to do |format|
       if @city.update_attributes(params[:city])
-        format.html { redirect_to @city, :notice => 'City was successfully updated.' }
+        format.html { redirect_to session.delete(:return_to), :notice => 'City was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }

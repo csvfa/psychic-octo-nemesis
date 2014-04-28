@@ -29,8 +29,6 @@ class StudiosController < ApplicationController
         @studio = Studio.new
 		@venues = Venue.all
       
-        logger.debug "session[:return_to] is " + session[:return_to].to_s
-        logger.debug "request.referer is " + request.referer
 		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  available_from: 2014-03-05 09:01:44
+  available_to: 2014-03-05 09:01:44
+  references: 
+
+two:
+  available_from: 2014-03-05 09:01:44
+  available_to: 2014-03-05 09:01:44
+  references: 

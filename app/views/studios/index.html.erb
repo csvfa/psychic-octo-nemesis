@@ -19,7 +19,7 @@
             <td><%= studio.name %></td>
             <td><%= studio.venue.to_s + ", " + studio.venue.city.to_s %></td>
             <td><%= studio.capacity %></td>
-            <td>£<%= studio.price %></td>
+            <td><%= number_to_currency(studio.price, unit: "&pound;") %></td>
             <td><%= studio.available_from.to_s(:time_only) %></td>
             <td><%= studio.available_to.to_s(:time_only) %></td>
             <td><%= studio.suggested_slots.map { |slot| slot.time.to_s(:time_only) }.join(",") %></td>

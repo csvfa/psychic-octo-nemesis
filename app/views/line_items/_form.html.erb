@@ -1,0 +1,76 @@
+<%= form_for(@line_item) do |f| %>
+  <% if @line_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@line_item.errors.count, "error") %> prohibited this line_item from being saved:</h2>
+
+      <ul>
+      <% @line_item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<form role="form"> <!-- Bootstrap CSS styling -->
+  <div class="row">
+	<div class="col-md-4">
+      
+      <div class="form-group">
+        <%= f.label :entry_date %><br />
+        <%= f.datetime_select :entry_date %>
+      </div>
+      
+      <fieldset <%= @no_guests_state %>>
+        <div class="form-group">
+          <%= f.label @label_prefix + :no_guests.to_s %><br />
+          <%= f.number_field :no_guests, :class=>"form-control" %>
+        </div>
+      </fieldset>
+      
+      <fieldset <%= @price_per_guest_state %>>
+        <div class="form-group">
+          <%= f.label @label_prefix + :price_per_guest.to_s %><br />
+          <%= f.text_field :price_per_guest, :class=>"form-control", :onchange => "clear_amount()" %>
+        </div>
+      </fieldset>
+      
+      <fieldset <%= @amount_state %>>
+        <div class="form-group">
+          <%= f.label @label_prefix + :amount.to_s %><br />
+          <%= f.text_field :amount, :class=>"form-control", :onchange => "clear_price_per_guest()" %>
+        </div>
+        </div>
+      </fieldset>
+    
+    <div class="col-md-4">
+      <fieldset <%= @note_state %>>
+        <div class="form-group">
+          <%= f.label :notes %><br />
+          <%= f.text_area :note, {:class=>"form-control", :rows=>3} %>
+        </div>
+      </fieldset>
+      
+      <fieldset <%= @expiry_date_state %>>
+        <div class="form-group">
+          <%= f.label :expiry_date %><br />
+          <%= f.date_select :expiry_date, {:include_blank => true, :default => @expiry_date_default} %>
+        </div>
+      </fieldset>
+      
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+		<%= f.label :action %><br />
+		<%= f.select :action, Event::ACTIONS, {}, { :size=>Event::ACTIONS.count, :class=>"form-control" } %>
+      </div>
+    </div>
+  </div>
+  <%= f.hidden_field :invoice_id, :value => @invoice.id %>
+  <%= f.hidden_field :type, :value => @line_item.type %>
+  <%= f.hidden_field :description, :value => @line_item.description %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+</form>
+
+<% end %>
