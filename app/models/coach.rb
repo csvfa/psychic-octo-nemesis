@@ -3,6 +3,14 @@ class Coach < ActiveRecord::Base
   has_many :events, :as => :imageable
   
   def full_name
-    first_name + " " + surname
+    if first_name.present?
+      if surname.present?
+        first_name + " " + surname
+      else
+        first_name
+      end
+    else
+      surname
+    end
   end
 end
