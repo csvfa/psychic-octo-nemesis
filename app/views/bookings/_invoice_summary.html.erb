@@ -1,0 +1,14 @@
+<% invoice_summary = InvoiceSummary.new(invoice) %>
+<table class="table table-condensed">
+  <tr><th colspan="3">INV<%= invoice_summary.id %> issued <%= invoice_summary.issue_date.to_s(:standard) %></th><th>Owed</th><th>Rec'd</th></tr>
+  <% invoice_summary.summary_line_items.each do |line_item| %>
+  <tr>
+    <% if line_item.is_a? GuestSummaryLineItem %>
+      <%= render partial: "guest_summary_line_item", locals: {line_item: line_item} %>
+    <% else %>
+      <%= render partial: "basic_summary_line_item", locals: {line_item: line_item} %>
+    <% end %>
+  </tr>
+  <% end %>
+  <tr><%= render partial: "basic_summary_line_item", locals: {line_item: invoice_summary.subtotal_summary_line_item} %></tr>
+</table>

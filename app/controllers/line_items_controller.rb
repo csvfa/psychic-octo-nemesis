@@ -76,13 +76,14 @@ class LineItemsController < ApplicationController
         @expiry_date_state = "disabled"
       when "guest_change"
         @line_item = GuestChangeLineItem.new
-        @expiry_date_state = @amount_state = "disabled"
+        @price_per_guest_state = @expiry_date_state = @amount_state = "disabled"
         @label_prefix = "Change in "
       when "early_bird_discount"
         @line_item = EarlyBirdDiscountLineItem.new
         @no_guests_state = @amount_state = "disabled"
         @line_item.price_per_guest = EarlyBirdDiscountLineItem::EARLY_BIRD_OFFER_PRICE_PER_PERSON
-        @line_item.expiry_date = EarlyBirdDiscountLineItem.early_bird_offer_default_expiry_date
+        @line_item.invoice = @invoice
+        @line_item.expiry_date = @line_item.default_expiry_date
         @label_prefix = "Change in "
       when "fixed_discount"
         @line_item = FixedDiscountLineItem.new
@@ -122,7 +123,7 @@ class LineItemsController < ApplicationController
         @expiry_date_state = "disabled"
       when "GuestChangeLineItem"
         @line_item = GuestChangeLineItem.find(params[:id])
-        @expiry_date_state = "disabled"
+        @price_per_guest_state = @expiry_date_state = "disabled"
         @label_prefix = "Change in "
       when "EarlyBirdDiscountLineItem"
         @line_item = EarlyBirdDiscountLineItem.find(params[:id])

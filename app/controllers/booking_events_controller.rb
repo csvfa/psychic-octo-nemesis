@@ -74,7 +74,7 @@ class BookingEventsController < ApplicationController
   
   private
   def create_invoice_if_needed
-    create_invoice if code = 'Customer wants to book' and @booking.invoices.empty?
+    create_invoice if @booking_event.code == 'Customer wants to book' and @booking.invoices.empty? and @booking.no_guests > 0
   end
   
   def create_invoice
@@ -92,14 +92,16 @@ class BookingEventsController < ApplicationController
     p.calculate_and_set_variables
     raise "Party Line Item creation had the following errors: " + p.errors.to_s unless p.save
     
-    ed =                 EarlyBirdDiscountLineItem.new
-    ed.description =     EarlyBirdDiscountLineItem::DESCRIPTION
-    ed.entry_date =      Time.now.round
-    ed.expiry_date =     EarlyBirdDiscountLineItem.early_bird_offer_default_expiry_date
-    ed.note =            EarlyBirdDiscountLineItem::NOTE
-    ed.price_per_guest = EarlyBirdDiscountLineItem::EARLY_BIRD_OFFER_PRICE_PER_PERSON
-    ed.invoice =         i
-    ed.calculate_and_set_variables
-    raise "Early Bird Discount Line Item creation had the following errors: " + ed.errors.to_s unless ed.save
+    if i.booking.no_guests >= EarlyBirdDiscountLineItem::EARLY_BIRD_OFFER_GUEST_NUMBER_THRESHOLD
+      ed =                 EarlyBirdDiscountLineItem.new
+      ed.description =     EarlyBirdDiscountLineItem::DESCRIPTION
+      ed.invoice =         i
+      ed.entry_date =      Time.now.round
+      ed.expiry_date =     ed.default_expiry_date
+      ed.note =            EarlyBirdDiscountLineItem::NOTE
+      ed.price_per_guest = EarlyBirdDiscountLineItem::EARLY_BIRD_OFFER_PRICE_PER_PERSON
+      ed.calculate_and_set_variables
+      raise "Early Bird Discount Line Item creation had the following errors: " + ed.errors.to_s unless ed.save
+    end
   end
 end

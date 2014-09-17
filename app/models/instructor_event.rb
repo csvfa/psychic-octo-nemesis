@@ -4,9 +4,11 @@ class InstructorEvent < Event
 		'Instructor invited',
 		'Instructor accepted',
 		'Instructor declined',
-		'Job sheet sent',
+        'Cheer info for job sheet',
+        'Job sheet note',
+        'Job sheet sent',
 		'Job sheet read',
-      'Other'
+        'Other'
 	]
 	
 		validates_inclusion_of :code, :in => CODES, :message => "{{value}} must be in #{CODES.join ','}", :allow_nil => true

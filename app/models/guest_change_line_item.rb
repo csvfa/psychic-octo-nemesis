@@ -5,13 +5,14 @@ class GuestChangeLineItem < LineItem
   after_save :create_eb_discount, if: :booking_is_eligible_for_eb_discount? # this should only add if one was previously removed due to guest change and not expiry
   after_save :create_eb_discount_removal, if: :booking_needs_eb_discount_removal?
   
-  after_save :create_min_guests_surcharge, if: :eligible_for_min_guests_surcharge?
   after_save :create_min_guests_surcharge_removal, if: :needs_min_guests_surcharge_removed?
+  after_save :create_min_guests_surcharge, if: :eligible_for_min_guests_surcharge?
+
   
   def calculate_and_set_variables
     raise "The number of guests cannot go below one" if self.invoice.booking.no_guests(entry_date) + self.no_guests < 1
     self.price_per_guest = nil
-    self.amount = self.no_guests * self.invoice.price_per_guest(entry_date)
+    self.amount = no_guests * invoice.price_per_guest(entry_date - 1.second) # -1 second is to ensure any discounts created as a result of this line item aren't included in the price per guest on subsequent re-calculations (because the auto discounts get exactly the same entry date)
     
     # if the deposit's already paid, don't return deposits.
     if no_guests < 0 and invoice.booking.deposit_paid?
@@ -20,14 +21,32 @@ class GuestChangeLineItem < LineItem
     end
   end
   
+  def associated_guest_change_discount
+    next_line_item = invoice.line_items[invoice.line_items.find_index(self) + 1]
+    if next_line_item.is_a? GuestDiscountLineItem
+      next_line_item
+    else
+      nil
+    end
+  end
+  
+  def associated_guest_change_discount_removal
+    next_line_item = invoice.line_items[invoice.line_items.find_index(self) + 1]
+    if next_line_item.is_a? GuestDiscountRemovalLineItem
+      next_line_item
+    else
+      nil
+    end
+  end
+  
   private
   
   def booking_is_eligible_for_guest_discount?
-    invoice.booking.no_guests(entry_date) >= GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and (invoice.booking.no_guests(entry_date) - no_guests) < GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and !invoice.booking.has_guest_discount?
+    invoice.booking.no_guests(entry_date) >= GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and (invoice.booking.no_guests(entry_date) - no_guests) < GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and !invoice.booking.has_guest_discount? # and deposit not paid
   end
   
   def booking_needs_guest_discount_removal?
-    invoice.booking.no_guests(entry_date) < GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and (invoice.booking.no_guests(entry_date) - no_guests) >= GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and !invoice.booking.has_guest_discount_removal?
+    invoice.booking.no_guests(entry_date) < GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and (invoice.booking.no_guests(entry_date) - no_guests) >= GuestDiscountLineItem::GUEST_NUMBER_THRESHOLD and !invoice.booking.has_guest_discount_removal? # and deposit not paid
   end
   
   def create_guest_discount
@@ -62,7 +81,7 @@ class GuestChangeLineItem < LineItem
     ed =                 EarlyBirdDiscountLineItem.new
     ed.description =     EarlyBirdDiscountLineItem::DESCRIPTION
     ed.entry_date =      entry_date
-    ed.expiry_date =     EarlyBirdDiscountLineItem.early_bird_offer_default_expiry_date
+    ed.expiry_date =     ed.default_expiry_date
     ed.note =            EarlyBirdDiscountLineItem::NOTE
     ed.price_per_guest = EarlyBirdDiscountLineItem::EARLY_BIRD_OFFER_PRICE_PER_PERSON
     ed.invoice =         invoice.next_open_invoice
@@ -82,11 +101,12 @@ class GuestChangeLineItem < LineItem
   end
   
   def eligible_for_min_guests_surcharge?
-    invoice.booking.no_guests(entry_date) < PartyLineItem::LOW_GUESTS and !invoice.booking.active_min_guests_surcharge
+    invoice.booking.no_guests(entry_date) < PartyLineItem::LOW_GUESTS
   end
   
   def needs_min_guests_surcharge_removed?
-    invoice.booking.no_guests(entry_date) >= PartyLineItem::LOW_GUESTS and invoice.booking.active_min_guests_surcharge
+    previous_line_item = invoice.line_items[invoice.line_items.find_index(self) - 1]
+    invoice.booking.no_guests(previous_line_item.entry_date) < PartyLineItem::LOW_GUESTS
   end
   
   def create_min_guests_surcharge

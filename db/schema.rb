@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140305090144) do
+ActiveRecord::Schema.define(:version => 20140625083044) do
 
   create_table "availability_slots", :force => true do |t|
     t.time     "available_from"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20140305090144) do
     t.integer  "studio_id"
     t.integer  "sales_person_id"
     t.integer  "city_id"
+    t.string   "offer"
   end
 
   add_index "bookings", ["coach_id"], :name => "index_bookings_on_coach_id"

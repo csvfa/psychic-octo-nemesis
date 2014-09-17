@@ -17,7 +17,7 @@
       
       <div class="form-group">
         <%= f.label :entry_date %><br />
-        <%= f.datetime_select :entry_date %>
+        <%= f.datetime_select :entry_date, :include_seconds => true %>
       </div>
       
       <fieldset <%= @no_guests_state %>>

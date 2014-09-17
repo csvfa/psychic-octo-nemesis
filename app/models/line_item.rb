@@ -12,7 +12,7 @@ class LineItem < ActiveRecord::Base
     "party" => "Party",
     "ppg_discount" => "Price Per Guest Discount",
     "fixed_discount" => "Fixed Discount",
-    "early_bird_discount" => EarlyBirdDiscountLineItem::DESCRIPTION,
+    "early_bird_discount" => "Early Bird Offer",
     "guest_discount" => "Guest Discount",
     "guest_change" => "Guest change",
     "refund" => "Refund",
@@ -35,7 +35,6 @@ class LineItem < ActiveRecord::Base
   end
   
   def update_later_line_items
-    # update line items with an entry date later than this one, in each invoice
     invoice.booking.invoices.each do |i|
       i.line_items.where("entry_date > ?", entry_date).each do |l|
         l.calculate_and_set_variables

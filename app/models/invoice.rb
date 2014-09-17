@@ -1,4 +1,5 @@
 class Invoice < ActiveRecord::Base
+  has_one :party_line_item
   has_many :ppg_discount_line_items
   has_many :fixed_discount_line_items
   has_many :discount_expiry_line_items
@@ -22,11 +23,27 @@ class Invoice < ActiveRecord::Base
     check_for_expired_early_bird_discount
     
     # have to set date here coz may have created new line items in prev method
-    date = Time.now if !date
-    
+    date = Time.now.round if !date
+        
     t = 0
     line_items.where("entry_date <= ?", date).each do |line_item|
       t += line_item.amount
+    end
+    t
+  end
+  
+  def total_amount_owed
+    t = 0
+    line_items.each do |line_item|
+      t += line_item.amount unless line_item.is_a? BalancePaymentLineItem
+    end
+    t
+  end
+  
+  def total_amount_received
+    t = 0
+    line_items.each do |line_item|
+      t += line_item.amount if line_item.is_a? BalancePaymentLineItem
     end
     t
   end

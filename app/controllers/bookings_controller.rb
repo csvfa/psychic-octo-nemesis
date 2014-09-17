@@ -1,24 +1,14 @@
 class BookingsController < ApplicationController
-	helper ApplicationHelper
+  helper ApplicationHelper
   # GET /bookings
     
-    def index
-	# order by city, venue, timeslot, time
-	
-	# attempt 1 here doesn't work because a booking may not have a studio
-	#	@finalSorted = @currentBookings.sort_by
-	#		{|x|
-	#			[x.studio.venue.city.name,
-	#			x.studio.venue.name,
-	#			x.timeslot]
-	#		}
-        
-        # if the user previously chose a region, use that. otherwise default to all. Set rather than an array so no duplicates.
-        if session[:filtered_regions].nil?
-            @filtered_regions = Set.new City::REGIONS
-        else
-            @filtered_regions = Set.new session[:filtered_regions]
-        end
+  def index        
+    # if the user previously chose a region, use that. otherwise default to all. Set rather than an array so no duplicates.
+    if session[:filtered_regions].nil?
+      @filtered_regions = Set.new City::REGIONS
+    else
+      @filtered_regions = Set.new session[:filtered_regions]
+    end
   end
 
   # GET /bookings/1
@@ -39,14 +29,17 @@ class BookingsController < ApplicationController
     @themes = Theme.all
     @coaches = Coach.all
     @studios = Studio.all
-		@salespeople = SalesPerson.all
-		@cities = City.all :order => "latitude DESC"
+    @salespeople = SalesPerson.all
+    @cities = City.all :order => "latitude DESC"
 		
-		#Create new customer & guest no. records which will appear in the view
-		@booking.customer = Customer.new
-		@booking.guest = Guest.new
+    #Create new customer & guest no. records which will appear in the view
+    @booking.customer = Customer.new
+    @booking.guest = Guest.new
+    @booking.guest.number = 0 # default is 0, which we treat as meaning "unspecified". Invoicing etc is disabled when it is 0
+    
+    @booking.offer = "£5pp off b4 " + Date.today.end_of_month.to_s(:standard)
 		
-		session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
+    session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
 
     respond_to do |format|
       format.html # new.html.erb
@@ -156,5 +149,6 @@ class BookingsController < ApplicationController
 		@booking = Booking.find(params[:id])
 		@customer = @booking.customer
 		@venue = @booking.studio.venue
+        @eb_discount = @booking.active_eb_discount
 	end
 end

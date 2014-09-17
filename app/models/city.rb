@@ -3,7 +3,8 @@ class City < ActiveRecord::Base
 		'North',
 		'South',
 		'East',
-		'West'
+		'West',
+        'Unknown'
 	]
 	
 	has_and_belongs_to_many :coaches

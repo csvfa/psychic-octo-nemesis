@@ -1,0 +1,3 @@
+<td colspan="3"><%= line_item.description %></td>
+<td><% unless line_item.amount_owed == 0 %><%= number_to_currency(line_item.amount_owed, unit: "&pound;", precision: 0) %><% end %></td>
+<td><% unless line_item.amount_received == 0 %><%= number_to_currency(line_item.amount_received, unit: "&pound;", precision: 0) %><% end %></td>

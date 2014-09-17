@@ -6,8 +6,9 @@ class EarlyBirdDiscountLineItem < PPGDiscountLineItem
   NOTE = "Auto"
   DESCRIPTION = "Early Bird Offer"
   
-  def self.early_bird_offer_default_expiry_date
-    Date.today.end_of_month
+  def default_expiry_date
+    # Early bird expires at end of month of original enquiry. Use the booking created_at as a proxy
+    invoice.booking.created_at.end_of_month
   end
   
   def check_for_expired_early_bird_discount

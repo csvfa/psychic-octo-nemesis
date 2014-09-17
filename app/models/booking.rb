@@ -62,9 +62,13 @@ class Booking < ActiveRecord::Base
 	end
 	
 	def self.orderedByTimeslotOn(regions, date)
-		# returns all bookings in a given array of regions, for a given day, in order of timeslot
-        # need to then order by city, and then by time
-        Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region IN (?)", regions).order('latitude DESC', 'timeslot')
+		# returns all bookings in a given array of regions, for a given day, in order of timeslot. also accepts a nil date, and will return nil timeslots in order of record creation
+        # need to then order by city (north to south), and then by time
+        if date.nil?
+          Booking.where(timeslot: nil).joins(:city).where("cities.region IN (?)", regions).order('latitude DESC', 'created_at')
+        else
+          Booking.where(timeslot: date.midnight..(date.midnight + 1.day)).joins(:city).where("cities.region IN (?)", regions).order('latitude DESC', 'timeslot')
+        end
 	end
 	
 	def self.in_timeslot(slot, studio, city = nil)
@@ -76,30 +80,27 @@ class Booking < ActiveRecord::Base
 		end
 	end
 	
-	def self.datesOfCurrentBookings(regions)
-		# returns an array of dates of bookings that are taking place today or in the future
-		# this is used on the bookings index
-		
-		# Bookings on or after today (note from previous midnight onwards so we include parties that already started today
-        currentBookings = Booking.where("timeslot >='" + Date.today.to_time.to_s + "'").joins(:city).where("cities.region IN (?)", regions)
-            
-        dates = Array.new
-		
-		#get each date that has a booking
-		currentBookings.each do |booking| 
-			dates << booking.timeslot.to_date
-		end
-		
-		#remove redundant dates and sort in date order
-		dates.uniq!
-		dates.sort!
-	end
+  def self.dates_of_current_bookings(regions)
+    # Bookings on or after today (note from previous midnight onwards so we include parties that already started today
+    dates_of_bookings(current_bookings_in_region(regions))
+  end
+  
+  def self.dates_of_balance_due_bookings(regions)
+    dates_of_bookings(current_bookings_in_region(regions).select { |booking| booking.invoices.last && booking.amount != 0 && booking.invoices.last.balance_due_date < Date.today })
+  end
+  
+  def self.dates_of_deposit_due_bookings(regions)
+    dates_of_bookings(current_bookings_in_region(regions).select { |booking| booking.invoices.last && !booking.deposit_paid? && booking.invoices.last.deposit_due_date < Date.today })
+  end
   
   def no_guests(date = Time.now) # the number of guests this booking has
     g = 0
     if self.invoices.empty?
       g = self.guest.number
     else
+      # if date is a Date, not a DateTime, then Ruby will assume its time is 00:00:00. This can make for incorrect comparisons with entry_date, which is a DateTime. Therefore we do this:
+      date = date.end_of_day if date.is_a? Date
+      
       # go through each invoice, and their line items and add their no_guests
       self.invoices.each do |i|
         i.line_items.where("entry_date <= ?", date).each do |l|
@@ -116,6 +117,14 @@ class Booking < ActiveRecord::Base
       a += i.amount unless i.amount.nil?
     end
     a
+  end
+  
+  def deposit_due
+    a = 0
+    invoices.each do |i|
+      a += i.total_amount_owed
+    end
+    a / 2
   end
   
   def price_per_guest
@@ -135,19 +144,6 @@ class Booking < ActiveRecord::Base
   def has_guest_discount_removal?
     guest_discount_index == -1
   end
-  
-  #def has_eb_discount_expiry?
-  #  h = false
-  #  expiries = Array.new
-    # need to force a database query because the local variable may not be up to date (can't just use "discount_expiry_line_items")
-  #  invoices.each do |i|
-  #      expiries += DiscountExpiryLineItem.where(:invoice_id => i.id) # array of arrays
-  #  end
-  #  expiries.flatten.each do |d|
-  #    h = true if d.note == DiscountExpiryLineItem::EARLY_BIRD_EXPIRY_NOTE
-  #  end
-  #  h
-  #end
   
   def active_eb_discount # returns the latest eb discount, even if it's expired, unless there's an eb guest removal or expiry
     active_eb_discount = nil
@@ -176,14 +172,22 @@ class Booking < ActiveRecord::Base
   end
     
   def deposit_paid?
-    total_deposit_amount = 0
+    deposit_paid = 0
     invoices.each do |i|
       i.deposit_payment_line_items.each do |d|
-        total_deposit_amount += d.amount
+        deposit_paid += d.amount 
       end
     end
 
-    total_deposit_amount.abs >= (amount / 2)
+    deposit_paid.abs >= deposit_due
+  end
+  
+  def pre_deposit_payment_line_items
+    if last_deposit_payment.present?
+      invoices.first.line_items.where("entry_date < ?", last_deposit_payment.entry_date) 
+    else
+      invoices.first.line_items
+    end
   end
   
   def active_min_guests_surcharge
@@ -201,8 +205,56 @@ class Booking < ActiveRecord::Base
       nil
     end
   end
+    
+  def last_deposit_payment
+    last = nil
+    
+    invoices.each do |i|
+      i.deposit_payment_line_items.each do |d|
+        if last.nil?
+          last = d
+        elsif d.entry_date > last.entry_date
+          last = d
+        end
+      end
+    end
+    
+    last
+  end
   
-  private  
+  def last_min_guests_surcharge_line_item(date)
+    last = nil
+    
+    invoices.each do |i|
+      i.min_guests_surcharge_line_items.where("entry_date < ?", date).each do |m|
+        if last.nil?
+          last = m
+        elsif m.entry_date > last.entry_date
+          last = m
+        end
+      end
+    end
+    
+    last
+  end
+  
+  private
+  
+  def self.dates_of_bookings(bookings)
+    dates = Array.new
+		
+    bookings.each do |booking|
+      booking.timeslot.nil? ? dates << nil : dates << booking.timeslot.to_date
+    end
+		
+    dates.uniq!
+    dates.sort!
+  end
+  
+  def self.current_bookings_in_region(regions)
+    Booking.where("timeslot >='" + Date.today.to_time.to_s + "' OR timeslot IS NULL").joins(:city).where("cities.region IN (?)", regions)
+  end
+    
   def guest_discount_index
     # positive number means has guest discount, negative number means has guest discount removal
     num_guest_discounts = 0

@@ -1,0 +1,5 @@
+<td><%= line_item.description %></td>
+<td><%= line_item.guest_change %><%= image_tag("person_icon.png") %></td>
+<td><%= number_to_currency(line_item.price_per_guest, unit: "&pound;", precision: 0) %>pp</td>
+<td><% unless line_item.amount_owed == 0 %><%= number_to_currency(line_item.amount_owed, unit: "&pound;", precision: 0) %><% end %></td>
+<td><% unless line_item.amount_received == 0 %><%= number_to_currency(line_item.amount_received, unit: "&pound;", precision: 0) %><% end %></td>

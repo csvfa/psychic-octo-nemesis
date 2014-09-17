@@ -26,6 +26,7 @@ class InvoicesController < ApplicationController
   # GET /invoices/new.json
   def new
     @invoice = Invoice.new
+
     @invoice.booking = @booking = get_booking
     @invoice.set_default_dates
     

@@ -1,37 +1,11 @@
-	<!-- implement when colours have been built
-	<h2>Action Required</h2>
-	<table>
-		<tr>
-			<th>Time &amp; Studio</th>
-			<th>Customer</th>
-			<th>Instructor &amp; Theme</th>
-			<th>Booking Communication</th>
-			<th>Payment</th>
-		</tr>
-	</table>
-	-->
-		<table class="table table-condensed">
-			<tr>
-				<th>Customer</th>
-				<th>Time &amp; Studio</th>
-				<th>Instructor</th>
-				<th>Booking Notes</th>
-				<th>Payment</th>
-				<th>Actions</th>
-			</tr>
-<!-- show by date, city, venue, time -->
-	<% Booking.datesOfCurrentBookings(@filtered_regions).each do |date| %>
-		<tr><td colspan=6><h2><%= date.to_s(:standard) %></h2></td></tr>
-			<!-- make this a partial? -->
-			<% Booking.orderedByTimeslotOn(@filtered_regions, date).each do |booking| %>
-                <!-- this id acts as an anchor so user returns to the booking they left from -->
+<!-- this id acts as an anchor so user returns to the booking they left from -->
                 <tr id ="booking<%= booking.id %>">
 					<td> <!-- Customer -->
 							<p><%= booking.customer %></p>
 							<p><%= booking.customer.telephone_number %></p>
 							<p><%= booking.customer.email %></p>
 							<p><%= booking.city %></p>
-							<p><%= booking.no_guests %><span class="text-muted"> guests</span></p>
+							<p><%= booking.no_guests == 0 ? "?" : booking.no_guests %><span class="text-muted"> guests</span></p>
 							<p>
 							<% if booking.theme.nil? %>
 								<span class ="text-muted">No theme</span>
@@ -46,7 +20,7 @@
 					</td>
 					
 					<td> <!-- Time and Studio -->
-						<p><%= booking.timeslot.to_s(:time_only) %>
+						<p><%= booking.timeslot.nil? ? "TBC" : booking.timeslot.to_s(:time_only)  %>
 						<% if booking.studio.nil? %>
 							<span class="text-muted">No studio</span></p>
 						<% else %>
@@ -81,24 +55,27 @@
 							:booking_id => booking.id}
 						%>
 					</td>
-					<td> <!-- Payment notes -->
-						<%= render partial: "events",
-							:locals => {:events => booking.events.where(:type => "PaymentEvent").order('occurred_at'),
-							:type => "payment",
-							:booking_id => booking.id}
-						%>
-					</td>
+					<td><%= render partial: "account_summary", locals: {booking: booking} %></td>
 					<td> <!-- Actions  -->
-						<p><%= link_to 'Edit', edit_booking_path(booking) %></p>
-						<p><%= link_to 'Studio calendar', studio_calendar_booking_path(booking) %></p>
-						<p><%= link_to 'Booking form', booking_form_booking_path(booking) %></p>
-                        <% if booking.invoices.empty? %>
-                          <p class="text-muted">Invoices</p>
+				        <p><%= link_to 'Edit booking', edit_booking_path(booking) %></p>
+                      
+                        <% if booking.timeslot.present? %>
+                          <p><%= link_to 'Studio calendar', studio_calendar_booking_path(booking) %></p>
                         <% else %>
-                          <p><%= link_to 'Invoices', booking_invoices_path(booking) %></p>
+                          <p><span class ="text-muted">Studio calendar</span></p>
                         <% end %>
+                      
+                        <% if booking.timeslot.present? and booking.studio.present? and booking.theme.present? and booking.no_guests > 0  and !booking.invoices.empty? %>
+                          <p><%= link_to 'Booking form', booking_form_booking_path(booking) %></p>
+                        <% else %>
+                          <p><span class ="text-muted">Booking form</span></p>
+                        <% end %>
+                      
+                        <% if booking.timeslot.present? and !booking.invoices.empty? and booking.no_guests > 0 %>
+                            <p><%= link_to 'Invoices', booking_invoices_path(booking) %></p>
+                        <% else %>
+                          <p><span class ="text-muted">Invoices</span></p>
+                        <% end %>
+              
 					</td>
 				</tr>
-			<% end %>
-	   <% end %>
-</table>

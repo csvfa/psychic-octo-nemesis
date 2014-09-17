@@ -6,10 +6,14 @@
 	<tr><td>Date/Time of Party:</td><td><%= @booking.timeslot.to_s(:date_only) %>, <%= @booking.timeslot.to_s(:time_only) %> -<%= (@booking.timeslot + 90.minutes).to_s(:time_only) %></td></tr>
 	<tr><td>Venue:</td><td><%= @venue.name %>, <%= @venue.address %></td></tr>
 	<tr><td>Party theme:</td><td><%= @booking.theme %></td></tr>
-	<tr><td>Additional info:</td><td>Package includes a bottle of bubbly as a gift for the bride</td></tr>
+	<tr><td>Gift for the bride:</td><td><%= @booking.theme.gifts.humanize %></td></tr>
 	<tr><td>No. participants:</td><td><%= @booking.guest.to_s %> people</td></tr>
-	<tr><td>Fee:</td><td></td></tr>
-	<tr><td>Total due:</td><td></td></tr>
+	<tr><td>Fee:</td><td><%= number_to_currency(@booking.price_per_guest, unit: "&pound;") %> per person
+      <% if @eb_discount.present? %>
+        (when booked by <%= @eb_discount.expiry_date.to_s(:standard) %>)
+      <% end %>
+    </td></tr>
+	<tr><td>Total due:</td><td><%= number_to_currency(@booking.amount, unit: "&pound;") %></td></tr>
 </table>
 <small><p><strong>Please refer to the accompanying invoice for details of how to pay.</strong></p></small>
 <h6>Terms and conditions</h6>

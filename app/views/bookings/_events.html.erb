@@ -38,7 +38,7 @@
                 <span class="<%= label_class %>"><%= event.code %></span>
             <% end %>
 
-            <% unless event.notes == "" %>
+            <% unless event.notes == "" or event.code == 'Cheer info for job sheet' %>
                 <small class="text-info"><%= event.notes %></small>
             <% end %>
             
@@ -53,7 +53,7 @@
                 <span class="<%= label_class %>"><%= event.code %></span>
             <% end %>
 
-            <% unless event.notes == "" %>
+            <% unless event.notes == "" or event.code == 'Cheer info for job sheet' %>
                 <small class="text-info"><%= event.notes %></small>
             <% end %>
             
