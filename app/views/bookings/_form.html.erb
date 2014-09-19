@@ -31,25 +31,19 @@
 				<%= f.collection_select :city_id, @cities, :id, :name, {}, :size=>@cities.count, :class=>"form-control" %>
                 <%= link_to 'Create new city', new_city_path %>
 			</div>
-		<% end %> <!-- End of customer fields -->
+		<% end %>
     </div>
     <div class="col-md-3">
-        <!-- Number of guests. If there is an invoice, changing this number must go through the line item logic -->
-        <% if @booking.invoices.empty? %>
-		  <%= f.fields_for :guest do |g| %>
-		    <div class="form-group">
-		      <%= g.label :number, "Number of guests" %><br />
-		      <%= g.number_field :number %>
-			</div>
-		  <% end %>
-        <% else %>
-          <div class="form-group">
-            <%= f.label :no_guests, "Number of guests" %><br />
-            <%= link_to @booking.no_guests, new_line_item_path({:invoice_id => @booking.invoices.last.id, :line_item_type => :guest_change}) %>
-          </div>
+		<%= f.fields_for :guest do |g| %>
+		  <div class="form-group">
+		    <%= g.label :number, "Number of guests" %><br />
+		    <%= g.number_field :number %>
+		  </div>
         <% end %>
-        
-		
+        <div class="form-group">
+		  <%= g.label :rate_per_guest, "£ Rate per guest" %><br />
+		  <%= g.number_field :rate_per_guest %>
+		</div>
 		<div class="form-group">
 			<%= f.label :sales_person %><br />
 			<%= f.collection_select :sales_person_id, @salespeople, :id, :name, {include_blank: true} %>
@@ -69,6 +63,10 @@
         <div class="form-group">
 			<%= f.label :offer %><br />
 			<%= f.text_field :offer %>
+		</div>
+              <div class="form-group">
+			<%= f.label :offer_expires_on %><br />
+			<%= f.date_field :offer_expires_on %>
 		</div>
 		<div class="form-group">
 			<%= f.label :studio %><br />

@@ -1,68 +1,51 @@
 <div class="container">
-	<div class="page-header"><h1>Invoices <small>for <%= @booking.customer.name %></small></h1></div>
-
-  <% @invoices.each do |invoice| %>
-  
-    <div class="row">
-      <div class="col-md-11">
-        <h2>Invoice id <%= invoice.id %></h2>
-        <p><span class="text-muted">Issued </span><%= invoice.invoice_date.to_s(:standard) %><span class="text-muted">, deposit due </span><%= invoice.deposit_due_date.to_s(:standard) %> (<%= distance_of_time_in_words_to_now(invoice.deposit_due_date) %> from now)<span class="text-muted">, balance due </span><%= invoice.balance_due_date.to_s(:standard) %> (<%= distance_of_time_in_words_to_now(invoice.balance_due_date) %> from now)</p>
-      </div>
-      <div class="col-md-1">
-        <%= link_to 'Edit', edit_invoice_path(invoice) %>
-      </div>
-    </div>
-  
-    <table class="table table-condensed">
-      <tr>
-        <th>Entry date</th>
-        <th>Description</th>
-        <th>No guests</th>
-        <th>Price per guest</th>
-        <th>Amount</th>
-        <th>Note</th>
-        <th>Expiry date</th>
-        <th></th>
-      </tr>
-
-      <% invoice.line_items.order(:entry_date).each do |line_item| %>
-        <tr>
-          <!-- set class depending on action -->
-          <td><%= line_item.entry_date.to_s(:standard) %></td>
-          <td><%= line_item.description %></td>
-          <td><%= line_item.no_guests %></td>
-          <td><%= number_to_currency(line_item.price_per_guest, unit: "&pound;") %></td>
-          <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
-          <td><%= line_item.note %></td>
-          <td><%= line_item.expiry_date.to_s(:standard) unless line_item.expiry_date.nil? %></td>
-          <td><%= link_to 'Edit', edit_line_item_path(line_item) %></td>
-        </tr>
-      <% end %>
-        <tr>
-          <td></td><td></td>
-          <td><strong><%= invoice.no_guests %></strong>
-          </td>
-          <td></td>
-          <td>
-            <table>
-              <tr><td>VAT</td><td align="right"><%= number_to_currency(invoice.vat, unit: "&pound;") %></td></tr>
-              <tr><td><strong>Total</strong></td><td align="right"><strong><%= number_to_currency(invoice.amount, unit: "&pound;") %></strong></td></tr>
-            </table>
-          </td>
-          <td></td><td></td><td></td>
-        </tr>
-    </table>
-    <p>Add line item:
-      <%= link_to 'Early Bird Offer', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :early_bird_discount}) %> |
-      <%= link_to 'Fixed Discount', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :fixed_discount}) %> |
-      <%= link_to 'Price Per Guest Discount', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :ppg_discount}) %> |
-      <%= link_to 'Guest change', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :guest_change}) %> |
-      <%= link_to 'Refund', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :refund}) %> |
-      <%= link_to 'Deposit payment', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :deposit_payment}) %> |
-      <%= link_to 'Balance payment', new_line_item_path({:invoice_id => invoice.id, :line_item_type => :balance_payment}) %>
-    </p>
-
-  <% end %>
-<br />
-
-<%= link_to 'New invoice', new_booking_invoice_path(@booking) %> | <%= link_to 'Home', root_path %>
+  <div class="page-header"><h1>Invoice <small>for <%= @booking.customer.name %></small></h1></div>
+<h2>Invoice id <%= @invoice.id %></h2>
+  <p><span class="text-muted">Issued </span><%= @invoice.invoice_date.to_s(:standard) %><span class="text-muted">, version </span><%= @invoice.version_number %></p>
+  <p><%= link_to 'Edit invoice', edit_invoice_path(@invoice) %></p>
+  <h3>Services Provided</h3>
+  <table class="table table-condensed">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>Number of people</th>
+      <th>Rate per person</th>
+      <th>Amount</th>
+      <th></th>
+    </tr>
+    <% @invoice.service_provided_line_items.order(:entry_date).each do |line_item| %>
+    <tr>
+      <td><%= line_item.entry_date.to_s(:standard) %></td>
+      <td><%= line_item.description %></td>
+      <td><%= line_item.no_people %></td>
+      <td><%= number_to_currency(line_item.rate_per_person, unit: "&pound;") %></td>
+      <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
+      <td><%= link_to 'Edit', edit_service_provided_line_item_path(line_item) %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td></td><td></td>
+      <td><strong><%= @invoice.total_people %></strong>
+      </td>
+      <td></td>
+      <td>
+        <table>
+          <tr><td>VAT</td><td align="right"><%= number_to_currency(@invoice.vat, unit: "&pound;") %></td></tr>
+          <tr><td><strong>Net</strong></td><td align="right"><strong><%= number_to_currency(@invoice.net, unit: "&pound;") %></strong></td></tr>
+          <tr><td><strong>Total</strong></td><td align="right"><strong><%= number_to_currency(@invoice.total, unit: "&pound;") %></strong></td></tr>
+        </table>
+      </td><td></td>
+    </tr>
+  </table>
+  <p><%= link_to 'Add service provided', new_service_provided_line_item_path({:invoice_id => @invoice.id}) %></p>
+  <h3>Payment Received</h3>
+  <p>Deposit <%= number_to_currency(@invoice.deposit, unit: "&pound;") %> due by <%= @invoice.deposit_due_date.to_s(:standard) %></p>
+  <table class="table table-condensed">
+    <% @invoice.received_line_items.order(:received_on).each do |line_item| %>
+    <tr>
+      <td>Received</td><td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td><td><%= line_item.received_on.to_s(:standard) %></td><td><%= link_to 'Edit', edit_received_line_item_path(line_item) %></td>
+    </tr>
+    <% end %>
+  </table>
+  <p>Final balance <%= number_to_currency(@invoice.final_balance, unit: "&pound;") %> due by <%= @invoice.balance_due_date.to_s(:standard) %></p>
+  <p><%= link_to 'Add payment received', new_received_line_item_path({:invoice_id => @invoice.id}) %></p>

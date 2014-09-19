@@ -24,6 +24,10 @@
     <%= f.label :balance_due_date %><br />
     <%= f.date_select :balance_due_date, {:class=>"form-control"} %>
   </div>
+  <div class="form-group">
+    <%= f.label :version_number %><br />
+    <%= f.number_field :version_number, {:class=>"form-control"} %>
+  </div>
   <%= f.hidden_field :booking_id, :value => @booking.id %>
   <div class="actions">
     <%= f.submit %>

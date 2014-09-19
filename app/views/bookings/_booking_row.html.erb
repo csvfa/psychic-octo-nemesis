@@ -65,16 +65,20 @@
                           <p><span class ="text-muted">Studio calendar</span></p>
                         <% end %>
                       
-                        <% if booking.timeslot.present? and booking.studio.present? and booking.theme.present? and booking.no_guests > 0  and !booking.invoices.empty? %>
+                        <% if booking.timeslot.present? and booking.studio.present? and booking.theme.present? and booking.no_guests > 0  and !booking.invoice.nil? %>
                           <p><%= link_to 'Booking form', booking_form_booking_path(booking) %></p>
                         <% else %>
                           <p><span class ="text-muted">Booking form</span></p>
                         <% end %>
                       
-                        <% if booking.timeslot.present? and !booking.invoices.empty? and booking.no_guests > 0 %>
-                            <p><%= link_to 'Invoices', booking_invoices_path(booking) %></p>
+                        <% if booking.timeslot.present? and booking.no_guests > 0 %>
+                          <% if booking.invoice.nil? %>
+                            <p><%= link_to 'Create invoice', new_invoice_path({:booking_id => booking.id}) %></p>
+                          <% else %>
+                            <p><%= link_to 'Invoice', invoice_path(booking.invoice) %></p>
+                          <% end %>
                         <% else %>
-                          <p><span class ="text-muted">Invoices</span></p>
+                          <p><span class ="text-muted">Create invoice</span></p>
                         <% end %>
               
 					</td>

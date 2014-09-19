@@ -1,13 +1,14 @@
 CheerleadingCoDatabase::Application.routes.draw do
     
-  resources :line_items
+  resources :received_line_items
 
-  resources :invoices
+  resources :service_provided_line_items
 
   resources :events
+  
+  resources :invoices
 
 	resources :bookings do
-		resources :invoices
 		member do
 			get 'studio_calendar', 'booking_form'
 		end

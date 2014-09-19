@@ -1,10 +1,7 @@
 class InvoicesController < ApplicationController
   # GET /invoices
   # GET /invoices.json
-  def index
-    @booking = get_booking
-    @invoices = @booking.invoices.order(:invoice_date)
-      
+  def index 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @invoices }
@@ -15,6 +12,7 @@ class InvoicesController < ApplicationController
   # GET /invoices/1.json
   def show
     @invoice = Invoice.find(params[:id])
+    @booking = @invoice.booking
 
     respond_to do |format|
       format.html # show.html.erb
@@ -26,8 +24,9 @@ class InvoicesController < ApplicationController
   # GET /invoices/new.json
   def new
     @invoice = Invoice.new
+    @invoice.version_number = 1
 
-    @invoice.booking = @booking = get_booking
+    @invoice.booking = @booking = Booking.find(params[:booking_id])
     @invoice.set_default_dates
     
     session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
@@ -53,7 +52,8 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       if @invoice.save
-        format.html { redirect_to session.delete(:return_to), notice: 'Invoice was successfully created.' }
+        create_first_line_item
+        format.html { redirect_to invoice_path(@invoice.id), notice: 'Invoice was successfully created.' }
         format.json { render json: @invoice, status: :created, location: @invoice }
       else
         format.html { render action: "new" }
@@ -69,7 +69,7 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       if @invoice.update_attributes(params[:invoice])
-        format.html { redirect_to session.delete(:return_to), notice: 'Invoice was successfully updated.' }
+        format.html { redirect_to invoice_path(@invoice.id), notice: 'Invoice was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -91,9 +91,15 @@ class InvoicesController < ApplicationController
       format.json { head :no_content }
     end
   end
-	
-  protected
-    def get_booking
-      Booking.find(params[:booking_id])
-    end
+  
+  private
+  
+  def create_first_line_item
+    s = ServiceProvidedLineItem.new
+    s.entry_date = Date.today
+    s.description = "Hen party"
+    s.no_people = @invoice.booking.no_guests
+    s.invoice = @invoice
+    raise "Could not save first line item: " + s.inspect.to_s unless s.save
+  end  
 end

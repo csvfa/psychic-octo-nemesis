@@ -1,25 +1,50 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Ref:</b>
-  <%= @invoice.ref %>
-</p>
-
-<p>
-  <b>Invoice date:</b>
-  <%= @invoice.invoice_date %>
-</p>
-
-<p>
-  <b>Deposit due date:</b>
-  <%= @invoice.deposit_due_date %>
-</p>
-
-<p>
-  <b>Balance due date:</b>
-  <%= @invoice.balance_due_date %>
-</p>
-
-
-<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
-<%= link_to 'Back', invoices_path %>
+<div class="container">
+  <div class="page-header"><h1>Invoice <%= @invoice.id %> <small>for <%= @booking.customer.name %></small></h1></div>
+  <p><span class="text-muted">Issued </span><%= @invoice.invoice_date.to_s(:standard) %><span class="text-muted">, version </span><%= @invoice.version_number %></p>
+  <p><%= link_to 'Edit invoice dates & version', edit_invoice_path(@invoice) %></p>
+  <h2>Services Provided</h2>
+  <table class="table table-condensed">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>Number of people</th>
+      <th>Rate per person</th>
+      <th>Amount</th>
+      <th></th>
+    </tr>
+    <% @invoice.service_provided_line_items.order(:entry_date).each do |line_item| %>
+    <tr>
+      <td><%= line_item.entry_date.to_s(:standard) %></td>
+      <td><%= line_item.description %></td>
+      <td><%= line_item.no_people %></td>
+      <td><%= number_to_currency(line_item.rate_per_person, unit: "&pound;") %></td>
+      <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
+      <td><%= link_to 'Edit', edit_service_provided_line_item_path(line_item) %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td></td><td></td>
+      <td><strong><%= @invoice.total_people %></strong>
+      </td>
+      <td></td>
+      <td>
+        <table>
+          <tr><td>VAT</td><td align="right"><%= number_to_currency(@invoice.vat, unit: "&pound;") %></td></tr>
+          <tr><td><strong>Net</strong></td><td align="right"><strong><%= number_to_currency(@invoice.net, unit: "&pound;") %></strong></td></tr>
+          <tr><td><strong>Total</strong></td><td align="right"><strong><%= number_to_currency(@invoice.total, unit: "&pound;") %></strong></td></tr>
+        </table>
+      </td><td></td>
+    </tr>
+  </table>
+  <p><%= link_to 'Add service provided', new_service_provided_line_item_path({:invoice_id => @invoice.id}) %></p>
+  <h2>Payment Received</h2>
+  <p>Deposit <%= number_to_currency(@invoice.deposit, unit: "&pound;") %> due by <%= @invoice.deposit_due_date.to_s(:standard) %></p>
+  <table class="table table-condensed">
+    <% @invoice.received_line_items.order(:received_on).each do |line_item| %>
+    <tr>
+      <td><%= line_item.received_on.to_s(:standard) %></td><td>Received by <%= line_item.payment_method %></td><td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td><td><%= link_to 'Edit', edit_received_line_item_path(line_item) %></td>
+    </tr>
+    <% end %>
+  </table>
+  <p>Final balance <%= number_to_currency(@invoice.final_balance, unit: "&pound;") %> due by <%= @invoice.balance_due_date.to_s(:standard) %></p>
+  <p><%= link_to 'Add payment received', new_received_line_item_path({:invoice_id => @invoice.id}) %></p>
