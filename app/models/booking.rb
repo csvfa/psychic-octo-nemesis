@@ -97,7 +97,7 @@ class Booking < ActiveRecord::Base
     dates = Array.new
 		
     bookings.each do |booking|
-      booking.timeslot.nil? ? dates << nil : dates << booking.timeslot.to_date
+      dates << booking.timeslot.to_date if booking.timeslot.present?
     end
 		
     dates.uniq!

@@ -11,10 +11,14 @@
     <th>Actions</th>
   </tr>
   <% Booking.dates_of_balance_due_bookings(@filtered_regions).each do |date| %>
-    <tr><td colspan=6><h3><%= date.nil? ? "Timeslot TBC" : date.to_s(:standard) %></h3></td></tr>
+    <tr><td colspan=6><h3><%= date.to_s(:standard) %></h3></td></tr>
     <% Booking.orderedByTimeslotOn(@filtered_regions, date).select { |booking| booking.invoice.balance_due_date < Date.today }.each do |booking| %>
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
     <% end %>
+  <% end %>
+  <tr><td colspan=6><h3>Timeslot TBC</h3></td></tr>
+    <% Booking.orderedByTimeslotOn(@filtered_regions, nil).select { |booking| booking.invoice.balance_due_date < Date.today }.each do |booking| %>
+    <%= render partial: "booking_row", :locals => {:booking => booking} %>
   <% end %>
 </table>
 <% else %>
@@ -34,8 +38,12 @@
     <th>Actions</th>
   </tr>
   <% Booking.dates_of_deposit_due_bookings(@filtered_regions).each do |date| %>
-    <tr><td colspan=6><h3><%= date.nil? ? "Timeslot TBC" : date.to_s(:standard) %></h3></td></tr>
+    <tr><td colspan=6><h3><%= date.to_s(:standard) %></h3></td></tr>
     <% Booking.orderedByTimeslotOn(@filtered_regions, date).select { |booking| booking.invoice.deposit_due_date < Date.today }.each do |booking| %>
+      <%= render partial: "booking_row", :locals => {:booking => booking} %>
+    <% end %>
+    <tr><td colspan=6><h3>Timeslot TBC</h3></td></tr>
+      <% Booking.orderedByTimeslotOn(@filtered_regions, nil).select { |booking| booking.invoice.deposit_due_date < Date.today }.each do |booking| %>
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
     <% end %>
   <% end %>
@@ -56,9 +64,13 @@
     <th>Actions</th>
   </tr>
   <% Booking.dates_of_current_bookings(@filtered_regions).each do |date| %>
-    <tr><td colspan=6><h3><%= date.nil? ? "Timeslot TBC" : date.to_s(:standard) %></h3></td></tr>
+    <tr><td colspan=6><h3><%= date.to_s(:standard) %></h3></td></tr>
     <% Booking.orderedByTimeslotOn(@filtered_regions, date).each do |booking| %>
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
     <% end %>
+  <% end %>
+  <tr><td colspan=6><h3>Timeslot TBC</h3></td></tr>
+  <% Booking.orderedByTimeslotOn(@filtered_regions, nil).each do |booking| %>
+    <%= render partial: "booking_row", :locals => {:booking => booking} %>
   <% end %>
 </table>

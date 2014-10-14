@@ -56,11 +56,12 @@
 						%>
 					</td>
 
-					<td><p><%= booking.pricing_structure.name %> expires <%= booking.pricing_structure.expiry_date.to_s(:standard) %>
+					<td>
+                      <% if booking.pricing_structure.present? %><p><%= booking.pricing_structure.name %> expires <%= booking.pricing_structure.expiry_date.to_s(:standard) %>
                       <% if booking.pricing_structure.expiry_date < Date.today %>
                         <span class="label label-danger">Expired</span>
                       <% end %>
-                      </p>
+                      </p><% end %>
                       <% if booking.timeslot.present? and booking.no_guests > 0 %>
                         <% if booking.invoice.nil? %>
                           <p><%= link_to 'Create invoice', new_invoice_path({:booking_id => booking.id}) %></p>
