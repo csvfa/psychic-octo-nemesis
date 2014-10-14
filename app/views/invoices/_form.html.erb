@@ -14,22 +14,113 @@
 <form role="form"> <!-- Bootstrap CSS styling -->
   <div class="form-group">
     <%= f.label :invoice_date %><br />
-    <%= f.date_select :invoice_date, {:class=>"form-control"} %>
-  </div>
-  <div class="form-group">
-    <%= f.label :deposit_due_date %><br />
-    <%= f.date_select :deposit_due_date, {:class=>"form-control"} %>
-  </div>
-  <div class="form-group">
-    <%= f.label :balance_due_date %><br />
-    <%= f.date_select :balance_due_date, {:class=>"form-control"} %>
+    <%= f.date_select :invoice_date, {:class=>"form-control", :order => [:day, :month, :year]} %>
   </div>
   <div class="form-group">
     <%= f.label :version_number %><br />
     <%= f.number_field :version_number, {:class=>"form-control"} %>
   </div>
   <%= f.hidden_field :booking_id, :value => @booking.id %>
-  <div class="actions">
+
+  <h2>Services Provided</h2>
+  <table class="table table-condensed">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>Number of people</th>
+      <th>Rate per person</th>
+      <th>Amount</th>
+      <th></th>
+    </tr>
+    <% @invoice.service_provided_line_items.order(:entry_date).each_with_index do |line_item, index| %>
+    <tr>
+      <td><%= line_item.entry_date.to_s(:standard) %></td>
+      <td><%= line_item.description %></td>
+      <td><%= line_item.no_people %></td>
+      <td><%= number_to_currency(line_item.rate_per_person, unit: "&pound;") %>
+        <% if index == 0 && line_item.rate_per_person != @invoice.booking.pricing_structure.rate_per_person %>
+          <%= link_to edit_booking_path(@invoice.booking) do %>
+            <span class="label label-danger">Booking rate is <%= number_to_currency(@invoice.booking.pricing_structure.rate_per_person, unit: "&pound;") %>?</span>
+          <% end %>
+        <% end %>
+        <% if @invoice.booking.pricing_structure.expiry_date < Date.today %>
+          <%= link_to edit_pricing_structure_path(@invoice.booking.pricing_structure) do %>
+            <span class="label label-danger">Pricing structure expired</span>
+          <% end %>
+        <% end %>
+      </td>
+      <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
+      <td><%= link_to 'Edit', edit_service_provided_line_item_path(line_item) %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td></td><td></td>
+      <td><strong><%= @invoice.total_people %></strong>
+        <% if @invoice.total_people != @invoice.booking.no_guests %>
+          <%= link_to edit_booking_path(@invoice.booking) do %>
+            <span class="label label-danger">Booking has <%= @invoice.booking.no_guests %> guests?</span>
+          <% end %>
+        <% end %>
+      </td>
+      <td></td>
+      <td>
+        <table>
+          <tr><td>VAT</td><td align="right"><%= number_to_currency(@invoice.vat, unit: "&pound;") %></td></tr>
+          <tr><td><strong>Net</strong></td><td align="right"><strong><%= number_to_currency(@invoice.net, unit: "&pound;") %></strong></td></tr>
+          <tr><td><strong>Total</strong></td><td align="right"><strong><%= number_to_currency(@invoice.total, unit: "&pound;") %></strong></td></tr>
+        </table>
+      </td><td></td>
+    </tr>
+  </table>
+  <p><%= link_to 'Add service provided', new_service_provided_line_item_path({:invoice_id => @invoice.id}) %></p>
+  
+  <h2>Payment Received</h2>
+  <table class="table table-condensed">
+    <% if @invoice.received_line_items.empty? %><p>None</p><% else %>
+      <% @invoice.received_line_items.order(:received_on).each do |line_item| %>
+      <tr>
+        <td><%= line_item.received_on.to_s(:standard) %></td>
+        <td>Received by <%= line_item.payment_method %></td>
+        <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
+        <td><%= link_to 'Edit', edit_received_line_item_path(line_item) %></td>
+      </tr>
+      <% end %>
+      <td></td>
+      <td></td>
+      <td><strong><%= number_to_currency(@invoice.total_received, unit: "&pound;") %></strong></td>
+      <td></td>
+    </table>
+  <% end %>
+  <p><%= link_to 'Add payment received', new_received_line_item_path({:invoice_id => @invoice.id}) %></p>
+  
+  <h2>Payment Due</h2>
+  <h3>Deposit</h3>
+  <div class="form-group">
+    <%= f.label :deposit_amount %><br />
+    <%= f.number_field :deposit_amount, {:class=>"form-control", :step => "0.01"} %>
+  </div>
+    <div class="form-group">
+    <%= f.label :deposit_due_date %><br />
+    <%= f.date_select :deposit_due_date, {:class=>"form-control", :order => [:day, :month, :year]} %>
+    <% if @invoice.deposit_due_date < Date.today %>
+      <span class="label label-danger">Deposit Due</span>
+    <% end %>
+    <% if @invoice.deposit_due_date > @invoice.booking.pricing_structure.expiry_date %>
+      <span class="label label-danger">Deposit Due after Offer Expires</span>
+    <% end %>
+  </div>
+
+  <h3>Outstanding Balance</h3>
+  <p><strong><%= number_to_currency(@invoice.amount_outstanding, unit: "&pound;") %></strong></p>
+   <div class="form-group">
+    <%= f.label :balance_due_date %><br />
+    <%= f.date_select :balance_due_date, {:class=>"form-control", :order => [:day, :month, :year]} %>
+    <% if @invoice.balance_due_date < Date.today %>
+      <span class="label label-danger">Balance Due</span>
+    <% end %>
+  </div>
+  
+   <div class="actions">
     <%= f.submit %>
   </div>
 </form>

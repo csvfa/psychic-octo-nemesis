@@ -1,8 +1,8 @@
 <div class="container">
 	<div class = "row">
 		<div class = "col-md-11">
-			<h1>Editing invoice</h1>
-		</div>
+          <div class="page-header"><h1>Invoice <%= @invoice.id %> <small>for <%= link_to @booking.customer.name, edit_booking_path(@booking) %>, <%= @booking.timeslot.to_s(:standard) %>, <%= @booking.city.name %>, <%= @booking.theme.name %> </small></h1></div>
+        </div>
 		<div class = "col-md-1">
 			<%= button_to "Delete invoice", @invoice, :method=>:delete, :class=>"btn btn-danger",:confirm=>"Are you sure?" %>
 		</div>

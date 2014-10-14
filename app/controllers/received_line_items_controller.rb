@@ -46,7 +46,7 @@ class ReceivedLineItemsController < ApplicationController
 
     respond_to do |format|
       if @received_line_item.save
-        format.html { redirect_to @received_line_item.invoice, notice: 'Received line item was successfully created.' }
+        format.html { redirect_to edit_invoice_path(@received_line_item.invoice), notice: 'Received line item was successfully created.' }
         format.json { render json: @received_line_item, status: :created, location: @received_line_item }
       else
         format.html { render action: "new" }
@@ -62,7 +62,7 @@ class ReceivedLineItemsController < ApplicationController
 
     respond_to do |format|
       if @received_line_item.update_attributes(params[:received_line_item])
-        format.html { redirect_to @received_line_item.invoice, notice: 'Received line item was successfully updated.' }
+        format.html { redirect_to edit_invoice_path(@received_line_item.invoice), notice: 'Received line item was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -75,10 +75,11 @@ class ReceivedLineItemsController < ApplicationController
   # DELETE /received_line_items/1.json
   def destroy
     @received_line_item = ReceivedLineItem.find(params[:id])
+    return_path = edit_invoice_path(@received_line_item.invoice)
     @received_line_item.destroy
 
     respond_to do |format|
-      format.html { redirect_to received_line_items_url }
+      format.html { redirect_to return_path }
       format.json { head :no_content }
     end
   end

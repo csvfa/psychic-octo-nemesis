@@ -1,5 +1,7 @@
 CheerleadingCoDatabase::Application.routes.draw do
     
+  resources :pricing_structures
+
   resources :received_line_items
 
   resources :service_provided_line_items
@@ -10,7 +12,7 @@ CheerleadingCoDatabase::Application.routes.draw do
 
 	resources :bookings do
 		member do
-			get 'studio_calendar', 'booking_form'
+			get 'studio_calendar', 'booking_form', 'job_sheet'
 		end
 	end
 

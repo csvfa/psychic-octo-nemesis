@@ -1,31 +1,105 @@
-<h1>Hen Party Booking Form</h1>
-<table>
-	<tr><td>Booking Party:</td><td><%= @customer.name %></td></tr>
-	<tr><td>Telephone:</td><td><%= @customer.telephone_number %></td></tr>
-	<tr><td>Email:</td><td><%= @customer.email %></td></tr>
-	<tr><td>Date/Time of Party:</td><td><%= @booking.timeslot.to_s(:date_only) %>, <%= @booking.timeslot.to_s(:time_only) %> -<%= (@booking.timeslot + 90.minutes).to_s(:time_only) %></td></tr>
-	<tr><td>Venue:</td><td><%= @venue.name %>, <%= @venue.address %></td></tr>
-	<tr><td>Party theme:</td><td><%= @booking.theme %></td></tr>
-	<tr><td>Gift for the bride:</td><td><%= @booking.theme.gifts.humanize %></td></tr>
-	<tr><td>No. participants:</td><td><%= @booking.guest.to_s %> people</td></tr>
-	<tr><td>Fee:</td><td><%= number_to_currency(@booking.price_per_guest, unit: "&pound;") %> per person
-      <% if @eb_discount.present? %>
-        (when booked by <%= @eb_discount.expiry_date.to_s(:standard) %>)
-      <% end %>
-    </td></tr>
-	<tr><td>Total due:</td><td><%= number_to_currency(@booking.amount, unit: "&pound;") %></td></tr>
+<div class="container">
+<%= image_tag "logo.png", style:"float:right", size: "220x103" %>
+<h1>Party Booking Invoice</h1>
+<div class = "row">
+  <div class = "col-md-6">
+    <table>
+	<tr><td>Invoice number</td><td><%= @booking.invoice.id %><% if @booking.invoice.version_number.present? %>-<%= @booking.invoice.version_number %><% end %></td></tr>
+	<tr><td>Customer name</td><td><strong><%= @customer.name %></strong></td></tr>
+	<tr><td>Telephone</td><td><%= @customer.telephone_number %></td></tr>
+	<tr><td>Email</td><td><%= @customer.email %></td></tr>
+  </table>
+</div>
+  
+  <div class = "col-md-6">
+    <table>
+	<tr><td>Date &amp; time</td><td><%= @booking.timeslot.to_s(:full_date_only) %>, <%= @booking.timeslot.to_s(:time_only) %> -<%= (@booking.timeslot + 90.minutes).to_s(:time_only) %></td></tr>
+      <tr><td>City</td><td><%= @booking.city.name %></td></tr>
+    <tr><td>Venue</td><td><%= @venue.name %><% if @venue.address.present? %>,<% end %> <%= @venue.address %></td></tr>
+	<tr><td>Theme</td><td><%= @booking.theme %></td></tr>
+	<tr><td>Gift for the bride</td><td><%= @booking.theme.gifts.humanize %></td></tr> 
+    </table>
+  </div>
+</div>
+<br />
+<table class="table table-condensed">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>Number of people</th>
+      <th>Rate per person<% if @booking.pricing_structure.expiry_date >= Date.today %>*<% end %></th>
+      <th>Amount</th>
+    </tr>
+    <% @booking.invoice.service_provided_line_items.order(:entry_date).each do |line_item| %>
+    <tr>
+      <td><%= line_item.entry_date.to_s(:standard) %></td>
+      <td><%= line_item.description %></td>
+      <td><%= line_item.no_people %></td>
+      <td><%= number_to_currency(line_item.rate_per_person, unit: "&pound;") %></td>
+      <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td></td><td></td>
+      <td><strong><%= @booking.invoice.total_people %></strong></td>
+      <td></td>
+      <td>
+        <table>
+          <tr><td>VAT</td><td align="right"><%= number_to_currency(@booking.invoice.vat, unit: "&pound;") %></td></tr>
+          <tr><td><strong>Net</strong></td><td align="right"><strong><%= number_to_currency(@booking.invoice.net, unit: "&pound;") %></strong></td></tr>
+          <tr><td><strong>Total</strong></td><td align="right"><strong><%= number_to_currency(@booking.invoice.total, unit: "&pound;") %></strong></td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  
+<% if @booking.pricing_structure.expiry_date >= Date.today %>
+  <p>*This rate is valid when booked by <%= @booking.pricing_structure.expiry_date.to_s(:full) %>. After then, the rate will increase by £5 per person.</p>
+<% end %>
+  
+<% if @booking.invoice.received_line_items.any? %>
+<table class="table table-condensed">
+  <% @booking.invoice.received_line_items.order(:received_on).each do |line_item| %>
+    <tr>
+      <td><%= line_item.received_on.to_s(:standard) %></td>
+      <td>Received by <%= line_item.payment_method %></td>
+      <td><%= number_to_currency(line_item.amount, unit: "&pound;") %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td></td>
+    <td></td>
+    <td><strong><%= number_to_currency(@booking.invoice.total_received, unit: "&pound;") %></strong></td>
+  </tr>
 </table>
-<small><p><strong>Please refer to the accompanying invoice for details of how to pay.</strong></p></small>
+<% end %>
+
+<% unless @booking.invoice.deposit_paid? %>
+  <p><strong>Deposit of <%= number_to_currency(@booking.invoice.deposit_amount, unit: "&pound;") %> needs to be paid by <%= @booking.invoice.deposit_due_date.to_s(:full) %></strong></p>
+<% end %>
+  
+<p><strong>Balance to pay: <%= number_to_currency(@booking.invoice.amount_outstanding, unit: "&pound;") %></strong></p>
+
+<h3>How to pay</h3>
+<p>Here are instructions on how to pay</p>
+<h4>By BACS</h4>
+<p>Instructions go here</p>
+<h4>By cheque</h4>
+<p>Instructions go here</p>
+  
 <h6>Terms and conditions</h6>
 <small>
-	<p>Rate is based on min x participants. Additional participants will be charged at x per person if they book by x (xpp for participants added after x).</p>
+	<p>Rate is based on min ? participants. Additional participants will be charged at ? per person if they book by x (xpp for participants added after x).</p>
 	<p>A 50% non-refundable deposit is required to secure a booking. The deposit is non-refundable and non-transferable even for individuals who drop out. Any individuals who drop out will lose their deposits. The balance is then due 15 days before the party and is also non-refundable and non-transferable. Breakages and any damage to Cheerleading Company equipment must be paid for in full.</p>
 	<p>Pregnant ladies are able to participate in the session provided they have got permission from their GP. Any pregnant participants who have not checked with their GP will not be able to join in, and will not be given refunds. So please ask them to check before booking!</p></small>
-<p><strong>Signed:_________________________________ Date:_________________________</strong></p>
-<small><address>
+<p><strong>By paying the deposit, you are confirming that you agree to the terms on this page</strong></p>
+
+  <h3>Contact us</h3>
+  <address>
 	<strong>The Cheerleading Company Limited</strong><br />
-	98 Hubert Grove, Clapham, SW9 9PD.<br />
+	98 Hubert Grove, Clapham, London, SW9 9PD.<br />
 	<%= link_to "www.cheerleadingcompany.co.uk", "http://www.cheerleadingcompany.co.uk" %><br />
 	<%= mail_to "cheerleadingco@hotmail.co.uk" %><br />
 	020 7274 3045
-</address></small>
+</address><p>VAT Number 0123456789</p>
+</div>

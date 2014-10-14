@@ -14,11 +14,11 @@
 <form role="form"> <!-- Bootstrap CSS styling -->
   <div class="form-group">
     <%= f.label :received_on %><br />
-    <%= f.date_select :received_on %>
+    <%= f.date_select :received_on, {:class=>"form-control", :order => [:day, :month, :year]} %>
   </div>
   <div class="form-group">
     <%= f.label :amount %><br />
-    <%= f.text_field :amount %>
+    <%= f.number_field :amount, :step => "0.01" %>
   </div>
   <div class="form-group">
     <%= f.label :payment_method %><br />

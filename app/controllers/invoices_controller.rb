@@ -10,30 +10,32 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/1
   # GET /invoices/1.json
-  def show
-    @invoice = Invoice.find(params[:id])
-    @booking = @invoice.booking
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @invoice }
-    end
-  end
 
   # GET /invoices/new
   # GET /invoices/new.json
   def new
-    @invoice = Invoice.new
-    @invoice.version_number = 1
+    @booking = Booking.find(params[:booking_id])
+    if @booking.invoice.present?
+      redirect_to edit_invoice_path(@booking.invoice.id)
+    else
+      @invoice = Invoice.new
+      @invoice.version_number = 1
 
-    @invoice.booking = @booking = Booking.find(params[:booking_id])
-    @invoice.set_default_dates
-    
-    session[:return_to] ||= request.referer # record where the user came from so we can return them there after the save
+      @invoice.booking = @booking
+      @invoice.set_default_dates
+      
+      @invoice.calculate_deposit_amount
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @invoice }
+      respond_to do |format|
+        if @invoice.save
+          @invoice.create_first_line_item
+          format.html { redirect_to edit_invoice_path(@invoice.id), notice: 'Invoice was successfully created.' }
+          format.json { render json: @invoice, status: :created, location: @invoice }
+        else
+          format.html { render action: "new" }
+          format.json { render json: @invoice.errors, status: :unprocessable_entity }
+        end
+      end
     end
   end
 
@@ -52,7 +54,7 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       if @invoice.save
-        create_first_line_item
+        create_first_line_item unless @invoice.booking.pricing_structure.rate_per_person.nil?
         format.html { redirect_to invoice_path(@invoice.id), notice: 'Invoice was successfully created.' }
         format.json { render json: @invoice, status: :created, location: @invoice }
       else
@@ -66,10 +68,16 @@ class InvoicesController < ApplicationController
   # PUT /invoices/1.json
   def update
     @invoice = Invoice.find(params[:id])
-
+    
+    if session[:return_to].nil?
+      return_path = root_path
+    else
+      return_path = session.delete(:return_to) + "#booking" + @invoice.booking.id.to_s
+    end
+    
     respond_to do |format|
       if @invoice.update_attributes(params[:invoice])
-        format.html { redirect_to invoice_path(@invoice.id), notice: 'Invoice was successfully updated.' }
+        format.html { redirect_to return_path, notice: 'Invoice was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -91,15 +99,4 @@ class InvoicesController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
-  private
-  
-  def create_first_line_item
-    s = ServiceProvidedLineItem.new
-    s.entry_date = Date.today
-    s.description = "Hen party"
-    s.no_people = @invoice.booking.no_guests
-    s.invoice = @invoice
-    raise "Could not save first line item: " + s.inspect.to_s unless s.save
-  end  
 end

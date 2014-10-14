@@ -9,9 +9,18 @@ class Booking < ActiveRecord::Base
   belongs_to :customer
   belongs_to :sales_person
   belongs_to :city
+  belongs_to :pricing_structure
 	
   accepts_nested_attributes_for :guest
   accepts_nested_attributes_for :customer
+  
+  ENQUIRY_METHODS = [
+    'Telephone',
+    'Email',
+    'Social media'
+  ]
+	
+  validates_inclusion_of :enquiry_method, :in => ENQUIRY_METHODS, :message => "{{value}} must be in #{ENQUIRY_METHODS.join ','}", :allow_nil => true
 
 	def new
 		s = events.build :code => 'Query received'
@@ -71,11 +80,11 @@ class Booking < ActiveRecord::Base
   end
   
   def self.dates_of_balance_due_bookings(regions)
-    dates_of_bookings(current_bookings_in_region(regions).select { |booking| booking.invoice && booking.invoice.amount_outstanding != 0 && booking.invoice.balance_due_date < Date.today })
+    dates_of_bookings(current_bookings_in_region(regions).select { |booking| booking.invoice && booking.invoice.amount_outstanding != 0 && booking.invoice.balance_due_date <= Date.today })
   end
   
   def self.dates_of_deposit_due_bookings(regions)
-    dates_of_bookings(current_bookings_in_region(regions).select { |booking| booking.invoice && !booking.invoice.deposit_paid? && booking.invoice.deposit_due_date < Date.today })
+    dates_of_bookings(current_bookings_in_region(regions).select { |booking| booking.invoice && !booking.invoice.deposit_paid? && booking.invoice.deposit_due_date <= Date.today })
   end
   
   def no_guests

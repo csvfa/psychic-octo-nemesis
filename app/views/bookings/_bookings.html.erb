@@ -1,5 +1,5 @@
 <!-- Balance Due Table -->
-<h2>Balances Overdue</h2>
+<h2>Balances Due</h2>
 <% if Booking.dates_of_balance_due_bookings(@filtered_regions).any? %>
 <table class="table table-condensed">
   <tr>
@@ -18,11 +18,11 @@
   <% end %>
 </table>
 <% else %>
-<p>No balances overdue</p>
+<p>No balances due</p>
 <% end %>
 
 <!-- Deposit Due Table -->
-<h2>Deposits Overdue</h2>
+<h2>Deposits Due</h2>
 <% if Booking.dates_of_deposit_due_bookings(@filtered_regions).any? %>
 <table class="table table-condensed">
   <tr>
@@ -35,13 +35,13 @@
   </tr>
   <% Booking.dates_of_deposit_due_bookings(@filtered_regions).each do |date| %>
     <tr><td colspan=6><h3><%= date.nil? ? "Timeslot TBC" : date.to_s(:standard) %></h3></td></tr>
-    <% Booking.orderedByTimeslotOn(@filtered_regions, date).select { |booking| booking.invoices.last.deposit_due_date < Date.today }.each do |booking| %>
+    <% Booking.orderedByTimeslotOn(@filtered_regions, date).select { |booking| booking.invoice.deposit_due_date < Date.today }.each do |booking| %>
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
     <% end %>
   <% end %>
 </table>
 <% else %>
-<p>No deposits overdue</p>
+<p>No deposits due</p>
 <% end %>
 
 <!-- All current bookings table -->

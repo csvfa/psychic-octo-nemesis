@@ -8,6 +8,8 @@ class InstructorEvent < Event
         'Job sheet note',
         'Job sheet sent',
 		'Job sheet read',
+		'Kit pending',
+		'Kit allocated',
         'Other'
 	]
 	

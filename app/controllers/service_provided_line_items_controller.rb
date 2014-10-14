@@ -43,11 +43,10 @@ class ServiceProvidedLineItemsController < ApplicationController
   # POST /service_provided_line_items.json
   def create
     @service_provided_line_item = ServiceProvidedLineItem.new(params[:service_provided_line_item])
-    @service_provided_line_item.amount = @service_provided_line_item.rate_per_person * @service_provided_line_item.no_people if @service_provided_line_item.amount.nil?
 
     respond_to do |format|
       if @service_provided_line_item.save
-        format.html { redirect_to @service_provided_line_item.invoice, notice: 'Service provided line item was successfully created.' }
+        format.html { redirect_to edit_invoice_path(@service_provided_line_item.invoice), notice: 'Service provided line item was successfully created.' }
         format.json { render json: @service_provided_line_item, status: :created, location: @service_provided_line_item }
       else
         format.html { render action: "new" }
@@ -60,11 +59,11 @@ class ServiceProvidedLineItemsController < ApplicationController
   # PUT /service_provided_line_items/1.json
   def update
     @service_provided_line_item = ServiceProvidedLineItem.find(params[:id])
-    params[:service_provided_line_item][:amount] = params[:service_provided_line_item][:rate_per_person] * params[:service_provided_line_item][:no_people] if @service_provided_line_item.amount.nil?
+    @invoice = @service_provided_line_item.invoice
 
     respond_to do |format|
       if @service_provided_line_item.update_attributes(params[:service_provided_line_item])
-        format.html { redirect_to @service_provided_line_item.invoice, notice: 'Service provided line item was successfully updated.' }
+        format.html { redirect_to edit_invoice_path(@service_provided_line_item.invoice), notice: 'Service provided line item was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -77,10 +76,11 @@ class ServiceProvidedLineItemsController < ApplicationController
   # DELETE /service_provided_line_items/1.json
   def destroy
     @service_provided_line_item = ServiceProvidedLineItem.find(params[:id])
+    return_path = edit_invoice_path(@service_provided_line_item.invoice)
     @service_provided_line_item.destroy
 
     respond_to do |format|
-      format.html { redirect_to service_provided_line_items_url }
+      format.html { redirect_to return_path }
       format.json { head :no_content }
     end
   end

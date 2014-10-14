@@ -22,7 +22,7 @@
   
   <div class="field">
     <%= f.label :occurred_at %><br />
-    <%= f.datetime_select :occurred_at %>
+    <%= f.datetime_select :occurred_at, :order => [:hour, :minute, :day, :month, :year] %>
   </div>
 
   <%= f.hidden_field :booking_id, :value => @booking.id %>

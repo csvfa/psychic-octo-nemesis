@@ -12,7 +12,7 @@
   <% end %>
 <form role="form"> <!-- Bootstrap CSS styling -->
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-md-4">
 		<%= f.fields_for :customer do |c| %> <!-- Customer fields -->
 			<div class="form-group">
 				<%= c.label :name, "Customer name" %><br />
@@ -33,40 +33,38 @@
 			</div>
 		<% end %>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
 		<%= f.fields_for :guest do |g| %>
 		  <div class="form-group">
 		    <%= g.label :number, "Number of guests" %><br />
 		    <%= g.number_field :number %>
 		  </div>
         <% end %>
-        <div class="form-group">
-		  <%= g.label :rate_per_guest, "£ Rate per guest" %><br />
-		  <%= g.number_field :rate_per_guest %>
-		</div>
 		<div class="form-group">
 			<%= f.label :sales_person %><br />
 			<%= f.collection_select :sales_person_id, @salespeople, :id, :name, {include_blank: true} %>
 			<br />
 			<%= link_to 'Create new sales person', new_sales_person_path %>
 		</div>
+        <div class="form-group">
+		  <%= f.label :enquiry_method %><br />
+		  <%= f.select :enquiry_method, Booking::ENQUIRY_METHODS, {include_blank: true} %>
+		</div>
 		<div class="form-group">
 			<%= f.label "Extra customer notes" %><br />
 			<%= f.text_area :notes, {:class=>"form-control", :rows=>3} %>
 		</div>
 	</div>
-  	<div class="col-md-3">
+  	<div class="col-md-4">
 		<div class="form-group">
 			<%= f.label :timeslot %><br />
-			<%= f.datetime_select :timeslot, :include_blank => true %>
+			<%= f.datetime_select :timeslot, {:order => [:hour, :minute, :day, :month, :year], :include_blank => true} %>
 		</div>
         <div class="form-group">
-			<%= f.label :offer %><br />
-			<%= f.text_field :offer %>
-		</div>
-              <div class="form-group">
-			<%= f.label :offer_expires_on %><br />
-			<%= f.date_field :offer_expires_on %>
+			<%= f.label "Pricing Structure" %><br />
+			<%= f.collection_select :pricing_structure_id, @pricing_structures, :id, :name %>
+			<br />
+			<%= link_to 'Create new pricing structure', new_pricing_structure_path %>
 		</div>
 		<div class="form-group">
 			<%= f.label :studio %><br />
@@ -86,12 +84,6 @@
 			<%= f.collection_select :theme_id, @themes, :id, :name, {include_blank: true} %>
 			<br />
 			<%= link_to 'Create new theme', new_theme_path %>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="form-group">
-			<%= f.label :advance_venue_payment_required %><br />
-			<%= f.check_box :advance_venue_payment_required %>
 		</div>
 	</div>
 </div>
