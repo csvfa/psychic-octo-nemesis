@@ -43,6 +43,7 @@ class ServiceProvidedLineItemsController < ApplicationController
   # POST /service_provided_line_items.json
   def create
     @service_provided_line_item = ServiceProvidedLineItem.new(params[:service_provided_line_item])
+    @invoice = @service_provided_line_item.invoice
 
     respond_to do |format|
       if @service_provided_line_item.save
