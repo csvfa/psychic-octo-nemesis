@@ -1,6 +1,6 @@
 class ServiceProvidedLineItem < ActiveRecord::Base
   belongs_to :invoice
-  validates :rate_per_person, numericality: { greater_than: 0 }
+  validates :rate_per_person, numericality: { greater_than: -1 }
   before_save :calculate_amount, if: Proc.new { |line_item| line_item.amount.nil? }
   
   def calculate_amount
