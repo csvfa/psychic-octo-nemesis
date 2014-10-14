@@ -2,6 +2,6 @@
 rails.png: rails-be8732dac73d845ac5b142c8fb5f9fb0.png
 application.js: application-7270767b2a9e9fff880aa5de378ca791.js
 bookings.js: bookings-2b0a065fd7b44ffb298b71428df20f55.js
-line_items.js: line_items-d3c8f7cb5d5c8120b815af9aefb3daff.js
+service_provided_line_items.js: service_provided_line_items-3de36b72659b1a4cda8252e3e400d03a.js
 application.css: application-0791604ba9952cca2287961d2a4f59cf.css
 jquery.min.map: jquery.min-70bec01470bf6bcfed5892ae554b38c8.map
