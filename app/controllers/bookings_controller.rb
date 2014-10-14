@@ -76,6 +76,8 @@ class BookingsController < ApplicationController
     @studios = Studio.all
     @salespeople = SalesPerson.all
     @cities = City.all :order => "latitude DESC"
+    @pricing_structures = PricingStructure.where("expiry_date >= ?", Date.today)
+
 
     @booking.city = City.find_all_by_name(:Unspecified).last if @booking.city.nil?
       
