@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Entry date:</b>
+  <%= @service_provided_line_item.entry_date %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @service_provided_line_item.description %>
+</p>
+
+<p>
+  <b>No people:</b>
+  <%= @service_provided_line_item.no_people %>
+</p>
+
+<p>
+  <b>Rate per person:</b>
+  <%= @service_provided_line_item.rate_per_person %>
+</p>
+
+<p>
+  <b>Amount{8.2}:</b>
+  <%= @service_provided_line_item.amount{8.2} %>
+</p>
+
+
+<%= link_to 'Edit', edit_service_provided_line_item_path(@service_provided_line_item) %> |
+<%= link_to 'Back', service_provided_line_items_path %>

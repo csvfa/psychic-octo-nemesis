@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  entry_date: 2014-09-19
+  description: MyString
+  no_people: 1
+  rate_per_person: 9.99
+  amount{8.2}: MyString
+
+two:
+  entry_date: 2014-09-19
+  description: MyString
+  no_people: 1
+  rate_per_person: 9.99
+  amount{8.2}: MyString

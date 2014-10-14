@@ -30,7 +30,6 @@ class BookingEventsController < ApplicationController
 
     respond_to do |format|
       if @booking_event.save
-        create_invoice_if_needed
         format.html { redirect_to return_path, :notice => 'Booking note was successfully created.' }
         format.json { render :json => @booking_event, :event => :created, :location => @booking_event }
       else
@@ -69,39 +68,6 @@ class BookingEventsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to return_path, :notice => 'Booking event was deleted.' }
       format.json { head :no_content }
-    end
-  end
-  
-  private
-  def create_invoice_if_needed
-    create_invoice if @booking_event.code == 'Customer wants to book' and @booking.invoices.empty? and @booking.no_guests > 0
-  end
-  
-  def create_invoice
-    i = Invoice.new
-    i.booking = @booking
-    i.invoice_date = Date.today
-    i.set_default_dates
-    raise "Invoice creation had the following errors: " + i.errors.to_s unless i.save
-        
-    p = PartyLineItem.new
-    p.description = LineItem::TYPE_DESCRIPTIONS["party"]
-    p.entry_date =  Time.now.round
-    p.no_guests =   i.booking.no_guests
-    p.invoice =     i
-    p.calculate_and_set_variables
-    raise "Party Line Item creation had the following errors: " + p.errors.to_s unless p.save
-    
-    if i.booking.no_guests >= EarlyBirdDiscountLineItem::EARLY_BIRD_OFFER_GUEST_NUMBER_THRESHOLD
-      ed =                 EarlyBirdDiscountLineItem.new
-      ed.description =     EarlyBirdDiscountLineItem::DESCRIPTION
-      ed.invoice =         i
-      ed.entry_date =      Time.now.round
-      ed.expiry_date =     ed.default_expiry_date
-      ed.note =            EarlyBirdDiscountLineItem::NOTE
-      ed.price_per_guest = EarlyBirdDiscountLineItem::EARLY_BIRD_OFFER_PRICE_PER_PERSON
-      ed.calculate_and_set_variables
-      raise "Early Bird Discount Line Item creation had the following errors: " + ed.errors.to_s unless ed.save
     end
   end
 end

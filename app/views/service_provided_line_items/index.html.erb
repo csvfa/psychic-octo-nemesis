@@ -1,0 +1,31 @@
+<h1>Listing service_provided_line_items</h1>
+
+<table>
+  <tr>
+    <th>Entry date</th>
+    <th>Description</th>
+    <th>No people</th>
+    <th>Rate per person</th>
+    <th>Amount{8.2}</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @service_provided_line_items.each do |service_provided_line_item| %>
+  <tr>
+    <td><%= service_provided_line_item.entry_date %></td>
+    <td><%= service_provided_line_item.description %></td>
+    <td><%= service_provided_line_item.no_people %></td>
+    <td><%= service_provided_line_item.rate_per_person %></td>
+    <td><%= service_provided_line_item.amount{8.2} %></td>
+    <td><%= link_to 'Show', service_provided_line_item %></td>
+    <td><%= link_to 'Edit', edit_service_provided_line_item_path(service_provided_line_item) %></td>
+    <td><%= link_to 'Destroy', service_provided_line_item, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Service provided line item', new_service_provided_line_item_path %>

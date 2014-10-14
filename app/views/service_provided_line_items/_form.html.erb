@@ -1,0 +1,41 @@
+<%= form_for(@service_provided_line_item) do |f| %>
+  <% if @service_provided_line_item.errors.any? %>
+    <div id="error_explanation">
+      <h2>Couldn't save because of <%= pluralize(@service_provided_line_item.errors.count, "error") %>:</h2>
+      <ul>
+      <% @service_provided_line_item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+<form role="form"> <!-- Bootstrap CSS styling -->
+  <div class="form-group">
+    <%= f.label :entry_date %><br />
+    <%= f.date_select :entry_date, {:class=>"form-control", :order => [:day, :month, :year]} %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="form-group">
+    <%= f.label :no_people %><br />
+    <%= f.number_field :no_people, :class=>"form-control", :onchange => "update_amount()" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :rate_per_person %><br />
+    <%= f.number_field :rate_per_person, :class=>"form-control", :onchange => "update_amount()", :step => "0.01" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :amount %><br />
+    <%= f.number_field :amount, :class=>"form-control", :disabled => @service_provided_line_item.amount.nil?, :step => "0.01" %>
+  </div>
+
+ <%= f.hidden_field :invoice_id, :value => @invoice.id %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

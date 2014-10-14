@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140625083044) do
+ActiveRecord::Schema.define(:version => 20140923175358) do
 
   create_table "availability_slots", :force => true do |t|
     t.time     "available_from"
@@ -33,13 +33,17 @@ ActiveRecord::Schema.define(:version => 20140625083044) do
     t.datetime "when_job_sheet_sent"
     t.string   "venue_booked_with"
     t.boolean  "advance_venue_payment_required"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
     t.integer  "customer_id"
     t.integer  "studio_id"
     t.integer  "sales_person_id"
     t.integer  "city_id"
     t.string   "offer"
+    t.decimal  "rate_per_guest",                 :precision => 8, :scale => 2
+    t.date     "offer_expires_on"
+    t.text     "enquiry_method"
+    t.integer  "pricing_structure_id"
   end
 
   add_index "bookings", ["coach_id"], :name => "index_bookings_on_coach_id"
@@ -119,30 +123,14 @@ ActiveRecord::Schema.define(:version => 20140625083044) do
     t.date     "invoice_date"
     t.date     "deposit_due_date"
     t.date     "balance_due_date"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
     t.integer  "booking_id"
+    t.integer  "version_number"
+    t.decimal  "deposit_amount",   :precision => 8, :scale => 2
   end
 
   add_index "invoices", ["booking_id"], :name => "index_invoices_on_booking_id"
-
-  create_table "line_items", :force => true do |t|
-    t.datetime "entry_date"
-    t.integer  "no_guests"
-    t.string   "type"
-    t.decimal  "amount",          :precision => 8, :scale => 2
-    t.text     "note"
-    t.string   "action"
-    t.string   "description"
-    t.date     "expiry_date"
-    t.string   "references"
-    t.integer  "invoice_id"
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
-    t.decimal  "price_per_guest", :precision => 8, :scale => 2
-  end
-
-  add_index "line_items", ["invoice_id"], :name => "index_line_items_on_invoice_id"
 
   create_table "managers", :force => true do |t|
     t.string   "name"
@@ -162,6 +150,29 @@ ActiveRecord::Schema.define(:version => 20140625083044) do
 
   add_index "opening_times", ["venue_id"], :name => "index_opening_times_on_venue_id"
 
+  create_table "pricing_structures", :force => true do |t|
+    t.text     "name"
+    t.decimal  "rate_per_person",  :precision => 8, :scale => 2
+    t.integer  "min_people"
+    t.decimal  "min_cost",         :precision => 8, :scale => 2
+    t.date     "expiry_date"
+    t.text     "terms"
+    t.text     "notes"
+    t.text     "initial_response"
+    t.text     "booking_response"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+  end
+
+  create_table "received_line_items", :force => true do |t|
+    t.date     "received_on"
+    t.decimal  "amount",         :precision => 8, :scale => 2
+    t.string   "payment_method"
+    t.integer  "invoice_id"
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+  end
+
   create_table "sales_people", :force => true do |t|
     t.string   "name"
     t.string   "email"
@@ -172,6 +183,17 @@ ActiveRecord::Schema.define(:version => 20140625083044) do
   end
 
   add_index "sales_people", ["events_company_id"], :name => "index_sales_people_on_events_company_id"
+
+  create_table "service_provided_line_items", :force => true do |t|
+    t.date     "entry_date"
+    t.string   "description"
+    t.integer  "no_people"
+    t.decimal  "rate_per_person", :precision => 8, :scale => 2
+    t.decimal  "amount",          :precision => 8, :scale => 2
+    t.integer  "invoice_id"
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
+  end
 
   create_table "studios", :force => true do |t|
     t.string   "name"

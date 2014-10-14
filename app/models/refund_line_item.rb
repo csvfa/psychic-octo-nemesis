@@ -1,2 +1,0 @@
-class RefundLineItem < DiscountLineItem
-end

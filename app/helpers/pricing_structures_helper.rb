@@ -1,0 +1,2 @@
+module PricingStructuresHelper
+end

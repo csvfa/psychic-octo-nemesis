@@ -1,0 +1,38 @@
+<div class="container">
+<h1>Pricing Structures <small>(expired hidden)</small></h1>
+
+<table class="table table-condensed">
+  <tr>
+    <th>Name</th>
+    <th>Rate per person</th>
+    <th>Min people</th>
+    <th>Min cost</th>
+    <th>Expiry date</th>
+    <th>Terms</th>
+    <th>Notes</th>
+    <th>Initial response</th>
+    <th>Booking response</th>
+    <th></th>
+  </tr>
+
+<% @pricing_structures.each do |pricing_structure| %>
+  <% if pricing_structure.expiry_date >= Date.today %>
+    <tr>
+      <td><%= pricing_structure.name %></td>
+      <td><%= number_to_currency(pricing_structure.rate_per_person, unit: "&pound;", precision: 0) %></td>
+      <td><%= pricing_structure.min_people %></td>
+      <td><%= number_to_currency(pricing_structure.min_cost, unit: "&pound;", precision: 0) %></td>
+      <td><%= pricing_structure.expiry_date.to_s(:standard) %></td>
+      <td><%= pricing_structure.terms %></td>
+      <td><%= pricing_structure.notes %></td>
+      <td><%= pricing_structure.initial_response %></td>
+      <td><%= pricing_structure.booking_response %></td>
+      <td><%= link_to 'Edit', edit_pricing_structure_path(pricing_structure) %></td>
+    </tr>
+  <% end %>
+<% end %>
+</table>
+
+<br />
+<%= link_to 'New Pricing structure', new_pricing_structure_path %> | <%= link_to 'Home', root_path %>
+</div>

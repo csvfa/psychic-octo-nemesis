@@ -1,0 +1,65 @@
+<%= form_for(@pricing_structure) do |f| %>
+  <% if @pricing_structure.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pricing_structure.errors.count, "error") %> prohibited this pricing_structure from being saved:</h2>
+
+      <ul>
+      <% @pricing_structure.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<form role="form">
+  <div class = "row">
+    <div class = "col-md-6">
+      <div class="form-group">
+        <%= f.label :name %><br />
+        <%= f.text_field :name, {:class=>"form-control"} %>
+      </div>
+      <div class="form-group">
+        <%= f.label :rate_per_person %><br />
+        <%= f.number_field :rate_per_person, {:class=>"form-control", :step => "0.01"} %>
+      </div>
+      <div class="form-group">
+        <%= f.label :min_people %><br />
+        <%= f.number_field :min_people, {:class=>"form-control"} %>
+      </div>
+      <div class="form-group">
+        <%= f.label :min_cost %><br />
+        <%= f.number_field :min_cost, {:class=>"form-control", :step => "0.01"} %>
+      </div>
+      <div class="form-group">
+        <%= f.label :expiry_date %><br />
+        <%= f.date_select :expiry_date, {:class=>"form-control", :order => [:day, :month, :year], :include_blank => true} %>
+      </div>
+      <div class="form-group">
+        <%= f.label :notes %><br />
+        <%= f.text_area :notes, {:class=>"form-control", :size => "24x5"} %>
+        <p class="help-block">For reference only - these notes don't appear anywhere.</p>
+      </div>
+    </div>
+    <div class = "col-md-6">
+      <div class="form-group">
+        <%= f.label "Terms and Conditions" %><br />
+        <%= f.text_area :terms, {:class=>"form-control", :size => "24x5"} %>
+        <p class="help-block">Appears in the customer booking invoice.</p>
+      </div>
+      <div class="form-group">
+        <%= f.label :initial_response %><br />
+        <%= f.text_area :initial_response, {:class=>"form-control", :size => "24x5"} %>
+        <p class="help-block">Appears in the initial response email template.</p>
+      </div>
+      <div class="form-group">
+        <%= f.label :booking_response %><br />
+        <%= f.text_area :booking_response, {:class=>"form-control", :size => "24x5"} %>
+        <p class="help-block">Appears in the booking response email template.</p>
+      </div>
+    </div>
+    <div class="actions">
+      <%= f.submit :class => "btn btn-default" %>
+    </div>
+  </div>
+</form>
+<% end %>

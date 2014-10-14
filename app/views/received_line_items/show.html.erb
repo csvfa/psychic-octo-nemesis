@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Received on:</b>
+  <%= @received_line_item.received_on %>
+</p>
+
+<p>
+  <b>Amount:</b>
+  <%= @received_line_item.amount %>
+</p>
+
+<p>
+  <b>Payment method:</b>
+  <%= @received_line_item.payment_method %>
+</p>
+
+
+<%= link_to 'Edit', edit_received_line_item_path(@received_line_item) %> |
+<%= link_to 'Back', received_line_items_path %>

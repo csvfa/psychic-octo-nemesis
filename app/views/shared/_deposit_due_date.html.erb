@@ -1,0 +1,7 @@
+<%= invoice.deposit_due_date.to_s(:standard) %>
+    <% if invoice.deposit_due_date < Date.today %>
+      <span class="label label-danger">Deposit Due</span>
+    <% end %>
+    <% if invoice.deposit_due_date > @invoice.booking.pricing_structure.expiry_date %>
+      <span class="label label-danger">Deposit Due after Offer Expires</span>
+    <% end %>

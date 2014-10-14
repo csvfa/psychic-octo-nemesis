@@ -1,0 +1,27 @@
+<h1>Listing received_line_items</h1>
+
+<table>
+  <tr>
+    <th>Received on</th>
+    <th>Amount</th>
+    <th>Payment method</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @received_line_items.each do |received_line_item| %>
+  <tr>
+    <td><%= received_line_item.received_on %></td>
+    <td><%= received_line_item.amount %></td>
+    <td><%= received_line_item.payment_method %></td>
+    <td><%= link_to 'Show', received_line_item %></td>
+    <td><%= link_to 'Edit', edit_received_line_item_path(received_line_item) %></td>
+    <td><%= link_to 'Destroy', received_line_item, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Received line item', new_received_line_item_path %>

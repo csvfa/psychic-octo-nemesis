@@ -1,0 +1,64 @@
+<div class="container">
+<%= image_tag "logo.png", style:"float:right", size: "220x103" %>
+<h1>Job Sheet for <%= @booking.coach.first_name %></h1>
+
+<table class="table table-condensed">
+  <tr><td>Date &amp; city</td><td><%= @booking.timeslot.to_s(:full_date_only) %>, <%= @booking.city.name %></td></tr>
+  <tr><td>Customer details</td><td><%= @booking.customer.name %><br /><%= @booking.customer.email %><br /><%= @booking.customer.telephone_number %></td></tr>
+
+<form role="form">
+  
+<tr><td colspan="2"><h3>Allocated Coach &amp; TCC Support Contact</h3></td></tr>
+  <tr><td>Coach</td><td><%= @booking.coach.first_name %> <%= @booking.coach.surname %></td></tr>
+  <tr><td>Emergency contact</td><td><%= text_field_tag(:emergency_contact, "Greta 07713640912  / Cece 07713640919", :class => "form-control") %></td></tr>
+  
+<tr><td colspan="2"><h3>Booking Details</h3></td></tr>
+<tr><td>Theme</td><td><%= @booking.theme %></td></tr>
+<tr><td>Date of Party</td><td><%= @booking.timeslot.to_s(:full_date_only) %></td></tr>
+<tr><td>Time of Party</td><td><%= @booking.timeslot.to_s(:time_only) %> until <%= (@booking.timeslot + 90.minutes).to_s(:time_only) %></td></tr>
+<tr><td>Venue</td><td><%= @booking.studio.venue.name %>, <%= @booking.studio.venue.address %></td></tr>
+<tr><td>Number of participants</td><td><%= @booking.guest.number %></td></tr>
+
+<% if @booking.events.where(:type => "InstructorEvent", :code => "Job sheet note").any? %>
+  <tr><td colspan="2"><h3>Notes for <%= @booking.coach.first_name %></h3></td></tr>
+  <% @booking.events.where(:type => "InstructorEvent", :code => "Job sheet note").order('occurred_at').each do |note| %>
+    <tr><td colspan="2"><%= simple_format(note.notes) %></td></tr>
+  <% end %>
+<% end %>
+  
+<tr><td colspan="2"><h3>Venue Payment</h3></td></tr>
+<% @booking.events.where(:type => "StudioEvent").order('occurred_at').each do |event| %>
+  <% case event.code
+    when 'Studio pencilled', 'Instructor to pay on the day', 'Awaiting invoice', 'Studio booked', 'Job sheet note' %>
+      <tr><td><%= event.code %> on <%= event.occurred_at.to_s(:standard) %></td><td><%= event.notes %></td></tr>
+    <% when 'Studio paid' %>
+      <tr><td><%= event.code %> on <%= event.occurred_at.to_s(:standard) %></td><td><% unless @booking.studio.price.nil? %> Studio price: <%=  number_to_currency(@booking.studio.price, unit: "&pound;") %>. <% end %><%= event.notes %></td></tr>
+  <% end %>
+<% end %>
+  
+<tr><td colspan="2"><h3>Kit &amp; Gift Required</h3></td></tr>
+  <tr><td>Kit</td><td><%= @booking.theme.kit %></td></tr>
+  <tr><td>Gifts</td><td><%= @booking.theme.gifts %></td></tr>
+<tr><td colspan="2"><%= text_area_tag(:kit_and_gift2, "Music on CD and iPod/phone
+Voucher Cards
+Camera", :class => "form-control", :size => "24x3") %></td></tr>
+  
+<tr><td colspan="2"><h3>Job Fee &amp; Payment Details</h3></td></tr>
+<tr><td colspan="2"><%= text_area_tag(:job_fee_and_payment, "Fee: " + @fee + "
+
+Expenses allowance: £6 bubbly
+" + @studio_price_to_display + "
+" + @travel + "
+
+Expenses to be invoiced along with final balance, and receipts must be included.", :class => "form-control", :size => "60x7") %></td></tr>
+
+<% if @booking.events.where(:type => "InstructorEvent", :code => "Cheer info for job sheet").any? %>
+<tr><td colspan="2"><h3>Cheer Info</h3></td></tr>  
+  <% @booking.events.where(:type => "InstructorEvent", :code => "Cheer info for job sheet").each do |cheer_info| %>
+  <tr><td colspan="2"><%= simple_format(cheer_info.notes) %></td></tr>  
+  <% end %>
+<% end %>
+
+</table>
+</form>
+</div>

@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @pricing_structure.name %>
+</p>
+
+<p>
+  <b>Rate per person:</b>
+  <%= @pricing_structure.rate_per_person %>
+</p>
+
+<p>
+  <b>Min people:</b>
+  <%= @pricing_structure.min_people %>
+</p>
+
+<p>
+  <b>Min cost:</b>
+  <%= @pricing_structure.min_cost %>
+</p>
+
+<p>
+  <b>Expiry date:</b>
+  <%= @pricing_structure.expiry_date %>
+</p>
+
+<p>
+  <b>Terms:</b>
+  <%= @pricing_structure.terms %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @pricing_structure.notes %>
+</p>
+
+<p>
+  <b>Initial response:</b>
+  <%= @pricing_structure.initial_response %>
+</p>
+
+<p>
+  <b>Booking response:</b>
+  <%= @pricing_structure.booking_response %>
+</p>
+
+
+<%= link_to 'Edit', edit_pricing_structure_path(@pricing_structure) %> |
+<%= link_to 'Back', pricing_structures_path %>
