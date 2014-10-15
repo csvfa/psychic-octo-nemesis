@@ -47,7 +47,6 @@ class BookingEventsController < ApplicationController
 
     respond_to do |format|
       if @booking_event.update_attributes(params[:booking_event])
-        create_invoice_if_needed
         format.html { redirect_to return_path, :notice => 'Booking Event was successfully updated.' }
         format.json { head :no_content }
       else

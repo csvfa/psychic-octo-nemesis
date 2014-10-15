@@ -4,7 +4,8 @@ class Studio < ActiveRecord::Base
   has_many :bookings
   has_many :availability_slots, :dependent => :destroy
     
-    accepts_nested_attributes_for :suggested_slots, :allow_destroy => true
+  accepts_nested_attributes_for :suggested_slots, :allow_destroy => true
+  accepts_nested_attributes_for :availability_slots, :allow_destroy => true
   
     validates_presence_of :name
     
