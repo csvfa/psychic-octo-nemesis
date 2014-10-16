@@ -16,7 +16,7 @@
 							<% unless booking.sales_person.nil? %>
 									<p><span class="text-muted">EO </span><%= booking.sales_person.name %><br>(<%= booking.sales_person.events_company.name %>)</p>
 							<% end %>
-							<p><%= booking.notes %></p>
+							<p><%= simple_format(booking.notes) %></p>
 					</td>
 					
 					<td> <!-- Time and Studio -->
@@ -62,7 +62,7 @@
                         <span class="label label-danger">Expired</span>
                       <% end %>
                       </p><% end %>
-                      <% if booking.timeslot.present? and booking.no_guests > 0 %>
+                      <% if booking.timeslot.present? && booking.no_guests.present? && booking.no_guests > 0 %>
                         <% if booking.invoice.nil? %>
                           <p><%= link_to 'Create invoice', new_invoice_path({:booking_id => booking.id}) %></p>
                             <% else %>
