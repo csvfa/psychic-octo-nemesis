@@ -27,7 +27,7 @@
       <th></th>
       <th></th>
       <th>Number of people</th>
-      <th>Rate per person<% if @booking.pricing_structure.expiry_date >= Date.today %>*<% end %></th>
+      <th>Rate per person<% if @booking.pricing_structure.expiry_date.present? && @booking.pricing_structure.expiry_date >= Date.today %>*<% end %></th>
       <th>Amount</th>
     </tr>
     <% @booking.invoice.service_provided_line_items.order(:entry_date).each do |line_item| %>
@@ -53,7 +53,7 @@
     </tr>
   </table>
   
-<% if @booking.pricing_structure.expiry_date >= Date.today %>
+<% if @booking.pricing_structure.expiry_date.present? && @booking.pricing_structure.expiry_date >= Date.today %>
   <p>*This rate is valid when booked by <%= @booking.pricing_structure.expiry_date.to_s(:full) %>. After then, the rate will increase by £5 per person.</p>
 <% end %>
   

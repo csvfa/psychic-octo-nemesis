@@ -57,8 +57,8 @@
 					</td>
 
 					<td>
-                      <% if booking.pricing_structure.present? %><p><%= booking.pricing_structure.name %> expires <%= booking.pricing_structure.expiry_date.to_s(:standard) %>
-                      <% if booking.pricing_structure.expiry_date < Date.today %>
+                      <% if booking.pricing_structure.present? %><p><%= booking.pricing_structure.name %><% if booking.pricing_structure.expiry_date.present? %> expires <%= booking.pricing_structure.expiry_date.to_s(:standard) %><% end %>
+                      <% if booking.pricing_structure.expiry_date.present? && booking.pricing_structure.expiry_date < Date.today %>
                         <span class="label label-danger">Expired</span>
                       <% end %>
                       </p><% end %>

@@ -16,13 +16,13 @@
   </tr>
 
 <% @pricing_structures.each do |pricing_structure| %>
-  <% if pricing_structure.expiry_date >= Date.today %>
+  <% if pricing_structure.expiry_date.nil? || pricing_structure.expiry_date >= Date.today %>
     <tr>
       <td><%= pricing_structure.name %></td>
       <td><%= number_to_currency(pricing_structure.rate_per_person, unit: "&pound;", precision: 0) %></td>
       <td><%= pricing_structure.min_people %></td>
       <td><%= number_to_currency(pricing_structure.min_cost, unit: "&pound;", precision: 0) %></td>
-      <td><%= pricing_structure.expiry_date.to_s(:standard) %></td>
+      <td><%= pricing_structure.expiry_date.nil? ? "Never" : pricing_structure.expiry_date.to_s(:standard) %></td>
       <td><%= pricing_structure.terms %></td>
       <td><%= pricing_structure.notes %></td>
       <td><%= pricing_structure.initial_response %></td>

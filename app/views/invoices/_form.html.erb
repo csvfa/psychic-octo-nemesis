@@ -43,7 +43,7 @@
             <span class="label label-danger">Booking rate is <%= number_to_currency(@invoice.booking.pricing_structure.rate_per_person, unit: "&pound;") %>?</span>
           <% end %>
         <% end %>
-        <% if @invoice.booking.pricing_structure.expiry_date < Date.today %>
+        <% if @invoice.booking.pricing_structure.expiry_date.present? && @invoice.booking.pricing_structure.expiry_date < Date.today %>
           <%= link_to edit_pricing_structure_path(@invoice.booking.pricing_structure) do %>
             <span class="label label-danger">Pricing structure expired</span>
           <% end %>
@@ -105,7 +105,7 @@
     <% if @invoice.deposit_due_date < Date.today %>
       <span class="label label-danger">Deposit Due</span>
     <% end %>
-    <% if @invoice.deposit_due_date > @invoice.booking.pricing_structure.expiry_date %>
+    <% if @invoice.booking.pricing_structure.expiry_date.present? && @invoice.deposit_due_date > @invoice.booking.pricing_structure.expiry_date %>
       <span class="label label-danger">Deposit Due after Offer Expires</span>
     <% end %>
   </div>
