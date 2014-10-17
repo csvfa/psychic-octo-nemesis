@@ -71,20 +71,27 @@
                                 <tr><td><%= booking.theme.name %></td><td><%= number_to_currency(booking.invoice.total, unit: "&pound;") %></td></tr>
                                 <tr><td>Received</td><td><%= number_to_currency(booking.invoice.total_received, unit: "&pound;") %></td></tr>
                                 <tr><td>Outstanding</td><td><%= number_to_currency(booking.invoice.amount_outstanding, unit: "&pound;") %></td></tr>                     
-                                <tr><td>Deposit Due</td><td><%= booking.invoice.deposit_due_date.to_s(:standard) %>
+                                <tr><td>
                                   <% if booking.invoice.deposit_paid? %>
-                                    <span class="label label-success">Paid</span>
-                                  <% elsif booking.invoice.deposit_due_date < Date.today %>
-                                    <span class="label label-danger">Late</span>
+                                    Deposit</td><td><span class="label label-success">Paid <%= booking.invoice.deposit_paid_on.to_s(:standard) %></span></td>
+                                  <% else %>
+                                    Deposit Due</td><td><%= booking.invoice.deposit_due_date.to_s(:standard) %>
+                                    <% if booking.invoice.deposit_due_date < Date.today %>
+                                      <span class="label label-danger">Late</span>
+                                    <% end %>
                                   <% end %>
-                                  </td></tr>                     
-                                <tr><td>Balance Due</td><td><%= booking.invoice.balance_due_date.to_s(:standard) %>
+                                </td></tr>
+
+                                <tr><td>
                                   <% if booking.invoice.balance_paid? %>
-                                    <span class="label label-success">Paid</span>
-                                  <% elsif booking.invoice.balance_due_date < Date.today %>
-                                    <span class="label label-danger">Late</span>
+                                    Balance</td><td><span class="label label-success">Paid <%= booking.invoice.balance_paid_on.to_s(:standard) %></span></td>
+                                  <% else %>
+                                    Balance Due</td><td><%= booking.invoice.balance_due_date.to_s(:standard) %>
+                                    <% if booking.invoice.balance_due_date < Date.today %>
+                                      <span class="label label-danger">Late</span>
+                                    <% end %>
                                   <% end %>
-                                </td></tr>                     
+                                </td></tr>                    
                               </table>
                             <p><%= link_to 'Invoice details', edit_invoice_path(booking.invoice) %></p>
                           <% end %>

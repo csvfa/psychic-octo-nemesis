@@ -33,8 +33,30 @@ class Invoice < ActiveRecord::Base
     deposit_amount.present? && received_line_items.sum(:amount) >= deposit_amount
   end
   
+  def deposit_paid_on
+    raise "No deposit payment date because the deposit has not been paid" if !deposit_paid?
+    running_total = 0
+    deposit_received_date = nil
+    received_line_items.each do |line_item|
+      running_total += line_item.amount
+      deposit_received_date = line_item.received_on if running_total >= deposit_amount
+    end
+	deposit_received_date
+  end
+  
   def balance_paid?
     amount_outstanding <= 0
+  end
+  
+  def balance_paid_on
+    raise "No balance payment date because the deposit has not been paid" if !balance_paid?
+    running_total = 0
+    balance_received_date = nil
+    received_line_items.each do |line_item|
+      running_total += line_item.amount
+      balance_received_date = line_item.received_on if running_total >= total
+    end
+	balance_received_date
   end
   
   def set_default_dates
