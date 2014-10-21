@@ -88,7 +88,7 @@ class Booking < ActiveRecord::Base
   end
   
   def no_guests
-   guest.number
+    guest.number
   end
   
   private
