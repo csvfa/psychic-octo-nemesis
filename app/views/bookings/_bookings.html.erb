@@ -16,9 +16,11 @@
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
     <% end %>
   <% end %>
+  <% unless Booking.orderedByTimeslotOn(@filtered_regions, nil).select { |booking| booking.invoice.present? && booking.invoice.balance_due_date <= Date.today }.empty? %>
   <tr><td colspan=6><h3>Timeslot TBC</h3></td></tr>
     <% Booking.orderedByTimeslotOn(@filtered_regions, nil).select { |booking| booking.invoice.present? && booking.invoice.balance_due_date <= Date.today }.each do |booking| %>
     <%= render partial: "booking_row", :locals => {:booking => booking} %>
+  <% end %>
   <% end %>
 </table>
 <% else %>
@@ -42,9 +44,11 @@
     <% Booking.orderedByTimeslotOn(@filtered_regions, date).select { |booking| booking.invoice.present? && booking.invoice.deposit_due_date <= Date.today }.each do |booking| %>
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
     <% end %>
+    <% unless Booking.orderedByTimeslotOn(@filtered_regions, nil).select { |booking| booking.invoice.present? && booking.invoice.deposit_due_date <= Date.today }.empty? %>
     <tr><td colspan=6><h3>Timeslot TBC</h3></td></tr>
       <% Booking.orderedByTimeslotOn(@filtered_regions, nil).select { |booking| booking.invoice.present? && booking.invoice.deposit_due_date <= Date.today }.each do |booking| %>
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
+    <% end %>
     <% end %>
   <% end %>
 </table>
@@ -69,8 +73,10 @@
       <%= render partial: "booking_row", :locals => {:booking => booking} %>
     <% end %>
   <% end %>
+  <% unless Booking.orderedByTimeslotOn(@filtered_regions, nil).empty? %>
   <tr><td colspan=6><h3>Timeslot TBC</h3></td></tr>
   <% Booking.orderedByTimeslotOn(@filtered_regions, nil).each do |booking| %>
     <%= render partial: "booking_row", :locals => {:booking => booking} %>
+  <% end %>
   <% end %>
 </table>
