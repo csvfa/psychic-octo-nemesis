@@ -83,7 +83,7 @@ class Invoice < ActiveRecord::Base
   def create_first_line_item
     s = ServiceProvidedLineItem.new
     s.entry_date = Date.today
-    s.description = booking.theme.name + " party"
+    s.description = booking.theme.present? ? booking.theme.name + " party" : "Party (no theme)"
     s.no_people = booking.no_guests
     s.invoice = self
     s.rate_per_person = booking.pricing_structure.rate_per_person

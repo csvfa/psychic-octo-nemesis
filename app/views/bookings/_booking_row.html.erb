@@ -68,7 +68,7 @@
                             <% else %>
                               <p>Invoice <%= booking.invoice.id %> issued <%= booking.invoice.invoice_date.to_s(:standard) %></p>
                               <table class="table table-condensed">
-                                <tr><td><%= booking.theme.name %></td><td><%= number_to_currency(booking.invoice.total, unit: "&pound;") %></td></tr>
+                                <tr><td><%= booking.theme.present? ? booking.theme.name + " party" : "Party (no theme)" %></td><td><%= number_to_currency(booking.invoice.total, unit: "&pound;") %></td></tr>
                                 <tr><td>Received</td><td><%= number_to_currency(booking.invoice.total_received, unit: "&pound;") %></td></tr>
                                 <tr><td>Outstanding</td><td><%= number_to_currency(booking.invoice.amount_outstanding, unit: "&pound;") %></td></tr>                     
                                 <tr><td>
