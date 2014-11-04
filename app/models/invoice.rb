@@ -56,7 +56,7 @@ class Invoice < ActiveRecord::Base
       running_total += line_item.amount
       balance_received_date = line_item.received_on if running_total >= total
     end
-    raise "Could not find a balance payment date for invoice " + this.inspect if balance_received_date.nil?
+    raise "Could not find a balance payment date for invoice " + self.inspect if balance_received_date.nil?
 	balance_received_date
   end
   
