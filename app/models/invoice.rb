@@ -45,7 +45,7 @@ class Invoice < ActiveRecord::Base
   end
   
   def balance_paid?
-    amount_outstanding <= 0
+    total > 0 && amount_outstanding <= 0
   end
   
   def balance_paid_on
