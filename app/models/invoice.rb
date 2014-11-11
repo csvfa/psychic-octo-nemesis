@@ -72,12 +72,12 @@ class Invoice < ActiveRecord::Base
   
   def calculate_deposit_amount
     raise "Could not calculate deposit amount because booking has no pricing structure. Booking: " + booking.inspect if booking.pricing_structure.nil?
-    amount = booking.pricing_structure.rate_per_person * booking.no_guests
+    amount = ( booking.pricing_structure.rate_per_person * booking.no_guests ) / 2
     
     if amount > booking.pricing_structure.min_cost
       self.deposit_amount = amount
     else
-      self.deposit_amount = booking.pricing_structure.min_cost
+      self.deposit_amount = booking.pricing_structure.min_cost / 2
     end
   end
   
